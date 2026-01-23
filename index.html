@@ -308,30 +308,51 @@
                         </button>
                     </div>
 
-                    <!-- Conteúdo: Siglas -->
+                    <!-- Conteúdo: Siglas (ATUALIZADO) -->
                     <div id="content-siglas" class="prontuario-section">
                         <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
                             <h3 class="text-base font-bold text-gray-800 flex items-center gap-2"><i data-lucide="type" class="w-5 h-5 text-primary"></i> Siglas</h3>
                             <button onclick="hideProntuarioSections()" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 active:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
                         </div>
                         <div class="grid grid-cols-1 gap-2 text-sm max-h-[60vh] overflow-y-auto pr-1">
-                             <!-- Renderização otimizada em cards menores -->
-                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">DA</span> <span class="text-gray-600 text-right text-xs">Diário alimentar</span></div>
+                            <!-- Procedimentos Gerais -->
+                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Gerais</div>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">DA</span> <span class="text-gray-600 text-right text-xs">Solicitação de diário alimentar</span></div>
                             <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">ODG</span> <span class="text-gray-600 text-right text-xs">Odontograma</span></div>
-                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">RX Inter</span> <span class="text-gray-600 text-right text-xs">RX Interproximal</span></div>
-                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">RX Per</span> <span class="text-gray-600 text-right text-xs">RX Periapical</span></div>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">RX Inter</span> <span class="text-gray-600 text-right text-xs">Radiografia interproximal</span></div>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">RX Per</span> <span class="text-gray-600 text-right text-xs">Radiografia periapical</span></div>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">AO</span> <span class="text-gray-600 text-right text-xs">Ajuste oclusão</span></div>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">IA</span> <span class="text-gray-600 text-right text-xs">Isolamento absoluto</span></div>
                             
-                            <!-- Headers de seção para organizar melhor no mobile -->
-                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Preparos</div>
-                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLI a VI</span> <span class="text-gray-600 text-right text-xs">Prep. Cavitário Classe I-VI</span></div>
+                            <!-- Preparos Cavitários -->
+                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Preparos Cavitários</div>
+                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLI</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe I</span></div>
+                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLII</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe II</span></div>
+                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLIII</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe III</span></div>
+                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLIV</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe IV</span></div>
+                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLV</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe V</span></div>
+                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLVI</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe VI</span></div>
                             
-                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Proteção</div>
-                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">PHC</span> <span class="text-gray-600 text-right text-xs">Hidróxido de Cálcio</span></div>
-                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">PIV</span> <span class="text-gray-600 text-right text-xs">Ionômero de Vidro</span></div>
-                            
-                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Restauração</div>
-                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">RRC</span> <span class="text-gray-600 text-right text-xs">Resina Composta</span></div>
-                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">RIV</span> <span class="text-gray-600 text-right text-xs">Ionômero Vidro</span></div>
+                            <!-- Proteção Pulpar -->
+                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Proteção Pulpar</div>
+                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">PHC</span> <span class="text-gray-600 text-right text-xs">Proteção com hidróxido de cálcio</span></div>
+                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">PIV</span> <span class="text-gray-600 text-right text-xs">Proteção com ionômero de vidro</span></div>
+                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">POZE</span> <span class="text-gray-600 text-right text-xs">Prot. cim. óxido de zinco e eugenol</span></div>
+                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">PMTA</span> <span class="text-gray-600 text-right text-xs">Proteção com MTA</span></div>
+                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">TEX</span> <span class="text-gray-600 text-right text-xs">Tratamento expectante</span></div>
+                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">CPD</span> <span class="text-gray-600 text-right text-xs">Capeamento pulpar direto</span></div>
+
+                            <!-- Restaurações e Estética -->
+                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Restauração e Estética</div>
+                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">ROZE</span> <span class="text-gray-600 text-right text-xs">Rest. cim. óxido de zinco e eugenol</span></div>
+                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">RRC</span> <span class="text-gray-600 text-right text-xs">Restauração em resina composta</span></div>
+                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">RAG</span> <span class="text-gray-600 text-right text-xs">Restauração em amálgama</span></div>
+                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">RIV</span> <span class="text-gray-600 text-right text-xs">Restauração em ionômero de vidro</span></div>
+                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">SEL</span> <span class="text-gray-600 text-right text-xs">Selante</span></div>
+                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">SELI</span> <span class="text-gray-600 text-right text-xs">Selante invasivo</span></div>
+                            <div class="bg-amber-50 p-3 rounded border border-amber-100 flex justify-between items-center"><span class="font-bold text-amber-700">MA</span> <span class="text-gray-600 text-right text-xs">Microabrasão</span></div>
+                            <div class="bg-amber-50 p-3 rounded border border-amber-100 flex justify-between items-center"><span class="font-bold text-amber-700">CLA VIT</span> <span class="text-gray-600 text-right text-xs">Clareamento dental vital</span></div>
+                            <div class="bg-amber-50 p-3 rounded border border-amber-100 flex justify-between items-center"><span class="font-bold text-amber-700">CLA NVIT</span> <span class="text-gray-600 text-right text-xs">Clareamento dental não vital</span></div>
                         </div>
                     </div>
 
