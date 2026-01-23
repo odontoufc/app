@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guia Clínico - Odontologia</title>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#0e7490', // Cyan-700
+                        secondary: '#155e75', // Cyan-800
+                        accent: '#ecfeff', // Cyan-50
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        .btn-card {
+            transition: all 0.3s ease;
+        }
+        .btn-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #0e7490;
+        }
+        
+        /* Modal Animation */
+        #modal {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #modal.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #modal:not(.hidden) {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+
+    <!-- Header / Navbar -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="bg-primary/10 p-2 rounded-lg text-primary">
+                    <i data-lucide="book-open-check" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold text-gray-900 tracking-tight">Guia Clínico</h1>
+                    <p class="text-xs text-gray-500 font-medium">Protocolos e Condutas Odontológicas</p>
+                </div>
+            </div>
+            <!-- Mobile Menu Button (Hidden for this simple version, assumes desktop/mobile responsive grid) -->
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full space-y-12">
+
+        <!-- Intro -->
+        <div class="text-center space-y-2 mb-8">
+            <h2 class="text-3xl font-bold text-gray-900">Bem-vindo</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Selecione uma especialidade ou recurso abaixo para acessar protocolos, diretrizes clínicas e materiais de apoio.</p>
+        </div>
+
+        <!-- Section 1: Especialidades -->
+        <section>
+            <div class="flex items-center gap-2 mb-6 border-b border-gray-200 pb-2">
+                <i data-lucide="layout-grid" class="w-5 h-5 text-primary"></i>
+                <h3 class="text-lg font-semibold text-gray-800">Especialidades</h3>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Dentística -->
+                <button onclick="openFeature('Dentística')" class="btn-card bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-4 group cursor-pointer w-full text-center h-48">
+                    <div class="bg-blue-50 p-4 rounded-full group-hover:bg-primary/10 transition-colors">
+                        <i data-lucide="sparkles" class="w-8 h-8 text-primary"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700 group-hover:text-primary">Dentística</span>
+                </button>
+
+                <!-- Periodontia -->
+                <button onclick="openFeature('Periodontia')" class="btn-card bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-4 group cursor-pointer w-full text-center h-48">
+                    <div class="bg-red-50 p-4 rounded-full group-hover:bg-red-100 transition-colors">
+                        <i data-lucide="layers" class="w-8 h-8 text-rose-600"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700 group-hover:text-rose-600">Periodontia</span>
+                </button>
+
+                <!-- Endodontia -->
+                <button onclick="openFeature('Endodontia')" class="btn-card bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-4 group cursor-pointer w-full text-center h-48">
+                    <div class="bg-indigo-50 p-4 rounded-full group-hover:bg-indigo-100 transition-colors">
+                        <i data-lucide="arrow-down-to-line" class="w-8 h-8 text-indigo-600"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700 group-hover:text-indigo-600">Endodontia</span>
+                </button>
+
+                <!-- Cirurgia -->
+                <button onclick="openFeature('Cirurgia')" class="btn-card bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-4 group cursor-pointer w-full text-center h-48">
+                    <div class="bg-emerald-50 p-4 rounded-full group-hover:bg-emerald-100 transition-colors">
+                        <i data-lucide="scissors" class="w-8 h-8 text-emerald-600"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700 group-hover:text-emerald-600">Cirurgia</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 2: Outros -->
+        <section>
+            <div class="flex items-center gap-2 mb-6 border-b border-gray-200 pb-2">
+                <i data-lucide="package-plus" class="w-5 h-5 text-primary"></i>
+                <h3 class="text-lg font-semibold text-gray-800">Outros Recursos</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Prescrições -->
+                <button onclick="openFeature('Prescrições')" class="btn-card bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 group cursor-pointer w-full text-left">
+                    <div class="bg-amber-50 p-3 rounded-lg group-hover:bg-amber-100 transition-colors">
+                        <i data-lucide="scroll-text" class="w-6 h-6 text-amber-600"></i>
+                    </div>
+                    <div>
+                        <span class="block font-semibold text-gray-700 group-hover:text-amber-700">Prescrições</span>
+                        <span class="text-sm text-gray-500">Modelos de receitas e posologias</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 ml-auto group-hover:text-amber-500"></i>
+                </button>
+
+                <!-- Links Úteis -->
+                <button onclick="openFeature('Links Úteis')" class="btn-card bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 group cursor-pointer w-full text-left">
+                    <div class="bg-gray-100 p-3 rounded-lg group-hover:bg-gray-200 transition-colors">
+                        <i data-lucide="link" class="w-6 h-6 text-gray-600"></i>
+                    </div>
+                    <div>
+                        <span class="block font-semibold text-gray-700 group-hover:text-gray-900">Links Úteis</span>
+                        <span class="text-sm text-gray-500">CRO, CFO e portais acadêmicos</span>
+                    </div>
+                    <i data-lucide="chevron-right" class="w-5 h-5 text-gray-300 ml-auto group-hover:text-gray-500"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Section 3: Manual de Biossegurança -->
+        <section class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-8 -mt-8 pointer-events-none"></div>
+            
+            <div class="p-6 sm:p-8 flex flex-col md:flex-row items-center md:items-start gap-6">
+                <div class="bg-primary/10 p-4 rounded-xl shrink-0">
+                    <i data-lucide="shield-check" class="w-10 h-10 text-primary"></i>
+                </div>
+                
+                <div class="flex-grow text-center md:text-left">
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">Manual de Biossegurança em Odontologia</h3>
+                    <p class="text-gray-600 mb-6">Guia completo com normas, procedimentos de esterilização e EPIs essenciais para a prática clínica segura.</p>
+                    
+                    <button onclick="openFeature('Manual de Biossegurança')" class="inline-flex items-center gap-2 bg-primary hover:bg-secondary text-white font-medium py-2.5 px-6 rounded-lg transition-colors shadow-sm hover:shadow">
+                        <span>Acessar Manual</span>
+                        <i data-lucide="external-link" class="w-4 h-4"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-auto">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+            
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-8">
+                <!-- Action Buttons -->
+                <div class="flex gap-4">
+                    <button onclick="openFeature('Feedback')" class="text-gray-600 hover:text-primary font-medium text-sm flex items-center gap-2 transition-colors">
+                        <i data-lucide="message-square" class="w-4 h-4"></i>
+                        Feedback
+                    </button>
+                    <div class="w-px h-5 bg-gray-300"></div>
+                    <button onclick="openFeature('Sobre')" class="text-gray-600 hover:text-primary font-medium text-sm flex items-center gap-2 transition-colors">
+                        <i data-lucide="info" class="w-4 h-4"></i>
+                        Sobre
+                    </button>
+                </div>
+
+                <!-- Logos Area -->
+                <div class="flex items-center gap-6 opacity-90 grayscale hover:grayscale-0 transition-all duration-500">
+                    <!-- Logo Odontologia (SVG Representation) -->
+                    <div class="flex flex-col items-center gap-1 group">
+                        <div class="w-12 h-12 rounded-full bg-red-800 flex items-center justify-center text-white relative shadow-sm border-2 border-red-900">
+                            <!-- Simple Staff of Asclepius representation -->
+                            <i data-lucide="activity" class="w-6 h-6"></i>
+                        </div>
+                        <span class="text-[10px] font-bold text-red-900 uppercase tracking-wider">Odontologia</span>
+                    </div>
+
+                    <div class="w-px h-10 bg-gray-300"></div>
+
+                    <!-- Logo UFC (Simulated) -->
+                    <div class="flex items-center gap-2 group">
+                        <div class="w-10 h-12 bg-blue-900 rounded-b-full rounded-t-sm flex items-center justify-center text-white border-2 border-yellow-400 shadow-sm relative overflow-hidden">
+                            <span class="text-[8px] font-bold text-center leading-tight z-10">UFC</span>
+                            <div class="absolute bottom-0 w-full h-1/2 bg-yellow-400/20 rounded-t-full"></div>
+                        </div>
+                        <div class="flex flex-col">
+                            <span class="text-[10px] font-bold text-gray-800 uppercase leading-none">Universidade</span>
+                            <span class="text-[10px] font-bold text-gray-800 uppercase leading-none my-0.5">Federal do</span>
+                            <span class="text-[10px] font-bold text-gray-800 uppercase leading-none">Ceará</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center border-t border-gray-100 pt-6">
+                <p class="text-xs text-gray-400">&copy; 2024 Guia Clínico - Odontologia UFC. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Modal/Toast for interactions -->
+    <div id="modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 transform transition-all scale-100">
+            <div class="flex flex-col items-center text-center">
+                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
+                    <i data-lucide="loader-2" class="w-6 h-6 animate-spin-slow"></i>
+                </div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2" id="modal-title">Funcionalidade</h3>
+                <p class="text-gray-500 text-sm mb-6">Esta seção está sendo desenvolvida e estará disponível em breve com conteúdo atualizado.</p>
+                <button onclick="closeModal()" class="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 rounded-lg transition-colors">
+                    Entendi
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Interaction Scripts
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+
+        function openFeature(featureName) {
+            modalTitle.textContent = featureName;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
