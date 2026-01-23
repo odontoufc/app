@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Guia Clínico - Odontologia</title>
     
     <!-- Google Fonts: Inter -->
@@ -28,6 +28,9 @@
                         primary: '#0e7490', // Cyan-700
                         secondary: '#155e75', // Cyan-800
                         accent: '#ecfeff', // Cyan-50
+                    },
+                    screens: {
+                        'xs': '375px', // Breakpoint extra para celulares pequenos
                     }
                 }
             }
@@ -36,81 +39,102 @@
 
     <style>
         html { scroll-behavior: smooth; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Ocultar barra de rolagem mas manter funcionalidade */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Scrollbar personalizada para desktop */
+        @media (min-width: 768px) {
+            ::-webkit-scrollbar { width: 8px; height: 8px; }
+            ::-webkit-scrollbar-track { background: #f1f1f1; }
+            ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+            ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        }
 
         .btn-card {
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
         }
-        .btn-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            border-color: #0e7490;
+        .btn-card:active {
+            transform: scale(0.98); /* Feedback tátil ao tocar */
+        }
+        @media (hover: hover) {
+            .btn-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                border-color: #0e7490;
+            }
         }
 
         /* Tab Animations */
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        .tab-content.active {
-            display: block;
-        }
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content.active { display: block; }
         
-        /* Sub-section Animations (Prontuário) */
-        .prontuario-section {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        .prontuario-section.active {
-            display: block;
-        }
+        .prontuario-section { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .prontuario-section.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
+        .tab-btn {
+            position: relative;
+            white-space: nowrap;
+        }
+        .tab-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: transparent;
+            transition: background-color 0.2s;
+        }
         .tab-btn.active {
             color: #0e7490;
-            border-bottom-color: #0e7490;
             background-color: #ecfeff;
         }
-
-        /* View Transitions */
-        .view-section {
-            display: none;
-        }
-        .view-section.active {
-            display: block;
-            animation: fadeInView 0.4s ease;
-        }
-        @keyframes fadeInView {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .tab-btn.active::after {
+            background-color: #0e7490;
         }
 
-        /* Odontogram Styles */
+        .view-section { display: none; }
+        .view-section.active { display: block; animation: fadeInView 0.3s ease; }
+        @keyframes fadeInView { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Odontogram Styles - Mobile Friendly */
         .tooth {
             border: 1px solid #e2e8f0;
             border-radius: 4px;
-            padding: 4px;
-            text-align: center;
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: white;
-            font-size: 0.75rem;
-            width: 32px;
+            font-size: 0.7rem;
+            width: 28px;
+            height: 28px;
+            flex-shrink: 0;
+        }
+        @media (min-width: 640px) {
+            .tooth { width: 34px; height: 34px; font-size: 0.8rem; }
         }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen">
+<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen text-base antialiased">
 
     <!-- Header / Navbar Global -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="navigateTo('home')">
-                <div class="bg-primary/10 p-1.5 rounded-lg text-primary">
+    <header class="bg-white shadow-sm sticky top-0 z-50 w-full">
+        <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer active:opacity-70 transition-opacity" onclick="navigateTo('home')">
+                <div class="bg-primary/10 p-2 rounded-lg text-primary">
                     <i data-lucide="book-open-check" class="w-5 h-5"></i>
                 </div>
                 <div>
@@ -119,83 +143,83 @@
                 </div>
             </div>
             
-            <button id="back-btn" onclick="navigateTo('home')" class="hidden text-sm text-gray-500 hover:text-primary flex items-center gap-1 font-medium transition-colors">
+            <button id="back-btn" onclick="navigateTo('home')" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 py-1.5 px-3 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 active:scale-95">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                Voltar
+                <span class="hidden xs:inline">Voltar</span>
             </button>
         </div>
     </header>
 
     <!-- Main Container -->
-    <main class="flex-grow max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+    <main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 pb-20">
 
         <!-- ================= VIEW: HOME ================= -->
-        <div id="view-home" class="view-section active space-y-10">
+        <div id="view-home" class="view-section active space-y-8">
             <!-- Intro -->
-            <div class="text-center space-y-2">
-                <h2 class="text-3xl font-bold text-gray-900">Bem-vindo</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Selecione uma especialidade ou recurso abaixo para acessar protocolos, diretrizes clínicas e materiais de apoio.</p>
+            <div class="text-center space-y-2 mb-2">
+                <h2 class="text-2xl xs:text-3xl font-bold text-gray-900">Bem-vindo</h2>
+                <p class="text-sm xs:text-base text-gray-600 max-w-2xl mx-auto">Selecione uma especialidade ou recurso abaixo.</p>
             </div>
 
             <!-- Section 1: Especialidades -->
             <section>
-                <div class="flex items-center gap-2 mb-6 border-b border-gray-200 pb-2">
+                <div class="flex items-center gap-2 mb-4 border-b border-gray-200 pb-2">
                     <i data-lucide="layout-grid" class="w-5 h-5 text-primary"></i>
                     <h3 class="text-lg font-semibold text-gray-800">Especialidades</h3>
                 </div>
                 
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-                    <button onclick="navigateTo('dentistica')" class="btn-card bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-4 group cursor-pointer w-full text-center h-48">
-                        <div class="bg-blue-50 p-4 rounded-full group-hover:bg-primary/10 transition-colors">
-                            <i data-lucide="sparkles" class="w-8 h-8 text-primary"></i>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-3 xs:gap-4">
+                    <button onclick="navigateTo('dentistica')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
+                        <div class="bg-blue-50 p-3 rounded-full">
+                            <i data-lucide="sparkles" class="w-6 h-6 xs:w-8 xs:h-8 text-primary"></i>
                         </div>
-                        <span class="font-semibold text-gray-700 group-hover:text-primary">Dentística</span>
+                        <span class="font-semibold text-sm xs:text-base text-gray-700">Dentística</span>
                     </button>
                     <!-- Other Buttons -->
-                    <button onclick="showModal('Periodontia')" class="btn-card bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-4 group cursor-pointer w-full text-center h-48">
-                        <div class="bg-red-50 p-4 rounded-full group-hover:bg-red-100 transition-colors">
-                            <i data-lucide="layers" class="w-8 h-8 text-rose-600"></i>
+                    <button onclick="showModal('Periodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
+                        <div class="bg-red-50 p-3 rounded-full">
+                            <i data-lucide="layers" class="w-6 h-6 xs:w-8 xs:h-8 text-rose-600"></i>
                         </div>
-                        <span class="font-semibold text-gray-700 group-hover:text-rose-600">Periodontia</span>
+                        <span class="font-semibold text-sm xs:text-base text-gray-700">Periodontia</span>
                     </button>
-                    <button onclick="showModal('Endodontia')" class="btn-card bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-4 group cursor-pointer w-full text-center h-48">
-                        <div class="bg-indigo-50 p-4 rounded-full group-hover:bg-indigo-100 transition-colors">
-                            <i data-lucide="arrow-down-to-line" class="w-8 h-8 text-indigo-600"></i>
+                    <button onclick="showModal('Endodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
+                        <div class="bg-indigo-50 p-3 rounded-full">
+                            <i data-lucide="arrow-down-to-line" class="w-6 h-6 xs:w-8 xs:h-8 text-indigo-600"></i>
                         </div>
-                        <span class="font-semibold text-gray-700 group-hover:text-indigo-600">Endodontia</span>
+                        <span class="font-semibold text-sm xs:text-base text-gray-700">Endodontia</span>
                     </button>
-                    <button onclick="showModal('Cirurgia')" class="btn-card bg-white p-6 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-4 group cursor-pointer w-full text-center h-48">
-                        <div class="bg-emerald-50 p-4 rounded-full group-hover:bg-emerald-100 transition-colors">
-                            <i data-lucide="scissors" class="w-8 h-8 text-emerald-600"></i>
+                    <button onclick="showModal('Cirurgia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
+                        <div class="bg-emerald-50 p-3 rounded-full">
+                            <i data-lucide="scissors" class="w-6 h-6 xs:w-8 xs:h-8 text-emerald-600"></i>
                         </div>
-                        <span class="font-semibold text-gray-700 group-hover:text-emerald-600">Cirurgia</span>
+                        <span class="font-semibold text-sm xs:text-base text-gray-700">Cirurgia</span>
                     </button>
                 </div>
             </section>
 
             <!-- Section 2: Outros -->
             <section>
-                <div class="flex items-center gap-2 mb-6 border-b border-gray-200 pb-2">
+                <div class="flex items-center gap-2 mb-4 border-b border-gray-200 pb-2">
                     <i data-lucide="package-plus" class="w-5 h-5 text-primary"></i>
-                    <h3 class="text-lg font-semibold text-gray-800">Outros Recursos</h3>
+                    <h3 class="text-lg font-semibold text-gray-800">Recursos</h3>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <button onclick="showModal('Prescrições')" class="btn-card bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 group cursor-pointer w-full text-left">
-                        <div class="bg-amber-50 p-3 rounded-lg group-hover:bg-amber-100 transition-colors">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <button onclick="showModal('Prescrições')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
+                        <div class="bg-amber-50 p-3 rounded-lg shrink-0">
                             <i data-lucide="scroll-text" class="w-6 h-6 text-amber-600"></i>
                         </div>
                         <div>
-                            <span class="block font-semibold text-gray-700 group-hover:text-amber-700">Prescrições</span>
-                            <span class="text-sm text-gray-500">Modelos de receitas e posologias</span>
+                            <span class="block font-semibold text-gray-700">Prescrições</span>
+                            <span class="text-xs text-gray-500">Modelos e posologias</span>
                         </div>
                     </button>
-                    <button onclick="showModal('Links Úteis')" class="btn-card bg-white p-5 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 group cursor-pointer w-full text-left">
-                        <div class="bg-gray-100 p-3 rounded-lg group-hover:bg-gray-200 transition-colors">
+                    <button onclick="showModal('Links Úteis')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
+                        <div class="bg-gray-100 p-3 rounded-lg shrink-0">
                             <i data-lucide="link" class="w-6 h-6 text-gray-600"></i>
                         </div>
                         <div>
-                            <span class="block font-semibold text-gray-700 group-hover:text-gray-900">Links Úteis</span>
-                            <span class="text-sm text-gray-500">CRO, CFO e portais acadêmicos</span>
+                            <span class="block font-semibold text-gray-700">Links Úteis</span>
+                            <span class="text-xs text-gray-500">CRO, CFO e portais</span>
                         </div>
                     </button>
                 </div>
@@ -203,16 +227,15 @@
 
             <!-- Section 3: Manual -->
             <section class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-bl-full -mr-8 -mt-8 pointer-events-none"></div>
-                <div class="p-6 sm:p-8 flex flex-col md:flex-row items-center md:items-start gap-6">
-                    <div class="bg-primary/10 p-4 rounded-xl shrink-0">
-                        <i data-lucide="shield-check" class="w-10 h-10 text-primary"></i>
+                <div class="p-5 flex flex-col md:flex-row items-center md:items-start gap-4">
+                    <div class="bg-primary/10 p-3 rounded-xl shrink-0">
+                        <i data-lucide="shield-check" class="w-8 h-8 text-primary"></i>
                     </div>
                     <div class="flex-grow text-center md:text-left">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2">Manual de Biossegurança</h3>
-                        <p class="text-gray-600 mb-6">Normas, procedimentos de esterilização e EPIs.</p>
-                        <button onclick="showModal('Manual de Biossegurança')" class="inline-flex items-center gap-2 bg-primary hover:bg-secondary text-white font-medium py-2.5 px-6 rounded-lg transition-colors shadow-sm">
-                            <span>Acessar</span>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Manual de Biossegurança</h3>
+                        <p class="text-sm text-gray-600 mb-4">Normas, esterilização e EPIs.</p>
+                        <button onclick="showModal('Manual de Biossegurança')" class="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-primary hover:bg-secondary text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-sm active:opacity-90">
+                            <span>Acessar Manual</span>
                             <i data-lucide="external-link" class="w-4 h-4"></i>
                         </button>
                     </div>
@@ -221,273 +244,230 @@
         </div>
 
         <!-- ================= VIEW: DENTÍSTICA ================= -->
-        <div id="view-dentistica" class="view-section space-y-6">
+        <div id="view-dentistica" class="view-section space-y-4">
             
-            <div class="flex items-center gap-4 mb-2">
-                <div class="p-3 bg-blue-50 rounded-xl">
-                    <i data-lucide="sparkles" class="w-8 h-8 text-primary"></i>
+            <!-- Page Header Compacto -->
+            <div class="flex items-center gap-3 mb-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                <div class="p-2 bg-blue-50 rounded-lg shrink-0">
+                    <i data-lucide="sparkles" class="w-6 h-6 text-primary"></i>
                 </div>
                 <div>
-                    <h2 class="text-2xl font-bold text-gray-900">Dentística</h2>
-                    <p class="text-gray-500 text-sm">Restaurações, Estética e Materiais Dentários</p>
+                    <h2 class="text-xl font-bold text-gray-900 leading-tight">Dentística</h2>
+                    <p class="text-gray-500 text-xs">Restaurações e Estética</p>
                 </div>
             </div>
 
-            <div class="bg-white rounded-t-xl border-b border-gray-200 flex overflow-x-auto">
-                <button onclick="switchTab('prontuario')" id="tab-btn-prontuario" class="tab-btn active flex-1 py-4 px-6 text-sm font-semibold text-gray-600 hover:text-primary border-b-2 border-transparent transition-all flex items-center justify-center gap-2 min-w-[120px]">
-                    <i data-lucide="clipboard-list" class="w-4 h-4"></i>
-                    Prontuário
-                </button>
-                <button onclick="switchTab('instrumentais')" id="tab-btn-instrumentais" class="tab-btn flex-1 py-4 px-6 text-sm font-semibold text-gray-600 hover:text-primary border-b-2 border-transparent transition-all flex items-center justify-center gap-2 min-w-[120px]">
-                    <i data-lucide="hammer" class="w-4 h-4"></i>
-                    Instrumentais
-                </button>
-                <button onclick="switchTab('protocolos')" id="tab-btn-protocolos" class="tab-btn flex-1 py-4 px-6 text-sm font-semibold text-gray-600 hover:text-primary border-b-2 border-transparent transition-all flex items-center justify-center gap-2 min-w-[120px]">
-                    <i data-lucide="file-text" class="w-4 h-4"></i>
-                    Protocolos
-                </button>
+            <!-- Sticky Tabs Navigation -->
+            <div class="sticky top-16 z-40 bg-gray-50 -mx-4 px-4 sm:mx-0 sm:px-0 pt-2 pb-2">
+                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide snap-x">
+                    <button onclick="switchTab('prontuario')" id="tab-btn-prontuario" class="tab-btn active flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 min-w-[110px] snap-center focus:outline-none">
+                        <i data-lucide="clipboard-list" class="w-4 h-4 shrink-0"></i>
+                        Prontuário
+                    </button>
+                    <button onclick="switchTab('instrumentais')" id="tab-btn-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 min-w-[110px] snap-center focus:outline-none">
+                        <i data-lucide="hammer" class="w-4 h-4 shrink-0"></i>
+                        Materiais
+                    </button>
+                    <button onclick="switchTab('protocolos')" id="tab-btn-protocolos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 min-w-[110px] snap-center focus:outline-none">
+                        <i data-lucide="file-text" class="w-4 h-4 shrink-0"></i>
+                        Protocolos
+                    </button>
+                </div>
             </div>
 
-            <div class="bg-white rounded-b-xl shadow-sm border border-gray-200 border-t-0 p-6 min-h-[400px]">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px]">
                 
-                <!-- === ABA PRONTUÁRIO (MANTIDO) === -->
+                <!-- === ABA PRONTUÁRIO === -->
                 <div id="tab-prontuario" class="tab-content active">
-                    <!-- Botões de Navegação Interna -->
-                    <div id="prontuario-menu" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                        <button onclick="showProntuarioSection('siglas')" class="p-4 border border-gray-200 rounded-lg hover:border-primary hover:bg-blue-50 transition flex flex-col items-center gap-2 text-center">
-                            <div class="p-2 bg-blue-100 rounded-full text-primary"><i data-lucide="type" class="w-5 h-5"></i></div>
-                            <span class="font-semibold text-gray-700">Siglas</span>
-                            <span class="text-xs text-gray-500">Abreviações comuns</span>
+                    
+                    <!-- Menu de Prontuário (Mobile: Lista Vertical para toque fácil) -->
+                    <div id="prontuario-menu" class="space-y-3">
+                        <button onclick="showProntuarioSection('siglas')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left active:bg-blue-50">
+                            <div class="p-3 bg-blue-100 rounded-full text-primary shrink-0"><i data-lucide="type" class="w-5 h-5"></i></div>
+                            <div>
+                                <span class="block font-semibold text-gray-800">Siglas</span>
+                                <span class="text-xs text-gray-500">Abreviações comuns</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
                         </button>
-                        <button onclick="showProntuarioSection('exemplos')" class="p-4 border border-gray-200 rounded-lg hover:border-primary hover:bg-blue-50 transition flex flex-col items-center gap-2 text-center">
-                            <div class="p-2 bg-green-100 rounded-full text-green-700"><i data-lucide="file-check" class="w-5 h-5"></i></div>
-                            <span class="font-semibold text-gray-700">Exemplos</span>
-                            <span class="text-xs text-gray-500">Preenchimento de ficha</span>
+                        <button onclick="showProntuarioSection('exemplos')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left active:bg-blue-50">
+                            <div class="p-3 bg-green-100 rounded-full text-green-700 shrink-0"><i data-lucide="file-check" class="w-5 h-5"></i></div>
+                            <div>
+                                <span class="block font-semibold text-gray-800">Exemplos</span>
+                                <span class="text-xs text-gray-500">Preenchimento de ficha</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
                         </button>
-                        <button onclick="showProntuarioSection('odontograma')" class="p-4 border border-gray-200 rounded-lg hover:border-primary hover:bg-blue-50 transition flex flex-col items-center gap-2 text-center">
-                            <div class="p-2 bg-purple-100 rounded-full text-purple-700"><i data-lucide="grid-3x3" class="w-5 h-5"></i></div>
-                            <span class="font-semibold text-gray-700">Odontograma</span>
-                            <span class="text-xs text-gray-500">Notação gráfica</span>
+                        <button onclick="showProntuarioSection('odontograma')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left active:bg-blue-50">
+                            <div class="p-3 bg-purple-100 rounded-full text-purple-700 shrink-0"><i data-lucide="grid-3x3" class="w-5 h-5"></i></div>
+                            <div>
+                                <span class="block font-semibold text-gray-800">Odontograma</span>
+                                <span class="text-xs text-gray-500">Referência visual</span>
+                            </div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
                         </button>
                     </div>
 
                     <!-- Conteúdo: Siglas -->
-                    <div id="content-siglas" class="prontuario-section bg-gray-50 p-6 rounded-xl border border-gray-100">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="type" class="w-5 h-5 text-primary"></i> Siglas e Abreviações</h3>
-                            <button onclick="hideProntuarioSections()" class="text-sm text-gray-500 hover:text-red-500 flex items-center gap-1"><i data-lucide="x" class="w-4 h-4"></i> Fechar</button>
+                    <div id="content-siglas" class="prontuario-section">
+                        <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                            <h3 class="text-base font-bold text-gray-800 flex items-center gap-2"><i data-lucide="type" class="w-5 h-5 text-primary"></i> Siglas</h3>
+                            <button onclick="hideProntuarioSections()" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 active:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-sm max-h-[400px] overflow-y-auto pr-2">
-                            <!-- Procedimentos Gerais -->
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-primary mb-1">DA</span> <span class="text-gray-600">Solicitação de diário alimentar</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-primary mb-1">ODG</span> <span class="text-gray-600">Odontograma</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-primary mb-1">RX Inter</span> <span class="text-gray-600">Radiografia interproximal</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-primary mb-1">RX Per</span> <span class="text-gray-600">Radiografia periapical</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-primary mb-1">AO</span> <span class="text-gray-600">Ajuste oclusão</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-primary mb-1">IA</span> <span class="text-gray-600">Isolamento absoluto</span></div>
-
-                            <!-- Preparos Cavitários -->
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-indigo-600 mb-1">PCCLI</span> <span class="text-gray-600">Preparo cavitário classe I</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-indigo-600 mb-1">PCCLII</span> <span class="text-gray-600">Preparo cavitário classe II</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-indigo-600 mb-1">PCCLIII</span> <span class="text-gray-600">Preparo cavitário classe III</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-indigo-600 mb-1">PCCLIV</span> <span class="text-gray-600">Preparo cavitário classe IV</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-indigo-600 mb-1">PCCLV</span> <span class="text-gray-600">Preparo cavitário classe V</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-indigo-600 mb-1">PCCLVI</span> <span class="text-gray-600">Preparo cavitário classe VI</span></div>
-
-                            <!-- Proteção Pulpar -->
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-emerald-600 mb-1">PHC</span> <span class="text-gray-600">Proteção com hidróxido de cálcio</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-emerald-600 mb-1">PIV</span> <span class="text-gray-600">Proteção com ionômero de vidro</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-emerald-600 mb-1">POZE</span> <span class="text-gray-600">Prot. cim. óxido de zinco e eugenol</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-emerald-600 mb-1">PMTA</span> <span class="text-gray-600">Proteção com MTA</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-emerald-600 mb-1">TEX</span> <span class="text-gray-600">Tratamento expectante</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-emerald-600 mb-1">CPD</span> <span class="text-gray-600">Capeamento pulpar direto</span></div>
-
-                            <!-- Restaurações e Estética -->
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-rose-600 mb-1">ROZE</span> <span class="text-gray-600">Rest. cim. óxido de zinco e eugenol</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-rose-600 mb-1">RRC</span> <span class="text-gray-600">Restauração em resina composta</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-rose-600 mb-1">RAG</span> <span class="text-gray-600">Restauração em amálgama</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-rose-600 mb-1">RIV</span> <span class="text-gray-600">Restauração em ionômero de vidro</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-rose-600 mb-1">SEL</span> <span class="text-gray-600">Selante</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-rose-600 mb-1">SELI</span> <span class="text-gray-600">Selante invasivo</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-amber-600 mb-1">MA</span> <span class="text-gray-600">Microabrasão</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-amber-600 mb-1">CLA VIT</span> <span class="text-gray-600">Clareamento dental vital</span></div>
-                            <div class="bg-white p-3 rounded shadow-sm border border-gray-200 flex flex-col"><span class="font-bold text-amber-600 mb-1">CLA NVIT</span> <span class="text-gray-600">Clareamento dental não vital</span></div>
+                        <div class="grid grid-cols-1 gap-2 text-sm max-h-[60vh] overflow-y-auto pr-1">
+                             <!-- Renderização otimizada em cards menores -->
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">DA</span> <span class="text-gray-600 text-right text-xs">Diário alimentar</span></div>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">ODG</span> <span class="text-gray-600 text-right text-xs">Odontograma</span></div>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">RX Inter</span> <span class="text-gray-600 text-right text-xs">RX Interproximal</span></div>
+                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">RX Per</span> <span class="text-gray-600 text-right text-xs">RX Periapical</span></div>
+                            
+                            <!-- Headers de seção para organizar melhor no mobile -->
+                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Preparos</div>
+                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLI a VI</span> <span class="text-gray-600 text-right text-xs">Prep. Cavitário Classe I-VI</span></div>
+                            
+                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Proteção</div>
+                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">PHC</span> <span class="text-gray-600 text-right text-xs">Hidróxido de Cálcio</span></div>
+                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">PIV</span> <span class="text-gray-600 text-right text-xs">Ionômero de Vidro</span></div>
+                            
+                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Restauração</div>
+                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">RRC</span> <span class="text-gray-600 text-right text-xs">Resina Composta</span></div>
+                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">RIV</span> <span class="text-gray-600 text-right text-xs">Ionômero Vidro</span></div>
                         </div>
                     </div>
 
                     <!-- Conteúdo: Exemplos -->
-                    <div id="content-exemplos" class="prontuario-section bg-gray-50 p-6 rounded-xl border border-gray-100">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="file-check" class="w-5 h-5 text-green-700"></i> Exemplos de Preenchimento</h3>
-                            <button onclick="hideProntuarioSections()" class="text-sm text-gray-500 hover:text-red-500 flex items-center gap-1"><i data-lucide="x" class="w-4 h-4"></i> Fechar</button>
+                    <div id="content-exemplos" class="prontuario-section">
+                        <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                            <h3 class="text-base font-bold text-gray-800 flex items-center gap-2"><i data-lucide="file-check" class="w-5 h-5 text-green-700"></i> Exemplos</h3>
+                            <button onclick="hideProntuarioSections()" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 active:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
                         </div>
                         
-                        <div class="space-y-6">
-                            <!-- Bloco Principal -->
-                            <div class="bg-white p-5 rounded-lg border-l-4 border-green-600 shadow-sm">
-                                <h4 class="font-bold text-gray-800 text-base mb-3 border-b pb-2">Como preencher procedimentos de dentística no prontuário?</h4>
-                                
-                                <div class="grid md:grid-cols-2 gap-6">
-                                    <div class="space-y-2">
-                                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Descrição Completa</p>
-                                        <p class="text-sm text-gray-600 leading-relaxed bg-gray-50 p-3 rounded border border-gray-100">
-                                            "Dente 16 - Anestesia Infiltrativa + Isolamento Absoluto + Preparo Cavitário Classe II (Mesiooclusodistal) + Proteção Pulpar com Cimento de Hidróxido de Cálcio + Proteção Pulpar com Cimento de Ionômero de Vidro + Restauração em Resina Composta (Opallis Cor A2) + Acabamento + Polimento + Ajuste Oclusal."
-                                        </p>
-                                    </div>
-                                    <div class="flex flex-col items-center justify-center">
-                                        <i data-lucide="arrow-right" class="w-6 h-6 text-gray-400 mb-2 hidden md:block"></i>
-                                    </div>
-                                    <div class="space-y-2 md:col-start-2">
-                                        <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide">Notação no Prontuário</p>
-                                        <div class="bg-green-50 p-3 rounded border border-green-200 text-sm font-mono text-green-900 font-medium break-words">
-                                            16 - AI + IA + PCCL II (MOD) + PHC + PIV + RRC (Opallis A2) + ACAB + POL + AO
-                                        </div>
-                                    </div>
-                                </div>
+                        <div class="space-y-4">
+                            <div class="bg-green-50 p-4 rounded-lg border border-green-100">
+                                <h4 class="font-bold text-green-800 text-sm mb-2">Exemplo Completo</h4>
+                                <p class="text-xs text-green-900 font-mono bg-white p-2 rounded border border-green-200 mb-2">
+                                    16 - AI + IA + PCCL II (MOD) + PHC + PIV + RRC (Opallis A2) + ACAB + POL + AO
+                                </p>
+                                <p class="text-xs text-green-700 leading-snug">
+                                    <span class="font-bold">Tradução:</span> Dente 16, Anestesia, Isolamento, Preparo MOD, Proteção Ca(OH)2 + CIV, Resina A2, Acabamento, Polimento e Ajuste Oclusal.
+                                </p>
                             </div>
-                            <!-- Bloco Secundário -->
-                            <div class="bg-white p-5 rounded-lg border border-gray-200 shadow-sm">
-                                <h4 class="font-semibold text-gray-800 mb-3 flex items-center gap-2">
-                                    <i data-lucide="list-checks" class="w-4 h-4 text-gray-500"></i>
-                                    Outros Exemplos
-                                </h4>
-                                <div class="space-y-3">
-                                    <div class="flex flex-col sm:flex-row gap-2 sm:items-center text-sm border-b border-gray-100 pb-2">
-                                        <span class="font-mono bg-gray-100 px-2 py-1 rounded text-gray-700 whitespace-nowrap">Exame Inicial</span>
-                                        <span class="text-gray-600">ANM + PROF + Rx per (36,37) + Rx inter (14,15) + ODG + PT</span>
-                                    </div>
-                                    <div class="flex flex-col sm:flex-row gap-2 sm:items-center text-sm">
-                                        <span class="font-mono bg-gray-100 px-2 py-1 rounded text-gray-700 whitespace-nowrap">Restauração Dente 14</span>
-                                        <span class="text-gray-600">14 AI + IA + PCCL II (MOD) + PHC + PIV + RRC (Opallis A2) + ACAB + POL + AO</span>
-                                    </div>
+
+                            <div class="space-y-2">
+                                <h4 class="text-sm font-semibold text-gray-700">Outros Casos</h4>
+                                <div class="bg-gray-50 p-3 rounded border border-gray-200">
+                                    <span class="text-xs font-bold text-gray-500 block mb-1">EXAME INICIAL</span>
+                                    <span class="text-xs font-mono text-gray-800">ANM + PROF + Rx per (36,37) + Rx inter (14,15) + ODG + PT</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <!-- Conteúdo: Odontograma -->
-                    <div id="content-odontograma" class="prontuario-section bg-gray-50 p-6 rounded-xl border border-gray-100">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="grid-3x3" class="w-5 h-5 text-purple-700"></i> Referência Visual - Odontograma</h3>
-                            <button onclick="hideProntuarioSections()" class="text-sm text-gray-500 hover:text-red-500 flex items-center gap-1"><i data-lucide="x" class="w-4 h-4"></i> Fechar</button>
+                    <div id="content-odontograma" class="prontuario-section">
+                        <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
+                            <h3 class="text-base font-bold text-gray-800 flex items-center gap-2"><i data-lucide="grid-3x3" class="w-5 h-5 text-purple-700"></i> Odontograma</h3>
+                            <button onclick="hideProntuarioSections()" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 active:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
                         </div>
                         
-                        <div class="text-center mb-6">
-                            <p class="text-sm text-gray-500 mb-4">Esquema visual dos quadrantes para anotação.</p>
+                        <div class="text-center">
+                            <p class="text-xs text-gray-500 mb-4">Role horizontalmente para ver todos os dentes.</p>
                             
-                            <div class="flex flex-col gap-8 items-center">
-                                <!-- Maxila -->
-                                <div class="flex gap-4">
-                                    <div class="flex gap-1 bg-white p-2 rounded shadow-sm">
-                                        <div class="tooth">18</div><div class="tooth">17</div><div class="tooth">16</div><div class="tooth">15</div><div class="tooth">14</div><div class="tooth">13</div><div class="tooth">12</div><div class="tooth">11</div>
+                            <!-- Container com Scroll Horizontal para Mobile -->
+                            <div class="overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
+                                <div class="flex flex-col gap-6 items-center min-w-[350px]">
+                                    <!-- Maxila -->
+                                    <div class="flex gap-2 sm:gap-4">
+                                        <div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200">
+                                            <div class="tooth">18</div><div class="tooth">17</div><div class="tooth">16</div><div class="tooth">15</div><div class="tooth">14</div><div class="tooth">13</div><div class="tooth">12</div><div class="tooth">11</div>
+                                        </div>
+                                        <div class="w-px bg-gray-300"></div>
+                                        <div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200">
+                                            <div class="tooth">21</div><div class="tooth">22</div><div class="tooth">23</div><div class="tooth">24</div><div class="tooth">25</div><div class="tooth">26</div><div class="tooth">27</div><div class="tooth">28</div>
+                                        </div>
                                     </div>
-                                    <div class="w-px bg-gray-300"></div>
-                                    <div class="flex gap-1 bg-white p-2 rounded shadow-sm">
-                                        <div class="tooth">21</div><div class="tooth">22</div><div class="tooth">23</div><div class="tooth">24</div><div class="tooth">25</div><div class="tooth">26</div><div class="tooth">27</div><div class="tooth">28</div>
+
+                                    <!-- Mandíbula -->
+                                    <div class="flex gap-2 sm:gap-4">
+                                        <div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200">
+                                            <div class="tooth">48</div><div class="tooth">47</div><div class="tooth">46</div><div class="tooth">45</div><div class="tooth">44</div><div class="tooth">43</div><div class="tooth">42</div><div class="tooth">41</div>
+                                        </div>
+                                        <div class="w-px bg-gray-300"></div>
+                                        <div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200">
+                                            <div class="tooth">31</div><div class="tooth">32</div><div class="tooth">33</div><div class="tooth">34</div><div class="tooth">35</div><div class="tooth">36</div><div class="tooth">37</div><div class="tooth">38</div>
+                                        </div>
                                     </div>
                                 </div>
-                                <!-- Mandíbula -->
-                                <div class="flex gap-4">
-                                    <div class="flex gap-1 bg-white p-2 rounded shadow-sm">
-                                        <div class="tooth">48</div><div class="tooth">47</div><div class="tooth">46</div><div class="tooth">45</div><div class="tooth">44</div><div class="tooth">43</div><div class="tooth">42</div><div class="tooth">41</div>
-                                    </div>
-                                    <div class="w-px bg-gray-300"></div>
-                                    <div class="flex gap-1 bg-white p-2 rounded shadow-sm">
-                                        <div class="tooth">31</div><div class="tooth">32</div><div class="tooth">33</div><div class="tooth">34</div><div class="tooth">35</div><div class="tooth">36</div><div class="tooth">37</div><div class="tooth">38</div>
-                                    </div>
-                                </div>
+                            </div>
+
+                            <div class="mt-4 text-left bg-blue-50 p-3 rounded-lg border border-blue-100">
+                                <h4 class="font-bold text-blue-800 text-xs mb-2">Legenda:</h4>
+                                <ul class="text-xs text-gray-700 grid grid-cols-2 gap-2">
+                                    <li class="flex items-center gap-2"><span class="w-2 h-2 bg-red-500 rounded-full"></span> Cárie</li>
+                                    <li class="flex items-center gap-2"><span class="w-2 h-2 bg-blue-500 rounded-full"></span> Restaurado</li>
+                                    <li class="flex items-center gap-2"><span class="w-2 h-2 bg-black rounded-full"></span> Ausente</li>
+                                    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full"></span> Extração</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- CONTENT: Instrumentais (ATUALIZADO) -->
+                <!-- CONTENT: Instrumentais (Otimizado Mobile) -->
                 <div id="tab-instrumentais" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 mb-6 flex items-center gap-2">
-                        <i data-lucide="hammer" class="w-6 h-6 text-primary"></i>
-                        Checklist de Materiais e Instrumentais
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                        <i data-lucide="hammer" class="w-5 h-5 text-primary"></i>
+                        Checklist
                     </h3>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        
-                        <!-- Carrinho e Bancada -->
-                        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all">
-                            <div class="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
-                                <div class="bg-blue-50 p-2 rounded-lg text-blue-600">
-                                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-                                </div>
-                                <h4 class="font-bold text-gray-800">Carrinho e Bancada</h4>
+                    <div class="space-y-4">
+                        <!-- Card Colapsável Mobile -->
+                        <details class="group bg-white rounded-xl border border-gray-200 shadow-sm open:border-blue-200 open:ring-1 open:ring-blue-100">
+                            <summary class="flex items-center gap-3 p-4 cursor-pointer font-semibold text-gray-800">
+                                <div class="bg-blue-50 p-2 rounded-lg text-blue-600 shrink-0"><i data-lucide="layout-dashboard" class="w-5 h-5"></i></div>
+                                <span class="flex-grow">Carrinho e Bancada</span>
+                                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
+                            </summary>
+                            <div class="px-4 pb-4 border-t border-gray-100 mt-2 pt-2">
+                                <ul class="text-sm text-gray-600 space-y-2 pt-2">
+                                    <li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5"></div><span>Anestésico + Agulha</span></li>
+                                    <li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5"></div><span>Kit Isolamento (Lençol, Arco)</span></li>
+                                    <li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5"></div><span>Adesivo + Ácido + Resina</span></li>
+                                    <li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5"></div><span>Acabamento e Polimento (Lixas, Borrachas)</span></li>
+                                </ul>
                             </div>
-                            <ul class="text-sm text-gray-600 space-y-2 columns-1 sm:columns-2 gap-4">
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Anestésico</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Agulha anestesia</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Lençol de borracha</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Ácido fosfórico</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Sistema Adesivo</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Resina composta</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>CIV</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Microbrush</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Lâmina de bisturi n°12</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Tira e Discos de Lixa</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Cunha de madeira</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Tira de Poliéster</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Papel carbono</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Escala Vita e Gaze</li>
-                            </ul>
-                        </div>
+                        </details>
 
-                        <!-- CME (Esterilização) -->
-                        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all">
-                            <div class="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
-                                <div class="bg-emerald-50 p-2 rounded-lg text-emerald-600">
-                                    <i data-lucide="package-check" class="w-5 h-5"></i>
-                                </div>
-                                <h4 class="font-bold text-gray-800">CME (Kits Estéreis)</h4>
+                        <details class="group bg-white rounded-xl border border-gray-200 shadow-sm open:border-emerald-200 open:ring-1 open:ring-emerald-100">
+                            <summary class="flex items-center gap-3 p-4 cursor-pointer font-semibold text-gray-800">
+                                <div class="bg-emerald-50 p-2 rounded-lg text-emerald-600 shrink-0"><i data-lucide="package-check" class="w-5 h-5"></i></div>
+                                <span class="flex-grow">CME (Estéril)</span>
+                                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
+                            </summary>
+                            <div class="px-4 pb-4 border-t border-gray-100 mt-2 pt-2">
+                                <ul class="text-sm text-gray-600 space-y-2 pt-2">
+                                    <li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full mt-1.5"></div><span>Kit Dentística</span></li>
+                                    <li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full mt-1.5"></div><span>Canetas Alta/Baixa</span></li>
+                                    <li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full mt-1.5"></div><span>Espátula 24 + Placa Vidro</span></li>
+                                </ul>
                             </div>
-                            <ul class="text-sm text-gray-600 space-y-2">
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Kit de Dentística</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Kit de Isolamento</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Arco de Young</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Caneta de Alta e Baixa Rotação</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Kit de acabamento e polimento</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Borrachas abrasivas</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Espátula 24 e Placa de vidro</li>
-                            </ul>
-                        </div>
+                        </details>
 
-                        <!-- Janelinha (Dispensário) -->
-                        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all">
-                            <div class="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
-                                <div class="bg-amber-50 p-2 rounded-lg text-amber-600">
-                                    <i data-lucide="concierge-bell" class="w-5 h-5"></i>
-                                </div>
-                                <h4 class="font-bold text-gray-800">Janelinha (Dispensário)</h4>
+                        <details class="group bg-white rounded-xl border border-gray-200 shadow-sm open:border-amber-200 open:ring-1 open:ring-amber-100">
+                            <summary class="flex items-center gap-3 p-4 cursor-pointer font-semibold text-gray-800">
+                                <div class="bg-amber-50 p-2 rounded-lg text-amber-600 shrink-0"><i data-lucide="concierge-bell" class="w-5 h-5"></i></div>
+                                <span class="flex-grow">Janelinha (Pegar)</span>
+                                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
+                            </summary>
+                            <div class="px-4 pb-4 border-t border-gray-100 mt-2 pt-2">
+                                <ul class="text-sm text-gray-600 space-y-2 pt-2">
+                                    <li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full mt-1.5"></div><span>Grampos + Matriz</span></li>
+                                    <li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full mt-1.5"></div><span>Brocas e Pontas</span></li>
+                                    <li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full mt-1.5"></div><span>Fotopolimerizador</span></li>
+                                    <li class="flex items-start gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full mt-1.5"></div><span>CIV encapsulado</span></li>
+                                </ul>
                             </div>
-                            <ul class="text-sm text-gray-600 space-y-2 columns-2">
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>Grampos</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>Brocas e Pontas</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>Matriz</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>Fotopolimerizador</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>CIV encapsulado</li>
-                            </ul>
-                        </div>
-
-                        <!-- Pessoal (Aluno) -->
-                        <div class="bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all">
-                            <div class="flex items-center gap-3 mb-4 border-b border-gray-100 pb-3">
-                                <div class="bg-purple-50 p-2 rounded-lg text-purple-600">
-                                    <i data-lucide="user-check" class="w-5 h-5"></i>
-                                </div>
-                                <h4 class="font-bold text-gray-800">Uso Pessoal (Aluno)</h4>
-                            </div>
-                            <ul class="text-sm text-gray-600 space-y-2">
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>Fio dental</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>Lubrificante</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>Caneta permanente</li>
-                                <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>Pincel para acabamento</li>
-                            </ul>
-                        </div>
-
+                        </details>
                     </div>
                 </div>
 
@@ -495,59 +475,40 @@
                 <div id="tab-protocolos" class="tab-content">
                     <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                         <i data-lucide="file-text" class="w-5 h-5 text-primary"></i>
-                        Protocolos Clínicos Padrão
+                        Protocolos
                     </h3>
                     
                     <div class="space-y-3">
                         <details class="group bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
                             <summary class="flex items-center justify-between p-4 cursor-pointer font-medium text-gray-800 hover:bg-gray-100 transition">
-                                <span>Restauração Classe I (Resina Composta)</span>
+                                <span class="text-sm sm:text-base">Restauração Classe I</span>
                                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform"></i>
                             </summary>
                             <div class="p-4 pt-0 text-sm text-gray-600 border-t border-gray-200 mt-2 bg-white">
                                 <ol class="list-decimal list-inside space-y-2 pt-2">
-                                    <li>Anestesia e Isolamento Absoluto.</li>
-                                    <li>Remoção do tecido cariado (Brocas esféricas carbide).</li>
-                                    <li>Condicionamento Ácido (37%): Esmalte (15-30s) e Dentina (15s).</li>
-                                    <li>Lavagem abundante e secagem (sem desidratar a dentina).</li>
-                                    <li>Aplicação do Sistema Adesivo (Friccionar microbrush 20s).</li>
-                                    <li>Fotopolimerização (20s).</li>
-                                    <li>Inserção incremental da resina (máx 2mm) e fotopolimerização.</li>
-                                    <li>Ajuste oclusal e Polimento.</li>
+                                    <li>Anestesia e Isolamento.</li>
+                                    <li>Remoção tecido cariado.</li>
+                                    <li>Condicionamento Ácido.</li>
+                                    <li>Adesivo + Foto (20s).</li>
+                                    <li>Inserção Resina Incremental.</li>
+                                    <li>Ajuste e Polimento.</li>
                                 </ol>
                             </div>
                         </details>
+                        <!-- Mais protocolos... -->
                         <details class="group bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
                             <summary class="flex items-center justify-between p-4 cursor-pointer font-medium text-gray-800 hover:bg-gray-100 transition">
-                                <span>Selante de Fóssulas e Fissuras</span>
+                                <span class="text-sm sm:text-base">Selante</span>
                                 <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform"></i>
                             </summary>
                             <div class="p-4 pt-0 text-sm text-gray-600 border-t border-gray-200 mt-2 bg-white">
                                 <ol class="list-decimal list-inside space-y-2 pt-2">
-                                    <li>Profilaxia com pedra-pomes e água (taça de borracha/escova).</li>
-                                    <li>Isolamento relativo eficaz ou absoluto.</li>
-                                    <li>Condicionamento ácido do esmalte (30s).</li>
-                                    <li>Lavagem e secagem completa (aspecto branco-opaco).</li>
-                                    <li>Aplicação do selante (evitar bolhas).</li>
-                                    <li>Fotopolimerização (20-40s).</li>
-                                    <li>Verificação da oclusão.</li>
+                                    <li>Profilaxia.</li>
+                                    <li>Isolamento relativo/absoluto.</li>
+                                    <li>Ácido (30s) + Lavar + Secar.</li>
+                                    <li>Aplicar Selante + Foto.</li>
+                                    <li>Checar oclusão.</li>
                                 </ol>
-                            </div>
-                        </details>
-                        <details class="group bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
-                            <summary class="flex items-center justify-between p-4 cursor-pointer font-medium text-gray-800 hover:bg-gray-100 transition">
-                                <span>Clareamento de Consultório</span>
-                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform"></i>
-                            </summary>
-                            <div class="p-4 pt-0 text-sm text-gray-600 border-t border-gray-200 mt-2 bg-white">
-                                <p class="pt-2">Protocolo variável conforme fabricante (Ex: Peróxido de Hidrogênio 35%).</p>
-                                <ul class="list-disc list-inside space-y-1 mt-2">
-                                    <li>Profilaxia prévia e registro de cor.</li>
-                                    <li>Barreira gengival fotopolimerizável.</li>
-                                    <li>Aplicação do gel clareador (geralmente 3 ciclos de 15min).</li>
-                                    <li>Remoção e lavagem.</li>
-                                    <li>Polimento com discos de feltro e pasta.</li>
-                                </ul>
                             </div>
                         </details>
                     </div>
@@ -559,57 +520,64 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-auto">
-        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            <div class="flex flex-col md:flex-row justify-between items-center gap-8 mb-8">
-                <div class="flex gap-4">
-                    <button onclick="showModal('Feedback')" class="text-gray-600 hover:text-primary font-medium text-sm flex items-center gap-2 transition-colors">
-                        <i data-lucide="message-square" class="w-4 h-4"></i>
-                        Feedback
+    <footer class="bg-white border-t border-gray-200 mt-auto pb-4">
+        <div class="max-w-5xl mx-auto px-4 py-8">
+            <div class="flex flex-col items-center gap-6">
+                
+                <!-- Action Buttons -->
+                <div class="flex gap-6 w-full justify-center">
+                    <button onclick="showModal('Feedback')" class="flex flex-col items-center gap-1 text-gray-500 hover:text-primary active:scale-95 transition-transform">
+                        <div class="p-2 bg-gray-100 rounded-full"><i data-lucide="message-square" class="w-5 h-5"></i></div>
+                        <span class="text-xs font-medium">Feedback</span>
                     </button>
-                    <div class="w-px h-5 bg-gray-300"></div>
-                    <button onclick="showModal('Sobre')" class="text-gray-600 hover:text-primary font-medium text-sm flex items-center gap-2 transition-colors">
-                        <i data-lucide="info" class="w-4 h-4"></i>
-                        Sobre
+                    <button onclick="showModal('Sobre')" class="flex flex-col items-center gap-1 text-gray-500 hover:text-primary active:scale-95 transition-transform">
+                        <div class="p-2 bg-gray-100 rounded-full"><i data-lucide="info" class="w-5 h-5"></i></div>
+                        <span class="text-xs font-medium">Sobre</span>
                     </button>
                 </div>
-                <div class="flex items-center gap-6 opacity-90">
+
+                <div class="w-full h-px bg-gray-100"></div>
+
+                <!-- Logos Area (Vertical Mobile) -->
+                <div class="flex items-center gap-6 opacity-80 grayscale hover:grayscale-0 transition-all">
+                    <!-- Logo Odonto -->
                     <div class="flex flex-col items-center gap-1">
-                        <div class="w-12 h-12 rounded-full bg-red-800 flex items-center justify-center text-white relative shadow-sm border-2 border-red-900">
-                            <i data-lucide="activity" class="w-6 h-6"></i>
+                        <div class="w-10 h-10 rounded-full bg-red-800 flex items-center justify-center text-white border-2 border-red-900">
+                            <i data-lucide="activity" class="w-5 h-5"></i>
                         </div>
-                        <span class="text-[10px] font-bold text-red-900 uppercase tracking-wider">Odontologia</span>
+                        <span class="text-[8px] font-bold text-red-900 uppercase">Odonto</span>
                     </div>
-                    <div class="w-px h-10 bg-gray-300"></div>
+                    <div class="w-px h-8 bg-gray-300"></div>
+                    <!-- Logo UFC -->
                     <div class="flex items-center gap-2">
-                        <div class="w-10 h-12 bg-blue-900 rounded-b-full rounded-t-sm flex items-center justify-center text-white border-2 border-yellow-400 shadow-sm relative overflow-hidden">
-                            <span class="text-[8px] font-bold text-center leading-tight z-10">UFC</span>
+                        <div class="w-8 h-10 bg-blue-900 rounded-b-full rounded-t-sm flex items-center justify-center text-white border-2 border-yellow-400 relative overflow-hidden">
+                            <span class="text-[8px] font-bold z-10">UFC</span>
                             <div class="absolute bottom-0 w-full h-1/2 bg-yellow-400/20 rounded-t-full"></div>
                         </div>
                         <div class="flex flex-col">
-                            <span class="text-[10px] font-bold text-gray-800 uppercase leading-none">Universidade</span>
-                            <span class="text-[10px] font-bold text-gray-800 uppercase leading-none my-0.5">Federal do</span>
-                            <span class="text-[10px] font-bold text-gray-800 uppercase leading-none">Ceará</span>
+                            <span class="text-[8px] font-bold text-gray-800 uppercase leading-none">Univ.</span>
+                            <span class="text-[8px] font-bold text-gray-800 uppercase leading-none my-0.5">Federal</span>
+                            <span class="text-[8px] font-bold text-gray-800 uppercase leading-none">Ceará</span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="text-center border-t border-gray-100 pt-6">
-                <p class="text-xs text-gray-400">&copy; 2024 Guia Clínico - Odontologia UFC.</p>
+            <div class="text-center pt-6">
+                <p class="text-[10px] text-gray-400">&copy; 2024 Guia Clínico - Odontologia UFC.</p>
             </div>
         </div>
     </footer>
 
     <!-- Modal Simples -->
     <div id="modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 animate-[fadeIn_0.2s_ease-out]">
             <div class="flex flex-col items-center text-center">
                 <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
                     <i data-lucide="info" class="w-6 h-6"></i>
                 </div>
                 <h3 class="text-lg font-bold text-gray-900 mb-2" id="modal-title">Funcionalidade</h3>
                 <p class="text-gray-500 text-sm mb-6">Conteúdo em desenvolvimento.</p>
-                <button onclick="closeModal()" class="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-2.5 rounded-lg">Fechar</button>
+                <button onclick="closeModal()" class="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 rounded-xl active:scale-[0.98] transition-transform">Fechar</button>
             </div>
         </div>
     </div>
@@ -636,22 +604,26 @@
         // Tabs
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`tab-btn-${tabName}`).classList.add('active');
+            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
+            activeBtn.classList.add('active');
+            
+            // Scroll to keep active tab visible
+            activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(`tab-${tabName}`).classList.add('active');
         }
 
         // Prontuário Sections Logic
         function showProntuarioSection(sectionName) {
-            // Esconde todas as seções primeiro
+            document.getElementById('prontuario-menu').classList.add('hidden');
             document.querySelectorAll('.prontuario-section').forEach(s => s.classList.remove('active'));
-            
-            // Mostra a escolhida
             document.getElementById(`content-${sectionName}`).classList.add('active');
         }
 
         function hideProntuarioSections() {
             document.querySelectorAll('.prontuario-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('prontuario-menu').classList.remove('hidden');
         }
 
         // Modal
