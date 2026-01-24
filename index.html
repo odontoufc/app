@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Guia Clínico - Odontologia</title>
     
-    <!-- Google Fonts: Inter -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
@@ -16,22 +15,24 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
+    <!-- Firebase SDKs (Versão Compatível - v9 Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-analytics-compat.js"></script>
+
     <!-- Custom Config -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    },
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
                     colors: {
-                        primary: '#0e7490', // Cyan-700
-                        secondary: '#155e75', // Cyan-800
-                        accent: '#ecfeff', // Cyan-50
+                        primary: '#0e7490', 
+                        secondary: '#155e75', 
+                        accent: '#ecfeff',
                     },
-                    screens: {
-                        'xs': '375px', // Breakpoint extra para celulares pequenos
-                    }
+                    screens: { 'xs': '375px' }
                 }
             }
         }
@@ -39,98 +40,34 @@
 
     <style>
         html { scroll-behavior: smooth; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
-        /* Ocultar barra de rolagem mas manter funcionalidade */
-        .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-        }
-        .scrollbar-hide {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* Scrollbar personalizada para desktop */
-        @media (min-width: 768px) {
-            ::-webkit-scrollbar { width: 8px; height: 8px; }
-            ::-webkit-scrollbar-track { background: #f1f1f1; }
-            ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-            ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        }
-
-        .btn-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-        }
-        .btn-card:active {
-            transform: scale(0.98); /* Feedback tátil ao tocar */
-        }
+        .btn-card { transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+        .btn-card:active { transform: scale(0.98); }
         @media (hover: hover) {
-            .btn-card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-                border-color: #0e7490;
-            }
+            .btn-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: #0e7490; }
         }
 
-        /* Tab Animations */
-        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
-        .tab-content.active { display: block; }
-        
-        .prontuario-section { display: none; animation: fadeIn 0.3s ease-in-out; }
-        .prontuario-section.active { display: block; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .tab-btn {
-            position: relative;
-            white-space: nowrap;
-        }
-        .tab-btn::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: transparent;
-            transition: background-color 0.2s;
-        }
-        .tab-btn.active {
-            color: #0e7490;
-            background-color: #ecfeff;
-        }
-        .tab-btn.active::after {
-            background-color: #0e7490;
-        }
-
+        /* Animations */
         .view-section { display: none; }
         .view-section.active { display: block; animation: fadeInView 0.3s ease; }
-        @keyframes fadeInView { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeInView { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Odontogram Styles - Mobile Friendly */
-        .tooth {
-            border: 1px solid #e2e8f0;
-            border-radius: 4px;
-            padding: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: white;
-            font-size: 0.7rem;
-            width: 28px;
-            height: 28px;
-            flex-shrink: 0;
-        }
-        @media (min-width: 640px) {
-            .tooth { width: 34px; height: 34px; font-size: 0.8rem; }
-        }
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .tab-btn.active { color: #0e7490; border-bottom: 2px solid #0e7490; background-color: #ecfeff; }
+        
+        /* Loading Spinner */
+        .spinner { border: 3px solid rgba(0,0,0,0.1); border-left-color: #0e7490; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen text-base antialiased">
 
-    <!-- Header / Navbar Global -->
+    <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50 w-full">
         <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3 cursor-pointer active:opacity-70 transition-opacity" onclick="navigateTo('home')">
@@ -143,25 +80,44 @@
                 </div>
             </div>
             
-            <button id="back-btn" onclick="navigateTo('home')" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 py-1.5 px-3 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 active:scale-95">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i>
-                <span class="hidden xs:inline">Voltar</span>
-            </button>
+            <div class="flex items-center gap-2">
+                <span id="admin-badge" class="hidden px-2 py-1 bg-red-100 text-red-700 text-[10px] font-bold uppercase rounded-full tracking-wider border border-red-200">Admin</span>
+                <button id="back-btn" onclick="navigateTo('home')" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 py-1.5 px-3 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 active:scale-95">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span class="hidden xs:inline">Voltar</span>
+                </button>
+            </div>
         </div>
     </header>
 
-    <!-- Main Container -->
+    <!-- Main Content -->
     <main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 pb-20">
 
         <!-- ================= VIEW: HOME ================= -->
         <div id="view-home" class="view-section active space-y-8">
-            <!-- Intro -->
             <div class="text-center space-y-2 mb-2">
                 <h2 class="text-2xl xs:text-3xl font-bold text-gray-900">Bem-vindo</h2>
                 <p class="text-sm xs:text-base text-gray-600 max-w-2xl mx-auto">Selecione uma especialidade ou recurso abaixo.</p>
             </div>
 
-            <!-- Section 1: Especialidades -->
+            <!-- Destaque: Protocolos (Blog) -->
+            <section>
+                <div onclick="navigateTo('blog')" class="btn-card bg-gradient-to-r from-primary to-secondary p-6 rounded-2xl shadow-lg cursor-pointer text-white relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
+                    <div class="flex items-center gap-4 relative z-10">
+                        <div class="bg-white/20 p-4 rounded-xl backdrop-blur-sm">
+                            <i data-lucide="library" class="w-8 h-8 text-white"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-1">Protocolos Clínicos</h3>
+                            <p class="text-cyan-100 text-sm">Acesse o banco de dados completo de procedimentos e diretrizes.</p>
+                        </div>
+                        <i data-lucide="arrow-right" class="w-6 h-6 ml-auto text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Especialidades -->
             <section>
                 <div class="flex items-center gap-2 mb-4 border-b border-gray-200 pb-2">
                     <i data-lucide="layout-grid" class="w-5 h-5 text-primary"></i>
@@ -175,7 +131,7 @@
                         </div>
                         <span class="font-semibold text-sm xs:text-base text-gray-700">Dentística</span>
                     </button>
-                    <!-- Other Buttons -->
+                    <!-- Buttons without implementation for now -->
                     <button onclick="showModal('Periodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
                         <div class="bg-red-50 p-3 rounded-full">
                             <i data-lucide="layers" class="w-6 h-6 xs:w-8 xs:h-8 text-rose-600"></i>
@@ -197,7 +153,7 @@
                 </div>
             </section>
 
-            <!-- Section 2: Outros -->
+            <!-- Outros -->
             <section>
                 <div class="flex items-center gap-2 mb-4 border-b border-gray-200 pb-2">
                     <i data-lucide="package-plus" class="w-5 h-5 text-primary"></i>
@@ -225,7 +181,7 @@
                 </div>
             </section>
 
-            <!-- Section 3: Manual -->
+            <!-- Manual -->
             <section class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
                 <div class="p-5 flex flex-col md:flex-row items-center md:items-start gap-4">
                     <div class="bg-primary/10 p-3 rounded-xl shrink-0">
@@ -243,404 +199,179 @@
             </section>
         </div>
 
+        <!-- ================= VIEW: BLOG DE PROTOCOLOS ================= -->
+        <div id="view-blog" class="view-section space-y-6">
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900">Protocolos Clínicos</h2>
+                        <p class="text-gray-500 text-sm">Base de conhecimento atualizada.</p>
+                    </div>
+                    <button id="btn-new-protocol" onclick="openEditor()" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-sm">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Novo
+                    </button>
+                </div>
+
+                <div class="relative">
+                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                    <input type="text" placeholder="Buscar protocolo..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+                </div>
+
+                <div id="blog-loader" class="flex justify-center py-10 hidden">
+                    <div class="spinner"></div>
+                </div>
+
+                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Cards inseridos via JS -->
+                </div>
+                
+                <div id="no-protocols-msg" class="text-center py-10 hidden">
+                    <p class="text-gray-500">Nenhum protocolo encontrado.</p>
+                    <p class="text-xs text-gray-400 mt-2">Clique em "Área Administrativa" no rodapé para adicionar.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= VIEW: LEITURA DO PROTOCOLO ================= -->
+        <div id="view-post" class="view-section">
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[60vh]">
+                <div class="bg-gray-50 border-b border-gray-100 p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase mb-2">Categoria</span>
+                            <h2 id="post-title" class="text-2xl font-bold text-gray-900 leading-tight">Título do Protocolo</h2>
+                        </div>
+                        <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2">
+                            <i data-lucide="edit-3" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="post-content" class="p-6 prose prose-blue max-w-none text-gray-700 text-sm leading-relaxed"></div>
+            </div>
+        </div>
+
         <!-- ================= VIEW: DENTÍSTICA ================= -->
         <div id="view-dentistica" class="view-section space-y-4">
-            
-            <!-- Page Header Compacto -->
             <div class="flex items-center gap-3 mb-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
                 <div class="p-2 bg-blue-50 rounded-lg shrink-0">
                     <i data-lucide="sparkles" class="w-6 h-6 text-primary"></i>
                 </div>
                 <div>
                     <h2 class="text-xl font-bold text-gray-900 leading-tight">Dentística</h2>
-                    <p class="text-gray-500 text-xs">Restaurações e Estética</p>
+                    <p class="text-gray-500 text-xs">Prontuário e Materiais</p>
                 </div>
             </div>
 
-            <!-- Sticky Tabs Navigation -->
-            <div class="sticky top-16 z-40 bg-gray-50 -mx-4 px-4 sm:mx-0 sm:px-0 pt-2 pb-2">
-                <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide snap-x">
-                    <button onclick="switchTab('prontuario')" id="tab-btn-prontuario" class="tab-btn active flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 min-w-[110px] snap-center focus:outline-none">
-                        <i data-lucide="clipboard-list" class="w-4 h-4 shrink-0"></i>
-                        Prontuário
-                    </button>
-                    <button onclick="switchTab('instrumentais')" id="tab-btn-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 min-w-[110px] snap-center focus:outline-none">
-                        <i data-lucide="hammer" class="w-4 h-4 shrink-0"></i>
-                        Materiais
-                    </button>
-                    <button onclick="switchTab('protocolos')" id="tab-btn-protocolos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 min-w-[110px] snap-center focus:outline-none">
-                        <i data-lucide="file-text" class="w-4 h-4 shrink-0"></i>
-                        Protocolos
-                    </button>
-                </div>
+            <!-- Abas (Sem Protocolos) -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex">
+                <button onclick="switchTab('prontuario')" id="tab-btn-prontuario" class="tab-btn active flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="clipboard-list" class="w-4 h-4"></i>
+                    Prontuário
+                </button>
+                <button onclick="switchTab('instrumentais')" id="tab-btn-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2">
+                    <i data-lucide="hammer" class="w-4 h-4"></i>
+                    Materiais
+                </button>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px]">
-                
-                <!-- === ABA PRONTUÁRIO === -->
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
+                <!-- ABA PRONTUÁRIO -->
                 <div id="tab-prontuario" class="tab-content active">
-                    
-                    <!-- Menu de Prontuário -->
                     <div id="prontuario-menu" class="space-y-3">
-                        <button onclick="showProntuarioSection('siglas')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left active:bg-blue-50">
+                        <button onclick="showProntuarioSection('siglas')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
                             <div class="p-3 bg-blue-100 rounded-full text-primary shrink-0"><i data-lucide="type" class="w-5 h-5"></i></div>
-                            <div>
-                                <span class="block font-semibold text-gray-800">Siglas</span>
-                                <span class="text-xs text-gray-500">Abreviações comuns</span>
-                            </div>
+                            <div><span class="block font-semibold text-gray-800">Siglas</span><span class="text-xs text-gray-500">Abreviações comuns</span></div>
                             <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
                         </button>
-                        <button onclick="showProntuarioSection('exemplos')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left active:bg-blue-50">
+                        <button onclick="showProntuarioSection('exemplos')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
                             <div class="p-3 bg-green-100 rounded-full text-green-700 shrink-0"><i data-lucide="file-check" class="w-5 h-5"></i></div>
-                            <div>
-                                <span class="block font-semibold text-gray-800">Exemplos</span>
-                                <span class="text-xs text-gray-500">Preenchimento de ficha</span>
-                            </div>
+                            <div><span class="block font-semibold text-gray-800">Exemplos</span><span class="text-xs text-gray-500">Preenchimento</span></div>
                             <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
                         </button>
-                        <button onclick="showProntuarioSection('odontograma')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left active:bg-blue-50">
+                        <button onclick="showProntuarioSection('odontograma')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
                             <div class="p-3 bg-purple-100 rounded-full text-purple-700 shrink-0"><i data-lucide="grid-3x3" class="w-5 h-5"></i></div>
-                            <div>
-                                <span class="block font-semibold text-gray-800">Odontograma</span>
-                                <span class="text-xs text-gray-500">Referência visual</span>
-                            </div>
+                            <div><span class="block font-semibold text-gray-800">Odontograma</span><span class="text-xs text-gray-500">Referência visual</span></div>
                             <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
                         </button>
                     </div>
-
-                    <!-- Conteúdo: Siglas -->
-                    <div id="content-siglas" class="prontuario-section">
-                        <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                            <h3 class="text-base font-bold text-gray-800 flex items-center gap-2"><i data-lucide="type" class="w-5 h-5 text-primary"></i> Siglas</h3>
-                            <button onclick="hideProntuarioSections()" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 active:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
-                        </div>
-                        <div class="grid grid-cols-1 gap-2 text-sm max-h-[60vh] overflow-y-auto pr-1">
-                            <!-- Geral -->
-                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Gerais</div>
-                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">DA</span> <span class="text-gray-600 text-right text-xs">Solicitação de diário alimentar</span></div>
-                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">ODG</span> <span class="text-gray-600 text-right text-xs">Odontograma</span></div>
-                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">RX Inter</span> <span class="text-gray-600 text-right text-xs">Radiografia interproximal</span></div>
-                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">RX Per</span> <span class="text-gray-600 text-right text-xs">Radiografia periapical</span></div>
-                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">AO</span> <span class="text-gray-600 text-right text-xs">Ajuste oclusão</span></div>
-                            <div class="bg-gray-50 p-3 rounded border border-gray-100 flex justify-between items-center"><span class="font-bold text-primary">IA</span> <span class="text-gray-600 text-right text-xs">Isolamento absoluto</span></div>
-                            
-                            <!-- Preparos -->
-                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Preparos Cavitários</div>
-                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLI</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe I</span></div>
-                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLII</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe II</span></div>
-                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLIII</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe III</span></div>
-                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLIV</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe IV</span></div>
-                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLV</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe V</span></div>
-                            <div class="bg-indigo-50 p-3 rounded border border-indigo-100 flex justify-between items-center"><span class="font-bold text-indigo-700">PCCLVI</span> <span class="text-gray-600 text-right text-xs">Preparo cavitário classe VI</span></div>
-                            
-                            <!-- Proteção -->
-                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Proteção Pulpar</div>
-                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">PHC</span> <span class="text-gray-600 text-right text-xs">Proteção com hidróxido de cálcio</span></div>
-                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">PIV</span> <span class="text-gray-600 text-right text-xs">Proteção com ionômero de vidro</span></div>
-                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">POZE</span> <span class="text-gray-600 text-right text-xs">Prot. cim. óxido de zinco e eugenol</span></div>
-                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">PMTA</span> <span class="text-gray-600 text-right text-xs">Proteção com MTA</span></div>
-                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">TEX</span> <span class="text-gray-600 text-right text-xs">Tratamento expectante</span></div>
-                            <div class="bg-emerald-50 p-3 rounded border border-emerald-100 flex justify-between items-center"><span class="font-bold text-emerald-700">CPD</span> <span class="text-gray-600 text-right text-xs">Capeamento pulpar direto</span></div>
-
-                            <!-- Restauração -->
-                            <div class="text-xs font-bold text-gray-400 uppercase mt-2 mb-1">Restauração e Estética</div>
-                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">ROZE</span> <span class="text-gray-600 text-right text-xs">Rest. cim. óxido de zinco e eugenol</span></div>
-                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">RRC</span> <span class="text-gray-600 text-right text-xs">Restauração em resina composta</span></div>
-                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">RAG</span> <span class="text-gray-600 text-right text-xs">Restauração em amálgama</span></div>
-                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">RIV</span> <span class="text-gray-600 text-right text-xs">Restauração em ionômero de vidro</span></div>
-                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">SEL</span> <span class="text-gray-600 text-right text-xs">Selante</span></div>
-                            <div class="bg-rose-50 p-3 rounded border border-rose-100 flex justify-between items-center"><span class="font-bold text-rose-700">SELI</span> <span class="text-gray-600 text-right text-xs">Selante invasivo</span></div>
-                            <div class="bg-amber-50 p-3 rounded border border-amber-100 flex justify-between items-center"><span class="font-bold text-amber-700">MA</span> <span class="text-gray-600 text-right text-xs">Microabrasão</span></div>
-                            <div class="bg-amber-50 p-3 rounded border border-amber-100 flex justify-between items-center"><span class="font-bold text-amber-700">CLA VIT</span> <span class="text-gray-600 text-right text-xs">Clareamento dental vital</span></div>
-                            <div class="bg-amber-50 p-3 rounded border border-amber-100 flex justify-between items-center"><span class="font-bold text-amber-700">CLA NVIT</span> <span class="text-gray-600 text-right text-xs">Clareamento dental não vital</span></div>
-                        </div>
-                    </div>
-
-                    <!-- Conteúdo: Exemplos -->
-                    <div id="content-exemplos" class="prontuario-section">
-                        <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                            <h3 class="text-base font-bold text-gray-800 flex items-center gap-2"><i data-lucide="file-check" class="w-5 h-5 text-green-700"></i> Exemplos</h3>
-                            <button onclick="hideProntuarioSections()" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 active:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
-                        </div>
-                        
-                        <div class="space-y-4">
-                            <!-- Procedimentos Realizados -->
-                            <div class="space-y-2">
-                                <h4 class="text-sm font-semibold text-gray-700">Procedimentos Realizados</h4>
-                                
-                                <!-- Exemplo 1: Exame Inicial -->
-                                <div class="bg-gray-50 p-3 rounded border border-gray-200">
-                                    <span class="text-xs font-bold text-gray-500 block mb-1">EXAME INICIAL</span>
-                                    <span class="text-xs font-mono text-gray-800 block break-words">ANM + PROF + Rx per (36,37) + Rx inter (14,15) + ODG + PT</span>
-                                </div>
-
-                                <!-- Exemplo 2: Dente 14 -->
-                                <div class="bg-green-50 p-3 rounded border border-green-200">
-                                    <span class="text-xs font-bold text-green-600 block mb-1">DENTE 14</span>
-                                    <span class="text-xs font-mono text-green-900 block break-words">14 AI + IA + PCCL II (MOD) + PHC + PIV + RRC (OPALLIS A2) + ACAB + POL + AO</span>
-                                </div>
-                            </div>
-
-                            <!-- Como Preencher (Exemplo 16) -->
-                            <div class="bg-white p-4 rounded-lg border-l-4 border-primary shadow-sm">
-                                <h4 class="font-bold text-gray-800 text-sm mb-2 pb-2 border-b border-gray-100">Como preencher no prontuário?</h4>
-                                
-                                <div class="space-y-3">
-                                    <div class="text-xs text-gray-600 leading-relaxed">
-                                        <span class="font-bold block mb-1">Procedimento Completo:</span>
-                                        Dente 16 - Anestesia Infiltrativa + Isolamento Absoluto + Preparo Cavitário Classe (Mesiooclusodistal) + Proteção Pulpar com Cimento de Hidróxido de Cálcio + Proteção Pulpar com Cimento de Ionômero de Vidro + Restauração em Resina Composta (Opallis Cor A2) + Acabamento + Polimento + Ajuste Oclusal.
-                                    </div>
-
-                                    <div class="flex justify-center text-primary">
-                                        <i data-lucide="arrow-down" class="w-4 h-4"></i>
-                                    </div>
-
-                                    <div class="bg-gray-100 p-2 rounded text-xs font-mono text-gray-900 break-words font-medium">
-                                        16 - AI + IA + PCCL II (MOD) + PHC + PIV + RRC (Opallis A2) + ACAB + POL + AO
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Outras Abreviaturas -->
-                            <div class="bg-yellow-50 p-3 rounded border border-yellow-200">
-                                <h4 class="text-xs font-bold text-yellow-800 uppercase mb-2">Outras Abreviaturas Comuns</h4>
-                                <div class="flex flex-wrap gap-2 text-xs">
-                                    <span class="bg-white px-2 py-1 rounded border border-yellow-300 text-gray-700" title="Proteção Óxido de Zinco e Eugenol">POZE</span>
-                                    <span class="bg-white px-2 py-1 rounded border border-yellow-300 text-gray-700" title="Restauração Óxido de Zinco e Eugenol">ROZE</span>
-                                    <span class="bg-white px-2 py-1 rounded border border-yellow-300 text-gray-700" title="Restauração Ionômero de Vidro">RIV</span>
-                                    <span class="bg-white px-2 py-1 rounded border border-yellow-300 text-gray-700" title="Selante">SEL</span>
-                                    <span class="bg-white px-2 py-1 rounded border border-yellow-300 text-gray-700" title="Tratamento Expectante">TEX</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Conteúdo: Odontograma -->
-                    <div id="content-odontograma" class="prontuario-section">
-                        <div class="flex items-center justify-between mb-4 pb-2 border-b border-gray-100">
-                            <h3 class="text-base font-bold text-gray-800 flex items-center gap-2"><i data-lucide="grid-3x3" class="w-5 h-5 text-purple-700"></i> Odontograma</h3>
-                            <button onclick="hideProntuarioSections()" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 active:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
-                        </div>
-                        
-                        <div class="text-center">
-                            <p class="text-xs text-gray-500 mb-4">Role horizontalmente para ver todos os dentes.</p>
-                            
-                            <div class="overflow-x-auto pb-4 scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0">
-                                <div class="flex flex-col gap-6 items-center min-w-[350px]">
-                                    <!-- Maxila -->
-                                    <div class="flex gap-2 sm:gap-4">
-                                        <div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200">
-                                            <div class="tooth">18</div><div class="tooth">17</div><div class="tooth">16</div><div class="tooth">15</div><div class="tooth">14</div><div class="tooth">13</div><div class="tooth">12</div><div class="tooth">11</div>
-                                        </div>
-                                        <div class="w-px bg-gray-300"></div>
-                                        <div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200">
-                                            <div class="tooth">21</div><div class="tooth">22</div><div class="tooth">23</div><div class="tooth">24</div><div class="tooth">25</div><div class="tooth">26</div><div class="tooth">27</div><div class="tooth">28</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Mandíbula -->
-                                    <div class="flex gap-2 sm:gap-4">
-                                        <div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200">
-                                            <div class="tooth">48</div><div class="tooth">47</div><div class="tooth">46</div><div class="tooth">45</div><div class="tooth">44</div><div class="tooth">43</div><div class="tooth">42</div><div class="tooth">41</div>
-                                        </div>
-                                        <div class="w-px bg-gray-300"></div>
-                                        <div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200">
-                                            <div class="tooth">31</div><div class="tooth">32</div><div class="tooth">33</div><div class="tooth">34</div><div class="tooth">35</div><div class="tooth">36</div><div class="tooth">37</div><div class="tooth">38</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="mt-4 text-left bg-blue-50 p-3 rounded-lg border border-blue-100">
-                                <h4 class="font-bold text-blue-800 text-xs mb-2">Legenda:</h4>
-                                <ul class="text-xs text-gray-700 grid grid-cols-2 gap-2">
-                                    <li class="flex items-center gap-2"><span class="w-2 h-2 bg-red-500 rounded-full"></span> Cárie</li>
-                                    <li class="flex items-center gap-2"><span class="w-2 h-2 bg-blue-500 rounded-full"></span> Restaurado</li>
-                                    <li class="flex items-center gap-2"><span class="w-2 h-2 bg-black rounded-full"></span> Ausente</li>
-                                    <li class="flex items-center gap-2"><span class="w-2 h-2 border border-black rounded-full"></span> Extração</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="content-siglas" class="hidden"></div>
+                    <div id="content-exemplos" class="hidden"></div>
+                    <div id="content-odontograma" class="hidden"></div>
                 </div>
 
-                <!-- CONTENT: Instrumentais (ATUALIZADO) -->
+                <!-- ABA INSTRUMENTAIS -->
                 <div id="tab-instrumentais" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <i data-lucide="hammer" class="w-5 h-5 text-primary"></i>
-                        Checklist (Materiais)
-                    </h3>
-                    
-                    <div class="space-y-4">
-                        <!-- Card Colapsável Mobile -->
-                        <details class="group bg-white rounded-xl border border-gray-200 shadow-sm open:border-blue-200 open:ring-1 open:ring-blue-100">
-                            <summary class="flex items-center gap-3 p-4 cursor-pointer font-semibold text-gray-800">
-                                <div class="bg-blue-50 p-2 rounded-lg text-blue-600 shrink-0"><i data-lucide="layout-dashboard" class="w-5 h-5"></i></div>
-                                <span class="flex-grow">Carrinho e Bancada</span>
-                                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
-                            </summary>
-                            <div class="px-4 pb-4 border-t border-gray-100 mt-2 pt-2">
-                                <ul class="text-sm text-gray-600 space-y-2 pt-2">
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Anestésico</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Agulha anestesia</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Lençol de borracha</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Ácido fosfórico</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Sistema Adesivo</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Resina composta</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>CIV</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Microbrush</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Lâmina de bisturi n°12</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Tira de Lixa</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Discos de Lixa</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Cunha de madeira</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Tira de Poliéster</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Papel carbono</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Escala Vita</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-blue-400 rounded-full"></div>Gaze</li>
-                                </ul>
-                            </div>
-                        </details>
-
-                        <details class="group bg-white rounded-xl border border-gray-200 shadow-sm open:border-emerald-200 open:ring-1 open:ring-emerald-100">
-                            <summary class="flex items-center gap-3 p-4 cursor-pointer font-semibold text-gray-800">
-                                <div class="bg-emerald-50 p-2 rounded-lg text-emerald-600 shrink-0"><i data-lucide="package-check" class="w-5 h-5"></i></div>
-                                <span class="flex-grow">CME (Estéril)</span>
-                                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
-                            </summary>
-                            <div class="px-4 pb-4 border-t border-gray-100 mt-2 pt-2">
-                                <ul class="text-sm text-gray-600 space-y-2 pt-2">
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Kit de Dentística</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Kit de Isolamento</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Arco de Young</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Caneta de Alta</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Caneta de Baixa</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Kit de acabamento e polimento</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Borrachas abrasivas</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Espátula 24</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-emerald-400 rounded-full"></div>Placa de vidro</li>
-                                </ul>
-                            </div>
-                        </details>
-
-                        <details class="group bg-white rounded-xl border border-gray-200 shadow-sm open:border-amber-200 open:ring-1 open:ring-amber-100">
-                            <summary class="flex items-center gap-3 p-4 cursor-pointer font-semibold text-gray-800">
-                                <div class="bg-amber-50 p-2 rounded-lg text-amber-600 shrink-0"><i data-lucide="concierge-bell" class="w-5 h-5"></i></div>
-                                <span class="flex-grow">Janelinha (Pegar)</span>
-                                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
-                            </summary>
-                            <div class="px-4 pb-4 border-t border-gray-100 mt-2 pt-2">
-                                <ul class="text-sm text-gray-600 space-y-2 pt-2">
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>Grampos</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>Brocas</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>Pontas</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>Matriz</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>Fotopolimerizador</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-amber-400 rounded-full"></div>CIV encapsulado</li>
-                                </ul>
-                            </div>
-                        </details>
-
-                        <details class="group bg-white rounded-xl border border-gray-200 shadow-sm open:border-purple-200 open:ring-1 open:ring-purple-100">
-                            <summary class="flex items-center gap-3 p-4 cursor-pointer font-semibold text-gray-800">
-                                <div class="bg-purple-50 p-2 rounded-lg text-purple-600 shrink-0"><i data-lucide="user-check" class="w-5 h-5"></i></div>
-                                <span class="flex-grow">Uso Pessoal (Aluno)</span>
-                                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform"></i>
-                            </summary>
-                            <div class="px-4 pb-4 border-t border-gray-100 mt-2 pt-2">
-                                <ul class="text-sm text-gray-600 space-y-2 pt-2">
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>Fio dental</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>Lubrificante</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>Caneta permanente</li>
-                                    <li class="flex items-center gap-2"><div class="w-1.5 h-1.5 bg-purple-400 rounded-full"></div>Pincel p. acabamento</li>
-                                </ul>
-                            </div>
-                        </details>
-                    </div>
+                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i data-lucide="hammer" class="w-5 h-5 text-primary"></i> Checklist</h3>
+                    <div id="instrumentais-list" class="space-y-4"></div>
                 </div>
+            </div>
+        </div>
 
-                <!-- CONTENT: Protocolos -->
-                <div id="tab-protocolos" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                        <i data-lucide="file-text" class="w-5 h-5 text-primary"></i>
-                        Protocolos
-                    </h3>
-                    
-                    <div class="space-y-3">
-                        <details class="group bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
-                            <summary class="flex items-center justify-between p-4 cursor-pointer font-medium text-gray-800 hover:bg-gray-100 transition">
-                                <span class="text-sm sm:text-base">Restauração Classe I</span>
-                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform"></i>
-                            </summary>
-                            <div class="p-4 pt-0 text-sm text-gray-600 border-t border-gray-200 mt-2 bg-white">
-                                <ol class="list-decimal list-inside space-y-2 pt-2">
-                                    <li>Anestesia e Isolamento.</li>
-                                    <li>Remoção tecido cariado.</li>
-                                    <li>Condicionamento Ácido.</li>
-                                    <li>Adesivo + Foto (20s).</li>
-                                    <li>Inserção Resina Incremental.</li>
-                                    <li>Ajuste e Polimento.</li>
-                                </ol>
-                            </div>
-                        </details>
-                        <!-- Mais protocolos... -->
-                        <details class="group bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
-                            <summary class="flex items-center justify-between p-4 cursor-pointer font-medium text-gray-800 hover:bg-gray-100 transition">
-                                <span class="text-sm sm:text-base">Selante</span>
-                                <i data-lucide="chevron-down" class="w-4 h-4 text-gray-500 group-open:rotate-180 transition-transform"></i>
-                            </summary>
-                            <div class="p-4 pt-0 text-sm text-gray-600 border-t border-gray-200 mt-2 bg-white">
-                                <ol class="list-decimal list-inside space-y-2 pt-2">
-                                    <li>Profilaxia.</li>
-                                    <li>Isolamento relativo/absoluto.</li>
-                                    <li>Ácido (30s) + Lavar + Secar.</li>
-                                    <li>Aplicar Selante + Foto.</li>
-                                    <li>Checar oclusão.</li>
-                                </ol>
-                            </div>
-                        </details>
+        <!-- ================= VIEW: EDITOR (ADMIN) ================= -->
+        <div id="view-editor" class="view-section">
+            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+                <h2 class="text-xl font-bold mb-6 text-gray-800">Editor de Protocolo</h2>
+                <form id="editor-form" onsubmit="saveProtocol(event)" class="space-y-4">
+                    <input type="hidden" id="edit-id">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+                        <input type="text" id="edit-title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
                     </div>
-                </div>
-
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+                        <select id="edit-category" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                            <option value="Dentística">Dentística</option>
+                            <option value="Periodontia">Periodontia</option>
+                            <option value="Endodontia">Endodontia</option>
+                            <option value="Cirurgia">Cirurgia</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Resumo (Card)</label>
+                        <input type="text" id="edit-summary" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo (HTML Permitido)</label>
+                        <textarea id="edit-content" rows="10" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none font-mono text-sm"></textarea>
+                        <p class="text-xs text-gray-500 mt-1">Dica: Use &lt;ol&gt;, &lt;li&gt;, &lt;strong&gt; para formatar.</p>
+                    </div>
+                    <div class="flex gap-3 pt-4">
+                        <button type="button" onclick="deleteProtocol()" id="btn-delete" class="px-4 py-3 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hidden">Excluir</button>
+                        <div class="flex-grow"></div>
+                        <button type="button" onclick="navigateTo('blog')" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancelar</button>
+                        <button type="submit" id="btn-save" class="px-6 py-3 bg-primary hover:bg-secondary text-white rounded-lg shadow-md flex items-center gap-2">
+                            <span>Salvar</span>
+                            <div id="save-spinner" class="spinner border-white border-l-transparent w-4 h-4 hidden"></div>
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
 
     </main>
 
     <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-auto pb-4">
+    <footer class="bg-white border-t border-gray-200 mt-auto">
         <div class="max-w-5xl mx-auto px-4 py-8">
             <div class="flex flex-col items-center gap-6">
-                
-                <!-- Action Buttons -->
-                <div class="flex gap-6 w-full justify-center">
-                    <button onclick="showModal('Feedback')" class="flex flex-col items-center gap-1 text-gray-500 hover:text-primary active:scale-95 transition-transform">
-                        <div class="p-2 bg-gray-100 rounded-full"><i data-lucide="message-square" class="w-5 h-5"></i></div>
-                        <span class="text-xs font-medium">Feedback</span>
-                    </button>
-                    <button onclick="showModal('Sobre')" class="flex flex-col items-center gap-1 text-gray-500 hover:text-primary active:scale-95 transition-transform">
-                        <div class="p-2 bg-gray-100 rounded-full"><i data-lucide="info" class="w-5 h-5"></i></div>
-                        <span class="text-xs font-medium">Sobre</span>
-                    </button>
-                </div>
+                <!-- Admin Button -->
+                <button onclick="toggleAdmin()" class="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors">
+                    <i data-lucide="lock" class="w-3 h-3"></i>
+                    Área Administrativa
+                </button>
 
                 <div class="w-full h-px bg-gray-100"></div>
 
-                <!-- Logos Area (Vertical Mobile) -->
                 <div class="flex items-center gap-6 opacity-80 grayscale hover:grayscale-0 transition-all">
                     <!-- Logo Odonto -->
                     <div class="flex flex-col items-center gap-1">
-                        <div class="w-10 h-10 rounded-full bg-red-800 flex items-center justify-center text-white border-2 border-red-900">
-                            <i data-lucide="activity" class="w-5 h-5"></i>
-                        </div>
+                        <div class="w-10 h-10 rounded-full bg-red-800 flex items-center justify-center text-white border-2 border-red-900"><i data-lucide="activity" class="w-5 h-5"></i></div>
                         <span class="text-[8px] font-bold text-red-900 uppercase">Odonto</span>
                     </div>
                     <div class="w-px h-8 bg-gray-300"></div>
                     <!-- Logo UFC -->
                     <div class="flex items-center gap-2">
-                        <div class="w-8 h-10 bg-blue-900 rounded-b-full rounded-t-sm flex items-center justify-center text-white border-2 border-yellow-400 relative overflow-hidden">
-                            <span class="text-[8px] font-bold z-10">UFC</span>
-                            <div class="absolute bottom-0 w-full h-1/2 bg-yellow-400/20 rounded-t-full"></div>
-                        </div>
+                        <div class="w-8 h-10 bg-blue-900 rounded-b-full rounded-t-sm flex items-center justify-center text-white border-2 border-yellow-400 relative overflow-hidden"><span class="text-[8px] font-bold z-10">UFC</span><div class="absolute bottom-0 w-full h-1/2 bg-yellow-400/20 rounded-t-full"></div></div>
                         <div class="flex flex-col">
                             <span class="text-[8px] font-bold text-gray-800 uppercase leading-none">Univ.</span>
                             <span class="text-[8px] font-bold text-gray-800 uppercase leading-none my-0.5">Federal</span>
@@ -649,82 +380,334 @@
                     </div>
                 </div>
             </div>
-            <div class="text-center pt-6">
-                <p class="text-[10px] text-gray-400">&copy; 2024 Guia Clínico - Odontologia UFC.</p>
-            </div>
+            <div class="text-center pt-6"><p class="text-[10px] text-gray-400">&copy; 2024 Guia Clínico - Odontologia UFC.</p></div>
         </div>
     </footer>
 
-    <!-- Modal Simples -->
-    <div id="modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 animate-[fadeIn_0.2s_ease-out]">
-            <div class="flex flex-col items-center text-center">
-                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4 text-primary">
-                    <i data-lucide="info" class="w-6 h-6"></i>
-                </div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2" id="modal-title">Funcionalidade</h3>
-                <p class="text-gray-500 text-sm mb-6">Conteúdo em desenvolvimento.</p>
-                <button onclick="closeModal()" class="w-full bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 rounded-xl active:scale-[0.98] transition-transform">Fechar</button>
+    <!-- Admin Login Modal -->
+    <div id="admin-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-xs w-full p-6">
+            <h3 class="text-lg font-bold text-gray-900 mb-4 text-center">Acesso Restrito</h3>
+            <input type="password" id="admin-pass" placeholder="Senha" class="w-full p-3 mb-4 border border-gray-300 rounded-lg outline-none focus:border-primary">
+            <div class="flex gap-2">
+                <button onclick="document.getElementById('admin-modal').classList.add('hidden')" class="flex-1 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancelar</button>
+                <button onclick="checkAdmin()" class="flex-1 py-2 bg-primary text-white rounded-lg hover:bg-secondary">Entrar</button>
             </div>
         </div>
     </div>
 
+    <!-- Scripts -->
     <script>
-        lucide.createIcons();
+        // =================================================================
+        // CONFIGURAÇÃO DO FIREBASE (Com chaves fornecidas)
+        // =================================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyCtPyXA4TJMvxeX3vNdelzvADQTyzVRCfw",
+            authDomain: "guia-clinico-odonto.firebaseapp.com",
+            projectId: "guia-clinico-odonto",
+            storageBucket: "guia-clinico-odonto.firebasestorage.app",
+            messagingSenderId: "734059654891",
+            appId: "1:734059654891:web:a0f4168725066b054d58ae",
+            measurementId: "G-5287NREP2D"
+        };
 
-        // Navigation
-        function navigateTo(viewId) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            const target = document.getElementById(`view-${viewId}`);
-            if (target) {
-                target.classList.add('active');
-                window.scrollTo(0, 0);
-            }
-            const backBtn = document.getElementById('back-btn');
-            if (viewId === 'home') {
-                backBtn.classList.add('hidden');
-            } else {
-                backBtn.classList.remove('hidden');
-            }
+        // Inicialização
+        let db;
+        let isFirebaseActive = false;
+
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            isFirebaseActive = true;
+            console.log("Firebase conectado com sucesso!");
+        } catch (e) {
+            console.error("Erro ao iniciar Firebase:", e);
+            alert("Erro de conexão com o banco de dados. Verifique o console.");
         }
 
-        // Tabs
+        lucide.createIcons();
+
+        // --- ESTADO DA APLICAÇÃO ---
+        let isAdmin = false;
+        let protocols = []; 
+        let currentProtocolId = null;
+
+        // Dados padrão (Fallback inicial se o banco estiver vazio)
+        // ATUALIZADO: Protocolo Classe II Composta Completo
+        const defaultProtocols = [
+            {
+                id: 'demo1',
+                title: "Classe I - Oclusal",
+                category: "Dentística",
+                summary: "Restauração de lesões oclusais com resina composta.",
+                content: `<ol class="list-decimal list-inside space-y-2"><li><strong>Diagnóstico:</strong> (radiografia).</li><li><strong>Verificação dos contatos oclusais:</strong> (Papel carbono e Pinça de Willis).</li><li><strong>Profilaxia:</strong> (Caneta de baixa, Escova de Robson, Pote Dappen e Pasta profilática).</li><li><strong>Seleção de cor:</strong> (90% dos casos - A2, A3 ou A3,5).</li><li><strong>Anestesia:</strong> (Carpule e Anestésico).</li><li><strong>Isolamento absoluto:</strong> (Lençol, Arco de Young, Perfurador, Grampo, Fio dental, Pinça porta-grampo, Espátula de invaginação).</li><li><strong>Acesso à lesão:</strong> (Pontas esféricas em alta rotação).</li><li><strong>Forma de contorno:</strong> (se necessário).</li><li><strong>Remoção de tecido cariado:</strong> (Broca esférica CA4/CA6 em baixa rotação e colher de dentina).</li><li><strong>Procedimento Adesivo:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Condicionamento ácido (Ácido fosfórico) 1 - 2 mm aquém das margens por 30 seg.</li><li>Lavagem e secagem (dentina por absorção e esmalte com jatos de ar) por 30 seg.</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Inserção incremental da resina composta + Fotoativação.</strong></li><li><strong>Remoção do isolamento.</strong></li><li><strong>Checagem dos contatos oclusais.</strong></li><li><strong>Ajuste oclusal:</strong> (Pontas diamantadas de granulações finas e extrafinas).</li><li><strong>Acabamento e polimento:</strong> (borrachas sequências: verde, amarela e azul) com lubrificação.</li></ol>`
+            },
+            {
+                id: 'demo2',
+                title: "Classe II - Simples",
+                category: "Dentística",
+                summary: "Técnica do slot horizontal (estritamente proximal).",
+                content: `<ol class="list-decimal list-inside space-y-2"><li><strong>Profilaxia.</strong></li><li><strong>Seleção de cor</strong> (90% dos casos - A2, A3 ou A3,5).</li><li><strong>Anestesia infiltrativa</strong> (Lidocaína 2%).</li><li><strong>Isolamento absoluto:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Verificação dos contatos proximais (fio dental).</li><li>Ajuste dos contatos proximais (tira de lixa).</li><li>Seleção e teste do grampo.</li><li>Colocação do lençol de borracha no arco.</li><li>Posição do conjunto arco/lençol na face do paciente.</li><li>Marcação dos dentes que serão isolados.</li><li>Perfuração do dique de borracha.</li><li>Lubrificação da superfície interna.</li><li>Passar os dentes pelo lençol de borracha.</li><li>Instalação dos grampos e estabilização do lençol.</li></ul></li><li><strong>Preparo cavitário:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Proteção do dente adjacente com matriz metálica.</li><li>Remoção de tecido cariado/restauração defeituosa.</li><li>Limpeza da cavidade.</li></ul></li><li><strong>Procedimento adesivo:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Proteção do dente adjacente com tira de poliéster.</li><li>Condicionamento ácido (1-2 mm além das margens).</li><li>Lavagem e secagem: Dentina com algodão, Esmalte com jatos de ar.</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Inserção incremental da resina composta + Fotoativação.</strong></li><li><strong>Acabamento e polimento:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Lâmina número 12.</li><li>Tiras de granulação fina.</li></ul></li></ol>`
+            },
+            {
+                id: 'demo3',
+                title: "Classe II - Composta",
+                category: "Dentística",
+                summary: "Técnica da matriz metálica parcial biconvexa.",
+                content: `<ol class="list-decimal list-inside space-y-2"><li><strong>Diagnóstico</strong> e <strong>Aferição dos contatos oclusais.</strong></li><li><strong>Profilaxia</strong> e <strong>Seleção de cor.</strong></li><li><strong>Anestesia.</strong></li><li><strong>Isolamento absoluto:</strong> Teste do grampo.</li><li><strong>Preparo cavitário:</strong> remoção de tecido cariado/restauração defeituosa (Proteger o dente adjacente com matriz metálica).</li><li><strong>Procedimento adesivo:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Realizado <strong>ANTES</strong> da adaptação da matriz (exceto se a matriz atuar como isolante).</li><li>Condicionamento ácido (1-2 mm além das margens):<ul class="list-disc list-inside ml-4"><li>Aplica em esmalte - 15 seg.</li><li>Estende p/ dentina - 15 seg.</li></ul></li><li>Lavagem e secagem (dentina com algodão e esmalte com jatos de ar).</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Adaptação da matriz metálica e estabilização com cunha.</strong></li><li><strong>Inserção incremental da resina + Fotoativação:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Inicia pela caixa proximal com incrementos oblíquos.</li><li>Para compensar a distância entre o fotopolimerizador e o incremento, <strong>aumentar o tempo de fotopolimerização</strong>.</li><li>Remoção da matriz.</li><li>Finaliza a inserção da resina na oclusal.</li></ul></li><li><strong>Remoção do isolamento.</strong></li><li><strong>Checagem dos contatos oclusais + Ajuste oclusal</strong> (Pontas diamantadas de granulação fina e extrafina).</li><li><strong>Acabamento:</strong> Discos abrasivos flexíveis, tiras de lixa (proximal).</li><li><strong>Polimento:</strong> borrachas abrasivas sequenciais em ordem decrescente / escovas abrasivas especiais.</li></ol>`
+            }
+        ];
+
+        // --- NAVEGAÇÃO ---
+        function navigateTo(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`view-${viewId}`).classList.add('active');
+            window.scrollTo(0, 0);
+
+            const backBtn = document.getElementById('back-btn');
+            if (viewId === 'home') backBtn.classList.add('hidden');
+            else backBtn.classList.remove('hidden');
+
+            if (viewId === 'blog') loadProtocols();
+            if (viewId === 'dentistica') renderProntuarioContent();
+        }
+
         function switchTab(tabName) {
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            const activeBtn = document.getElementById(`tab-btn-${tabName}`);
-            activeBtn.classList.add('active');
-            
-            // Scroll to keep active tab visible
-            activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-
+            document.getElementById(`tab-btn-${tabName}`).classList.add('active');
             document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(`tab-${tabName}`).classList.add('active');
         }
 
-        // Prontuário Sections Logic
-        function showProntuarioSection(sectionName) {
-            document.getElementById('prontuario-menu').classList.add('hidden');
-            document.querySelectorAll('.prontuario-section').forEach(s => s.classList.remove('active'));
-            document.getElementById(`content-${sectionName}`).classList.add('active');
+        // --- LÓGICA DO FIREBASE / BLOG ---
+        async function loadProtocols() {
+            const grid = document.getElementById('blog-grid');
+            const loader = document.getElementById('blog-loader');
+            const noMsg = document.getElementById('no-protocols-msg');
+            
+            grid.innerHTML = '';
+            loader.classList.remove('hidden');
+            noMsg.classList.add('hidden');
+
+            try {
+                if (isFirebaseActive) {
+                    const snapshot = await db.collection('protocols').orderBy('title').get();
+                    if (!snapshot.empty) {
+                        protocols = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    } else {
+                        // Se o banco estiver vazio, usa os padrões para popular (apenas visualização inicial)
+                        protocols = defaultProtocols;
+                        // Opcional: Salvar os defaults no banco se estiver vazio
+                        // defaultProtocols.forEach(p => db.collection('protocols').add(p));
+                    }
+                } else {
+                    // Modo Offline (teste)
+                    protocols = JSON.parse(localStorage.getItem('gc_protocols')) || defaultProtocols;
+                }
+            } catch (error) {
+                console.error("Erro ao carregar:", error);
+                // Fallback silencioso para dados locais em caso de erro de rede
+                protocols = defaultProtocols;
+            }
+
+            loader.classList.add('hidden');
+
+            if (protocols.length === 0) {
+                noMsg.classList.remove('hidden');
+                return;
+            }
+
+            protocols.forEach(post => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-full animate-[fadeIn_0.5s]";
+                card.onclick = () => openPost(post.id);
+                
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold text-primary bg-blue-50 px-2 py-1 rounded">${post.category}</span>
+                        ${isAdmin ? `<button onclick="event.stopPropagation(); editPost('${post.id}')" class="text-gray-400 hover:text-blue-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button>` : ''}
+                    </div>
+                    <h3 class="text-lg font-bold text-gray-900 mb-2">${post.title}</h3>
+                    <p class="text-sm text-gray-600 mb-4 line-clamp-3 flex-grow">${post.summary}</p>
+                    <div class="flex items-center text-primary text-sm font-medium mt-auto">
+                        Ler protocolo <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+            lucide.createIcons();
+            
+            const newBtn = document.getElementById('btn-new-protocol');
+            if(isAdmin) newBtn.classList.remove('hidden');
+            else newBtn.classList.add('hidden');
         }
 
+        function openPost(id) {
+            const post = protocols.find(p => p.id === id);
+            if (!post) return;
+
+            document.getElementById('post-category').textContent = post.category;
+            document.getElementById('post-title').textContent = post.title;
+            document.getElementById('post-content').innerHTML = post.content;
+            
+            const editBtn = document.getElementById('btn-edit-post');
+            if(isAdmin) {
+                editBtn.classList.remove('hidden');
+                editBtn.onclick = () => editPost(id);
+            } else {
+                editBtn.classList.add('hidden');
+            }
+
+            navigateTo('post');
+        }
+
+        // --- ADMIN / EDITOR ---
+        function toggleAdmin() {
+            if (isAdmin) {
+                isAdmin = false;
+                document.getElementById('admin-badge').classList.add('hidden');
+                alert("Modo Administrador desativado.");
+                navigateTo('home');
+            } else {
+                document.getElementById('admin-modal').classList.remove('hidden');
+            }
+        }
+
+        function checkAdmin() {
+            const pass = document.getElementById('admin-pass').value;
+            if (pass === 'admin') { // Senha simples
+                isAdmin = true;
+                document.getElementById('admin-modal').classList.add('hidden');
+                document.getElementById('admin-badge').classList.remove('hidden');
+                document.getElementById('admin-pass').value = '';
+                if(document.getElementById('view-blog').classList.contains('active')) loadProtocols();
+            } else {
+                alert("Senha incorreta!");
+            }
+        }
+
+        function openEditor() {
+            document.getElementById('editor-form').reset();
+            document.getElementById('edit-id').value = '';
+            document.getElementById('btn-delete').classList.add('hidden');
+            navigateTo('editor');
+        }
+
+        function editPost(id) {
+            const post = protocols.find(p => p.id === id);
+            if (!post) return;
+
+            document.getElementById('edit-id').value = post.id;
+            document.getElementById('edit-title').value = post.title;
+            document.getElementById('edit-category').value = post.category;
+            document.getElementById('edit-summary').value = post.summary;
+            document.getElementById('edit-content').value = post.content;
+            document.getElementById('btn-delete').classList.remove('hidden');
+            
+            navigateTo('editor');
+        }
+
+        async function saveProtocol(e) {
+            e.preventDefault();
+            const btn = document.getElementById('btn-save');
+            const spinner = document.getElementById('save-spinner');
+            
+            btn.disabled = true;
+            spinner.classList.remove('hidden');
+
+            const idInput = document.getElementById('edit-id').value;
+            const data = {
+                title: document.getElementById('edit-title').value,
+                category: document.getElementById('edit-category').value,
+                summary: document.getElementById('edit-summary').value,
+                content: document.getElementById('edit-content').value,
+                updatedAt: new Date()
+            };
+
+            try {
+                if (isFirebaseActive) {
+                    if (idInput && !idInput.startsWith('demo')) { // Evita editar demos no Firebase sem ID real
+                        await db.collection('protocols').doc(idInput).update(data);
+                    } else {
+                        await db.collection('protocols').add(data);
+                    }
+                } else {
+                    // Fallback LocalStorage
+                    let localProts = JSON.parse(localStorage.getItem('gc_protocols')) || [];
+                    if(idInput) {
+                        const idx = localProts.findIndex(p => p.id == idInput);
+                        if(idx > -1) localProts[idx] = { id: idInput, ...data };
+                    } else {
+                        localProts.push({ id: Date.now().toString(), ...data });
+                    }
+                    localStorage.setItem('gc_protocols', JSON.stringify(localProts));
+                }
+                navigateTo('blog');
+            } catch (err) {
+                console.error(err);
+                alert("Erro ao salvar.");
+            } finally {
+                btn.disabled = false;
+                spinner.classList.add('hidden');
+            }
+        }
+
+        async function deleteProtocol() {
+            const idInput = document.getElementById('edit-id').value;
+            if(!confirm("Tem certeza que deseja excluir?")) return;
+
+            if (isFirebaseActive && !idInput.startsWith('demo')) {
+                await db.collection('protocols').doc(idInput).delete();
+            } else {
+                let localProts = JSON.parse(localStorage.getItem('gc_protocols')) || [];
+                localProts = localProts.filter(p => p.id != idInput);
+                localStorage.setItem('gc_protocols', JSON.stringify(localProts));
+            }
+            navigateTo('blog');
+        }
+
+        // --- LEGADO: Prontuário ---
+        function renderProntuarioContent() {
+            // Renderiza Siglas
+            document.getElementById('content-siglas').innerHTML = `
+                <div class="flex justify-between items-center mb-4"><h3 class="font-bold flex gap-2"><i data-lucide="type" class="w-5 text-primary"></i> Siglas</h3><button onclick="hideProntuarioSections()" class="text-xs bg-gray-100 px-3 py-1 rounded-full">Voltar</button></div>
+                <div class="grid grid-cols-1 gap-2 text-sm h-[60vh] overflow-y-auto">
+                    <div class="text-xs font-bold text-gray-400 uppercase mt-1">Gerais</div>
+                    <div class="bg-gray-50 p-2 rounded border flex justify-between"><span class="font-bold text-primary">DA</span><span class="text-xs">Diário alimentar</span></div>
+                    <div class="bg-gray-50 p-2 rounded border flex justify-between"><span class="font-bold text-primary">ODG</span><span class="text-xs">Odontograma</span></div>
+                    <div class="text-xs font-bold text-gray-400 uppercase mt-2">Preparos</div>
+                    <div class="bg-indigo-50 p-2 rounded border flex justify-between"><span class="font-bold text-indigo-700">PCCLI</span><span class="text-xs">Classe I</span></div>
+                    <div class="bg-indigo-50 p-2 rounded border flex justify-between"><span class="font-bold text-indigo-700">PCCLII</span><span class="text-xs">Classe II</span></div>
+                </div>
+            `;
+            
+            // Renderiza Instrumentais
+            const instList = document.getElementById('instrumentais-list');
+            if(instList.innerHTML === '') {
+               instList.innerHTML = `
+                <details class="group bg-gray-50 p-3 rounded-lg border border-gray-200"><summary class="font-medium cursor-pointer">Carrinho/Bancada</summary><ul class="text-xs mt-2 pl-4 list-disc text-gray-600"><li>Anestésico + Agulha</li><li>Isolamento (Lençol, Arco)</li><li>Adesivo + Resina + Ácido</li></ul></details>
+                <details class="group bg-gray-50 p-3 rounded-lg border border-gray-200"><summary class="font-medium cursor-pointer">CME (Estéril)</summary><ul class="text-xs mt-2 pl-4 list-disc text-gray-600"><li>Kit Dentística</li><li>Canetas Alta/Baixa</li><li>Espátula 24</li></ul></details>
+               `;
+            }
+            lucide.createIcons();
+        }
+
+        // Navegação interna do Prontuário
+        function showProntuarioSection(id) {
+            document.getElementById('prontuario-menu').classList.add('hidden');
+            document.querySelectorAll('#tab-prontuario > div:not(#prontuario-menu)').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`content-${id}`).classList.remove('hidden');
+        }
         function hideProntuarioSections() {
-            document.querySelectorAll('.prontuario-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('#tab-prontuario > div:not(#prontuario-menu)').forEach(el => el.classList.add('hidden'));
             document.getElementById('prontuario-menu').classList.remove('hidden');
         }
 
-        // Modal
-        const modal = document.getElementById('modal');
-        const modalTitle = document.getElementById('modal-title');
-
-        function showModal(title) {
-            modalTitle.textContent = title;
-            modal.classList.remove('hidden');
-        }
-        function closeModal() {
-            modal.classList.add('hidden');
-        }
-        modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+        // Modal dummy
+        function showModal(title) { alert(`Seção ${title} em desenvolvimento.`); }
+        
+        // Init
+        renderProntuarioContent();
     </script>
 </body>
 </html>
