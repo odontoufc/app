@@ -8,7 +8,6 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -55,21 +54,19 @@
         .view-section.active { display: block; animation: fadeInView 0.3s ease; }
         @keyframes fadeInView { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .tab-btn.active { color: #0e7490; border-bottom: 2px solid #0e7490; background-color: #ecfeff; }
+        /* Tabs Dinâmicas */
+        .tab-scroll { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+        .tab-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.75rem 1rem; color: #6b7280; font-weight: 600; font-size: 0.875rem; border-bottom: 2px solid transparent; transition: all 0.2s; }
+        .tab-btn:hover { color: #0e7490; }
+        .tab-btn.active { color: #0e7490; border-bottom-color: #0e7490; background-color: #ecfeff; }
         
         .spinner { border: 3px solid rgba(0,0,0,0.1); border-left-color: #0e7490; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* EDITOR GOOGLE DOCS STYLE */
+        /* Editor & Content Styles */
         .editor-paper {
-            background: white;
-            min-height: 29.7cm; padding: 2.5cm 2cm; margin: 0 auto;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            outline: none; color: #333; line-height: 1.6; font-size: 11pt;
+            background: white; min-height: 29.7cm; padding: 2.5cm 2cm; margin: 0 auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); outline: none; color: #333; line-height: 1.6; font-size: 11pt;
             font-family: 'Inter', sans-serif !important; 
         }
         .editor-paper * { font-family: 'Inter', sans-serif !important; color: #374151 !important; background-color: transparent !important; font-size: inherit !important; }
@@ -84,19 +81,15 @@
         .toolbar-btn { padding: 0.4rem; border-radius: 0.25rem; color: #4b5563; transition: background 0.2s; display: flex; align-items: center; justify-content: center; min-width: 32px; min-height: 32px; }
         .toolbar-btn:hover { background-color: #e5e7eb; color: #111827; }
         
-        /* LISTAS E HIERARQUIA */
         .rich-text ul, .editor-paper ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
         .rich-text ol, .editor-paper ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
         .rich-text li, .editor-paper li { margin-bottom: 0.25em; }
         .rich-text ul ul, .editor-paper ul ul { list-style-type: circle; margin-top: 0.25em; margin-bottom: 0.25em; }
         .rich-text ol ol, .editor-paper ol ol { list-style-type: lower-alpha; margin-top: 0.25em; margin-bottom: 0.25em; }
-        .rich-text ul ul ul, .editor-paper ul ul ul { list-style-type: square; }
-        .rich-text ol ol ol, .editor-paper ol ol ol { list-style-type: lower-roman; }
-        
-        /* ODONTOGRAMA */
-        .tooth { border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px; display: flex; align-items: center; justify-content: center; background: white; font-size: 0.7rem; width: 28px; height: 28px; flex-shrink: 0; }
         
         [contenteditable]:empty:before { content: attr(placeholder); color: #9ca3af; cursor: text; display: block; }
+        
+        .tooth { border: 1px solid #e2e8f0; border-radius: 4px; padding: 2px; display: flex; align-items: center; justify-content: center; background: white; font-size: 0.7rem; width: 28px; height: 28px; flex-shrink: 0; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen text-base antialiased">
@@ -134,76 +127,70 @@
                 <p class="text-sm xs:text-base text-gray-600 max-w-2xl mx-auto">Selecione uma especialidade ou recurso abaixo.</p>
             </div>
 
-            <!-- Destaque: Protocolos (Blog) -->
+            <!-- Blog -->
             <section>
                 <div onclick="navigateTo('blog')" class="btn-card bg-gradient-to-r from-primary to-secondary p-6 rounded-2xl shadow-lg cursor-pointer text-white relative overflow-hidden group">
                     <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-10 -mt-10 transition-transform group-hover:scale-110"></div>
                     <div class="flex items-center gap-4 relative z-10">
-                        <div class="bg-white/20 p-4 rounded-xl backdrop-blur-sm">
-                            <i data-lucide="library" class="w-8 h-8 text-white"></i>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold mb-1">Protocolos Clínicos</h3>
-                            <p class="text-cyan-100 text-sm">Acesse o banco de dados completo.</p>
-                        </div>
+                        <div class="bg-white/20 p-4 rounded-xl backdrop-blur-sm"><i data-lucide="library" class="w-8 h-8 text-white"></i></div>
+                        <div><h3 class="text-xl font-bold mb-1">Protocolos Clínicos</h3><p class="text-cyan-100 text-sm">Base de dados completa.</p></div>
                         <i data-lucide="arrow-right" class="w-6 h-6 ml-auto text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
                     </div>
                 </div>
             </section>
 
-            <!-- Especialidades -->
+            <!-- Especialidades (Agora abrem página dinâmica) -->
             <section>
                 <div class="flex items-center gap-2 mb-4 border-b border-gray-200 pb-2">
                     <i data-lucide="layout-grid" class="w-5 h-5 text-primary"></i>
                     <h3 class="text-lg font-semibold text-gray-800">Especialidades</h3>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 xs:gap-4">
-                    <button onclick="navigateTo('dentistica')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
+                    <button onclick="openDynamicPage('dentistica', 'Dentística')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
                         <div class="bg-blue-50 p-3 rounded-full"><i data-lucide="sparkles" class="w-6 h-6 xs:w-8 xs:h-8 text-primary"></i></div>
                         <span class="font-semibold text-sm xs:text-base text-gray-700">Dentística</span>
                     </button>
-                    <!-- Buttons without implementation for now -->
-                    <button onclick="showModal('Periodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
+                    <button onclick="openDynamicPage('periodontia', 'Periodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
                         <div class="bg-red-50 p-3 rounded-full"><i data-lucide="layers" class="w-6 h-6 xs:w-8 xs:h-8 text-rose-600"></i></div>
                         <span class="font-semibold text-sm xs:text-base text-gray-700">Periodontia</span>
                     </button>
-                    <button onclick="showModal('Endodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
+                    <button onclick="openDynamicPage('endodontia', 'Endodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
                         <div class="bg-indigo-50 p-3 rounded-full"><i data-lucide="arrow-down-to-line" class="w-6 h-6 xs:w-8 xs:h-8 text-indigo-600"></i></div>
                         <span class="font-semibold text-sm xs:text-base text-gray-700">Endodontia</span>
                     </button>
-                    <button onclick="showModal('Cirurgia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
+                    <button onclick="openDynamicPage('cirurgia', 'Cirurgia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
                         <div class="bg-emerald-50 p-3 rounded-full"><i data-lucide="scissors" class="w-6 h-6 xs:w-8 xs:h-8 text-emerald-600"></i></div>
                         <span class="font-semibold text-sm xs:text-base text-gray-700">Cirurgia</span>
                     </button>
                 </div>
             </section>
 
-            <!-- Outros -->
+            <!-- Outros (Agora abrem página dinâmica) -->
             <section>
                 <div class="flex items-center gap-2 mb-4 border-b border-gray-200 pb-2">
                     <i data-lucide="package-plus" class="w-5 h-5 text-primary"></i>
                     <h3 class="text-lg font-semibold text-gray-800">Recursos</h3>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button onclick="openFixedContent('prescricoes-geral', 'Prescrições', 'Modelos e Posologias')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
+                    <button onclick="openDynamicPage('prescricoes', 'Prescrições')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
                         <div class="bg-amber-50 p-3 rounded-lg shrink-0"><i data-lucide="scroll-text" class="w-6 h-6 text-amber-600"></i></div>
                         <div><span class="block font-semibold text-gray-700">Prescrições</span><span class="text-xs text-gray-500">Modelos e posologias</span></div>
                     </button>
-                    <button onclick="openFixedContent('links-uteis', 'Links Úteis', 'Portais Importantes')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
+                    <button onclick="openDynamicPage('links', 'Links Úteis')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
                         <div class="bg-gray-100 p-3 rounded-lg shrink-0"><i data-lucide="link" class="w-6 h-6 text-gray-600"></i></div>
                         <div><span class="block font-semibold text-gray-700">Links Úteis</span><span class="text-xs text-gray-500">CRO, CFO e portais</span></div>
                     </button>
                 </div>
             </section>
-
-            <!-- Manual -->
+            
+            <!-- Manual (Fixo, mas usa viewer) -->
             <section class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
                 <div class="p-5 flex flex-col md:flex-row items-center md:items-start gap-4">
                     <div class="bg-primary/10 p-3 rounded-xl shrink-0"><i data-lucide="shield-check" class="w-8 h-8 text-primary"></i></div>
                     <div class="flex-grow text-center md:text-left">
                         <h3 class="text-lg font-bold text-gray-900 mb-1">Manual de Biossegurança</h3>
                         <p class="text-sm text-gray-600 mb-4">Normas, esterilização e EPIs.</p>
-                        <button onclick="openFixedContent('biosseguranca-manual', 'Manual de Biossegurança', 'Normas e Procedimentos')" class="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-primary hover:bg-secondary text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-sm active:opacity-90">
+                        <button onclick="openPost(null, {id:'manual', title:'Biossegurança', category:'Manual', content:'<p>Conteúdo do Manual...</p>'})" class="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-primary hover:bg-secondary text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-sm active:opacity-90">
                             <span>Acessar Manual</span>
                             <i data-lucide="external-link" class="w-4 h-4"></i>
                         </button>
@@ -212,519 +199,362 @@
             </section>
         </div>
 
-        <!-- ================= VIEW: BLOG DE PROTOCOLOS ================= -->
-        <div id="view-blog" class="view-section space-y-6">
-            <div class="flex flex-col gap-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900">Protocolos Clínicos</h2>
-                        <p class="text-gray-500 text-sm">Base de conhecimento atualizada.</p>
-                    </div>
-                    <!-- Botão Novo -->
-                    <button id="btn-new-protocol" onclick="openEditor()" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-sm">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Novo
-                    </button>
+        <!-- ================= VIEW: PÁGINA DINÂMICA (ESPECIALIDADES/RECURSOS) ================= -->
+        <div id="view-dynamic-page" class="view-section space-y-4">
+            <!-- Header da Página -->
+            <div class="flex items-center gap-3 mb-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                <div class="p-2 bg-blue-50 rounded-lg shrink-0"><i data-lucide="bookmark" class="w-6 h-6 text-primary"></i></div>
+                <div><h2 id="page-title" class="text-xl font-bold text-gray-900 leading-tight">Título da Página</h2><p class="text-gray-500 text-xs">Conteúdo da seção</p></div>
+                <!-- Admin: Gerenciar Abas -->
+                <button onclick="openTabsManager()" id="btn-manage-tabs" class="ml-auto text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg hidden flex items-center gap-1"><i data-lucide="settings" class="w-3 h-3"></i> Abas</button>
+            </div>
+
+            <!-- Abas Dinâmicas -->
+            <div id="dynamic-tabs" class="bg-white rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide">
+                <!-- Inserido via JS -->
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
+                <!-- Conteúdo da Aba Ativa (Lista de Botões) -->
+                <div id="tab-content-area" class="space-y-3">
+                    <!-- Botões inseridos via JS -->
                 </div>
-                <div class="relative">
-                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                    <input type="text" placeholder="Buscar protocolo..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
-                </div>
-                <div id="blog-loader" class="flex justify-center py-10 hidden"><div class="spinner"></div></div>
-                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-                <div id="no-protocols-msg" class="text-center py-10 hidden">
-                    <p class="text-gray-500">Nenhum protocolo encontrado.</p>
-                    <p class="text-xs text-gray-400 mt-2">Clique em "Área Administrativa" no rodapé para adicionar.</p>
+
+                <!-- Botão Adicionar Item (Admin) -->
+                <div id="page-admin-actions" class="mt-4 pt-4 border-t border-gray-100 hidden">
+                     <button onclick="createNewItem()" class="w-full border-2 border-dashed border-gray-300 rounded-xl p-3 text-gray-500 hover:border-primary hover:text-primary transition flex items-center justify-center gap-2 text-sm font-medium">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Adicionar Novo Botão/Item
+                     </button>
                 </div>
             </div>
         </div>
 
-        <!-- ================= VIEW: LEITURA DE CONTEÚDO (GENÉRICA) ================= -->
+        <!-- ================= VIEW: BLOG GLOBAL ================= -->
+        <div id="view-blog" class="view-section space-y-6">
+            <div class="flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-2xl font-bold text-gray-900">Protocolos Clínicos</h2>
+                    <button id="btn-new-protocol" onclick="openEditor(null, '', 'Geral', '', true)" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-sm"><i data-lucide="plus" class="w-4 h-4"></i> Novo</button>
+                </div>
+                <div class="relative"><i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i><input type="text" placeholder="Buscar..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all"></div>
+                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
+        </div>
+
+        <!-- ================= VIEW: LEITOR DE CONTEÚDO ================= -->
         <div id="view-post" class="view-section">
             <div class="max-w-4xl mx-auto">
                 <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[60vh]">
-                    <div class="bg-gray-50 border-b border-gray-100 p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase mb-2">Categoria</span>
-                                <h2 id="post-title" class="text-2xl font-bold text-gray-900 leading-tight">Título</h2>
-                            </div>
-                            <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2 rounded hover:bg-gray-200 transition">
-                                <i data-lucide="edit-3" class="w-5 h-5"></i>
-                            </button>
-                        </div>
+                    <div class="bg-gray-50 border-b border-gray-100 p-6 flex justify-between items-start">
+                        <div><span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase mb-2">Categoria</span><h2 id="post-title" class="text-2xl font-bold text-gray-900 leading-tight">Título</h2></div>
+                        <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
                     </div>
                     <div id="post-content" class="p-8 rich-text editor-paper" style="box-shadow: none; padding: 2rem;"></div>
                 </div>
             </div>
         </div>
 
-        <!-- ================= VIEW: DENTÍSTICA ================= -->
-        <div id="view-dentistica" class="view-section space-y-4">
-            <div class="flex items-center gap-3 mb-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                <div class="p-2 bg-blue-50 rounded-lg shrink-0"><i data-lucide="sparkles" class="w-6 h-6 text-primary"></i></div>
-                <div><h2 class="text-xl font-bold text-gray-900 leading-tight">Dentística</h2><p class="text-gray-500 text-xs">Prontuário e Materiais</p></div>
-            </div>
-
-            <!-- Abas -->
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex">
-                <button onclick="switchTab('prontuario')" id="tab-btn-prontuario" class="tab-btn active flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2">
-                    <i data-lucide="clipboard-list" class="w-4 h-4"></i> Prontuário
-                </button>
-                <button onclick="switchTab('instrumentais')" id="tab-btn-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2">
-                    <i data-lucide="hammer" class="w-4 h-4"></i> Materiais
-                </button>
-            </div>
-
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
-                <!-- ABA PRONTUÁRIO DINÂMICA -->
-                <div id="tab-prontuario" class="tab-content active">
-                    <!-- Menu gerado via JS -->
-                    <div id="prontuario-menu" class="space-y-3">
-                         <!-- Itens serão injetados aqui -->
-                    </div>
-                    <!-- Botão Novo Item Prontuário -->
-                    <div id="prontuario-admin-actions" class="mt-4 pt-4 border-t border-gray-100 hidden">
-                         <button onclick="openEditor(null, '', 'Prontuário', 'Novo Item')" class="w-full border-2 border-dashed border-gray-300 rounded-xl p-3 text-gray-500 hover:border-primary hover:text-primary transition flex items-center justify-center gap-2 text-sm font-medium">
-                            <i data-lucide="plus" class="w-4 h-4"></i> Adicionar Nova Seção
-                         </button>
-                    </div>
-
-                    <!-- Containers Dinâmicos (Para visualizar o conteúdo ao clicar) -->
-                    <div id="dynamic-content-area" class="hidden">
-                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                            <div class="flex items-center gap-2">
-                                <h3 id="dynamic-title" class="font-bold text-lg text-gray-800">Título</h3>
-                                <button id="btn-edit-dynamic" class="hidden text-gray-400 hover:text-blue-600 p-1"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                            </div>
-                            <button onclick="hideProntuarioSections()" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 hover:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
-                        </div>
-                        
-                        <!-- ODONTOGRAMA (Feature Fixa) -->
-                        <div id="feature-odontograma" class="hidden mb-6">
-                            <div class="text-center overflow-x-auto pb-4"><div class="flex flex-col gap-6 items-center min-w-[350px]"><div class="flex gap-2 sm:gap-4"><div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200"><div class="tooth">18</div><div class="tooth">17</div><div class="tooth">16</div><div class="tooth">15</div><div class="tooth">14</div><div class="tooth">13</div><div class="tooth">12</div><div class="tooth">11</div></div><div class="w-px bg-gray-300"></div><div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200"><div class="tooth">21</div><div class="tooth">22</div><div class="tooth">23</div><div class="tooth">24</div><div class="tooth">25</div><div class="tooth">26</div><div class="tooth">27</div><div class="tooth">28</div></div></div><div class="flex gap-2 sm:gap-4"><div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200"><div class="tooth">48</div><div class="tooth">47</div><div class="tooth">46</div><div class="tooth">45</div><div class="tooth">44</div><div class="tooth">43</div><div class="tooth">42</div><div class="tooth">41</div></div><div class="w-px bg-gray-300"></div><div class="flex gap-0.5 bg-gray-50 p-1.5 rounded border border-gray-200"><div class="tooth">31</div><div class="tooth">32</div><div class="tooth">33</div><div class="tooth">34</div><div class="tooth">35</div><div class="tooth">36</div><div class="tooth">37</div><div class="tooth">38</div></div></div></div></div>
-                        </div>
-
-                        <div id="dynamic-body" class="rich-text text-sm editor-paper" style="min-height: auto; box-shadow: none; padding: 0;"></div>
-                    </div>
-                </div>
-
-                <!-- ABA INSTRUMENTAIS -->
-                <div id="tab-instrumentais" class="tab-content">
-                    <div class="flex items-center gap-2 mb-4">
-                        <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="hammer" class="w-5 h-5 text-primary"></i> Checklist</h3>
-                         <button onclick="openEditor('dentistica-materiais', 'Materiais Dentística', 'Dentística', 'Lista de materiais')" id="btn-edit-inst" class="hidden text-gray-400 hover:text-blue-600 p-1"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
-                    </div>
-                    <div id="instrumentais-list" class="space-y-4 rich-text"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- ================= VIEW: EDITOR (ADMIN) WYSIWYG ================= -->
+        <!-- ================= VIEW: EDITOR (ADMIN) ================= -->
         <div id="view-editor" class="view-section">
             <div class="max-w-4xl mx-auto">
-                <form id="editor-form" onsubmit="saveProtocol(event)" class="space-y-4">
+                <form id="editor-form" onsubmit="saveItem(event)" class="space-y-4">
                     <input type="hidden" id="edit-id">
+                    <input type="hidden" id="edit-page-id"> <!-- ID da página pai (ex: dentistica) -->
+                    <input type="hidden" id="edit-tab-id"> <!-- ID da aba pai (ex: prontuario) -->
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                            <input type="text" id="edit-title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-                            <select id="edit-category" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
-                                <option value="Dentística">Dentística</option>
-                                <option value="Prontuário">Prontuário (Subseção)</option>
-                                <option value="Periodontia">Periodontia</option>
-                                <option value="Endodontia">Endodontia</option>
-                                <option value="Cirurgia">Cirurgia</option>
-                                <option value="Geral">Geral</option>
-                            </select>
-                        </div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Título do Botão</label><input type="text" id="edit-title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none"></div>
+                        <div><label class="block text-sm font-medium text-gray-700 mb-1">Subtítulo / Resumo</label><input type="text" id="edit-summary" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none"></div>
                     </div>
-                    <div id="summary-container">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Resumo / Descrição (Para o botão)</label>
-                        <input type="text" id="edit-summary" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
-                    </div>
-
-                    <!-- TOOLBAR -->
+                    
+                    <!-- Toolbar -->
                     <div class="editor-toolbar rounded-t-lg border border-gray-300 border-b-0 bg-gray-50">
-                        <button type="button" onclick="execCmd('undo')" class="toolbar-btn" title="Desfazer"><i data-lucide="undo" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="execCmd('redo')" class="toolbar-btn" title="Refazer"><i data-lucide="redo" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="execCmd('bold')" class="toolbar-btn font-bold">B</button>
+                        <button type="button" onclick="execCmd('italic')" class="toolbar-btn italic">I</button>
                         <div class="w-px h-6 bg-gray-300 mx-2"></div>
-                        <button type="button" onclick="execCmd('bold')" class="toolbar-btn font-bold" title="Negrito">B</button>
-                        <button type="button" onclick="execCmd('italic')" class="toolbar-btn italic" title="Itálico">I</button>
-                        <button type="button" onclick="execCmd('underline')" class="toolbar-btn underline" title="Sublinhado">U</button>
+                        <button type="button" onclick="execCmd('insertUnorderedList')" class="toolbar-btn"><i data-lucide="list" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="execCmd('insertOrderedList')" class="toolbar-btn"><i data-lucide="list-ordered" class="w-4 h-4"></i></button>
                         <div class="w-px h-6 bg-gray-300 mx-2"></div>
-                        <button type="button" onclick="execCmd('formatBlock', 'H3')" class="toolbar-btn font-bold text-sm" title="Título">H1</button>
-                        <button type="button" onclick="execCmd('insertUnorderedList')" class="toolbar-btn" title="Lista com Marcadores"><i data-lucide="list" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="execCmd('insertOrderedList')" class="toolbar-btn" title="Lista Numerada"><i data-lucide="list-ordered" class="w-4 h-4"></i></button>
-                        <div class="w-px h-6 bg-gray-300 mx-2"></div>
-                        <button type="button" onclick="execCmd('outdent')" class="toolbar-btn" title="Diminuir Recuo"><i data-lucide="outdent" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="execCmd('indent')" class="toolbar-btn" title="Aumentar Recuo"><i data-lucide="indent" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="execCmd('outdent')" class="toolbar-btn"><i data-lucide="outdent" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="execCmd('indent')" class="toolbar-btn"><i data-lucide="indent" class="w-4 h-4"></i></button>
                     </div>
+                    
+                    <div id="editor-content" class="editor-paper rich-text rounded-b-lg border border-gray-300" contenteditable="true" placeholder="Conteúdo..."></div>
 
-                    <!-- EDITOR -->
-                    <div id="editor-content" class="editor-paper rich-text rounded-b-lg border border-gray-300" contenteditable="true" placeholder="Comece a digitar..."></div>
-
-                    <!-- Actions -->
                     <div class="flex gap-3 pt-4 sticky bottom-0 bg-gray-50 p-4 border-t border-gray-200 z-50">
-                        <button type="button" onclick="deleteProtocol()" id="btn-delete" class="px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hidden text-sm font-medium">Excluir</button>
+                        <button type="button" onclick="deleteItem()" id="btn-delete" class="px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hidden text-sm font-medium">Excluir</button>
                         <div class="flex-grow"></div>
                         <button type="button" onclick="window.history.back()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-white text-sm font-medium">Cancelar</button>
-                        <button type="submit" id="btn-save" class="px-6 py-2 bg-primary hover:bg-secondary text-white rounded-lg shadow-md flex items-center gap-2 text-sm font-medium">
-                            <span>Salvar</span>
-                            <div id="save-spinner" class="spinner border-white border-l-transparent w-4 h-4 hidden"></div>
-                        </button>
+                        <button type="submit" id="btn-save" class="px-6 py-2 bg-primary hover:bg-secondary text-white rounded-lg shadow-md flex items-center gap-2 text-sm font-medium">Salvar</button>
                     </div>
                 </form>
             </div>
         </div>
 
-    </main>
-
-    <!-- Footer & Admin Modal -->
-    <footer class="bg-white border-t border-gray-200 mt-auto"><div class="max-w-5xl mx-auto px-4 py-8"><div class="flex flex-col items-center gap-6"><button onclick="toggleAdmin()" class="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors"><i data-lucide="lock" class="w-3 h-3"></i> Área Administrativa</button><div class="w-full h-px bg-gray-100"></div><div class="flex items-center gap-6 opacity-80 grayscale hover:grayscale-0 transition-all"><div class="flex flex-col items-center gap-1"><div class="w-10 h-10 rounded-full bg-red-800 flex items-center justify-center text-white border-2 border-red-900"><i data-lucide="activity" class="w-5 h-5"></i></div><span class="text-[8px] font-bold text-red-900 uppercase">Odonto</span></div><div class="w-px h-8 bg-gray-300"></div><div class="flex items-center gap-2"><div class="w-8 h-10 bg-blue-900 rounded-b-full rounded-t-sm flex items-center justify-center text-white border-2 border-yellow-400 relative overflow-hidden"><span class="text-[8px] font-bold z-10">UFC</span><div class="absolute bottom-0 w-full h-1/2 bg-yellow-400/20 rounded-t-full"></div></div><div class="flex flex-col"><span class="text-[8px] font-bold text-gray-800 uppercase leading-none">Univ.</span><span class="text-[8px] font-bold text-gray-800 uppercase leading-none my-0.5">Federal</span><span class="text-[8px] font-bold text-gray-800 uppercase leading-none">Ceará</span></div></div></div></div><div class="text-center pt-6"><p class="text-[10px] text-gray-400">&copy; 2024 Guia Clínico - Odontologia UFC.</p></div></div></footer>
-
-    <div id="admin-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-xs w-full p-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-4 text-center">Acesso Restrito</h3>
-            <input type="password" id="admin-pass" placeholder="Senha" class="w-full p-3 mb-4 border border-gray-300 rounded-lg outline-none focus:border-primary">
-            <div class="flex gap-2">
-                <button onclick="document.getElementById('admin-modal').classList.add('hidden')" class="flex-1 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancelar</button>
-                <button onclick="checkAdmin()" class="flex-1 py-2 bg-primary text-white rounded-lg hover:bg-secondary">Entrar</button>
+        <!-- ================= VIEW: GERENCIADOR DE ABAS ================= -->
+        <div id="modal-tabs" class="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
+            <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6">
+                <h3 class="text-lg font-bold text-gray-900 mb-4">Gerenciar Abas</h3>
+                <div id="tabs-list-edit" class="space-y-2 mb-4 max-h-60 overflow-y-auto"></div>
+                <div class="flex gap-2">
+                    <input type="text" id="new-tab-name" placeholder="Nome da nova aba" class="flex-1 p-2 border border-gray-300 rounded-lg text-sm">
+                    <button onclick="addNewTab()" class="bg-green-600 text-white p-2 rounded-lg hover:bg-green-700"><i data-lucide="plus" class="w-4 h-4"></i></button>
+                </div>
+                <button onclick="document.getElementById('modal-tabs').classList.add('hidden')" class="w-full mt-4 py-2 border border-gray-300 rounded-lg text-sm">Fechar</button>
             </div>
         </div>
-    </div>
+
+    </main>
+
+    <!-- Footer & Admin -->
+    <footer class="bg-white border-t border-gray-200 mt-auto"><div class="max-w-5xl mx-auto px-4 py-8"><div class="flex flex-col items-center gap-6"><button onclick="toggleAdmin()" class="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1"><i data-lucide="lock" class="w-3 h-3"></i> Admin</button><div class="w-full h-px bg-gray-100"></div><div class="flex items-center gap-6 opacity-80 grayscale hover:grayscale-0"><div class="flex flex-col items-center gap-1"><div class="w-10 h-10 rounded-full bg-red-800 flex items-center justify-center text-white border-2 border-red-900"><i data-lucide="activity" class="w-5 h-5"></i></div><span class="text-[8px] font-bold text-red-900 uppercase">Odonto</span></div><div class="w-px h-8 bg-gray-300"></div><div class="flex items-center gap-2"><div class="w-8 h-10 bg-blue-900 rounded-b-full rounded-t-sm flex items-center justify-center text-white border-2 border-yellow-400 relative overflow-hidden"><span class="text-[8px] font-bold z-10">UFC</span><div class="absolute bottom-0 w-full h-1/2 bg-yellow-400/20 rounded-t-full"></div></div><div class="flex flex-col"><span class="text-[8px] font-bold text-gray-800 uppercase leading-none">Univ.</span><span class="text-[8px] font-bold text-gray-800 uppercase leading-none my-0.5">Federal</span><span class="text-[8px] font-bold text-gray-800 uppercase leading-none">Ceará</span></div></div></div></div><div class="text-center pt-6"><p class="text-[10px] text-gray-400">&copy; 2024 Guia Clínico</p></div></div></footer>
+
+    <div id="admin-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 hidden"><div class="bg-white rounded-2xl p-6"><h3 class="text-lg font-bold mb-4">Acesso</h3><input type="password" id="admin-pass" placeholder="Senha" class="w-full p-3 mb-4 border rounded-lg"><div class="flex gap-2"><button onclick="document.getElementById('admin-modal').classList.add('hidden')" class="flex-1 py-2 text-gray-600 border rounded-lg">Cancelar</button><button onclick="checkAdmin()" class="flex-1 py-2 bg-primary text-white rounded-lg">Entrar</button></div></div></div>
 
     <!-- Scripts -->
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCtPyXA4TJMvxeX3vNdelzvADQTyzVRCfw",
-            authDomain: "guia-clinico-odonto.firebaseapp.com",
-            projectId: "guia-clinico-odonto",
-            storageBucket: "guia-clinico-odonto.firebasestorage.app",
-            messagingSenderId: "734059654891",
-            appId: "1:734059654891:web:a0f4168725066b054d58ae",
-            measurementId: "G-5287NREP2D"
-        };
-
-        let db;
-        let isFirebaseActive = false;
-
-        try {
-            firebase.initializeApp(firebaseConfig);
-            db = firebase.firestore();
-            isFirebaseActive = true;
-            console.log("Firebase conectado!");
-        } catch (e) {
-            console.error("Erro Firebase:", e);
-        }
-
+        const firebaseConfig = { apiKey: "AIzaSyCtPyXA4TJMvxeX3vNdelzvADQTyzVRCfw", authDomain: "guia-clinico-odonto.firebaseapp.com", projectId: "guia-clinico-odonto", storageBucket: "guia-clinico-odonto.firebasestorage.app", messagingSenderId: "734059654891", appId: "1:734059654891:web:a0f4168725066b054d58ae", measurementId: "G-5287NREP2D" };
+        let db; let isFirebaseActive = false;
+        try { firebase.initializeApp(firebaseConfig); db = firebase.firestore(); isFirebaseActive = true; } catch(e) { console.error(e); }
+        
         lucide.createIcons();
-
         let isAdmin = false;
-        let contentCache = {}; 
+        let currentPageId = '';
+        let currentTabId = '';
 
-        // DADOS PADRÃO (Iniciais)
-        const defaultData = [
-             { id: 'dentistica-siglas', title: 'Siglas', category: 'Prontuário', summary: 'Abreviações comuns', content: `<div class="grid grid-cols-1 gap-2 text-sm"><p><strong>Gerais</strong></p><ul><li>DA: Solicitação de diário alimentar</li><li>ODG: Odontograma</li></ul></div>` },
-             { id: 'dentistica-exemplos', title: 'Exemplos', category: 'Prontuário', summary: 'Preenchimento de ficha', content: `<p>Conteúdo de exemplos...</p>` },
-             { id: 'dentistica-odontograma', title: 'Odontograma', category: 'Prontuário', summary: 'Referência visual', content: `<p>Legenda: Vermelho (Cárie), Azul (Restaurado)...</p>` },
-             { id: 'dentistica-materiais', title: 'Materiais Dentística', category: 'Dentística', content: `<ul><li><strong>Carrinho:</strong> Anestésico...</li></ul>` },
-             { id: 'demo1', title: "Classe I - Oclusal", category: "Dentística", summary: "Restauração oclusal.", content: `<ol><li>Diagnóstico...</li></ol>` }
+        // DADOS ESTRUTURAIS (Simulando DB NoSQL)
+        // Estrutura: db.collection('tabs') e db.collection('items')
+        let localTabs = [
+            { id: 'tab-prontuario', pageId: 'dentistica', title: 'Prontuário', order: 1 },
+            { id: 'tab-materiais', pageId: 'dentistica', title: 'Materiais', order: 2 },
+            { id: 'tab-geral-presc', pageId: 'prescricoes', title: 'Geral', order: 1 }
+        ];
+        let localItems = [
+            { id: 'item1', tabId: 'tab-prontuario', title: 'Siglas', summary: 'Abreviações', icon: 'type', content: '...' },
+            { id: 'item2', tabId: 'tab-prontuario', title: 'Exemplos', summary: 'Preenchimento', icon: 'file-check', content: '...' },
+            { id: 'item3', tabId: 'tab-materiais', title: 'Lista Geral', summary: 'Checklist', icon: 'hammer', content: '...' }
         ];
 
-        // --- EDITOR WYSIWYG ---
-        function execCmd(command, value = null) {
-            document.execCommand(command, false, value);
-            document.getElementById('editor-content').focus();
-        }
-        document.getElementById('editor-content').addEventListener('paste', function(e) {
-            e.preventDefault();
-            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-            document.execCommand('insertText', false, text);
-        });
-        document.getElementById('editor-content').addEventListener('keydown', function(e) {
-            if (e.key === 'Tab') {
-                e.preventDefault();
-                e.shiftKey ? document.execCommand('outdent') : document.execCommand('indent');
-            }
-        });
-
-        // --- LÓGICA DE DADOS ---
-        async function loadSiteContent() {
-            if (isFirebaseActive) {
-                const snapshot = await db.collection('protocols').get();
-                if(snapshot.empty) {
-                     // Popula se vazio (opcional)
-                } else {
-                    snapshot.forEach(doc => { contentCache[doc.id] = { id: doc.id, ...doc.data() }; });
-                }
-            } else {
-                let local = JSON.parse(localStorage.getItem('gc_protocols')) || defaultData;
-                local.forEach(item => contentCache[item.id] = item);
-            }
-            updateUI(); 
-        }
-
-        function updateUI() {
-            if (document.getElementById('view-blog').classList.contains('active')) renderBlog();
-            if (document.getElementById('view-dentistica').classList.contains('active')) {
-                 renderProntuarioMenu();
-                 renderInstrumentais();
-                 const activeSection = document.querySelector('#prontuario-menu.hidden') ? document.querySelector('#dynamic-content-area:not(.hidden)') : null;
-                 // Se estava em uma seção interna que foi deletada, volta ao menu
-                 if(activeSection) {
-                    // Logic to reload current section text if open would go here
-                 }
-            }
-            updateEditButtons();
-        }
-
-        function renderBlog() {
-            const grid = document.getElementById('blog-grid');
-            grid.innerHTML = '';
-            // Blog mostra apenas o que NÃO é da categoria "Prontuário" e tem summary
-            const protocols = Object.values(contentCache).filter(item => item.category !== 'Prontuário' && item.summary && item.category !== 'Geral');
+        // --- SISTEMA DE PÁGINAS DINÂMICAS ---
+        async function openDynamicPage(pageId, pageTitle) {
+            currentPageId = pageId;
+            document.getElementById('page-title').textContent = pageTitle;
+            navigateTo('dynamic-page');
             
-            if (protocols.length === 0) {
-                document.getElementById('no-protocols-msg').classList.remove('hidden');
-            } else {
-                 document.getElementById('no-protocols-msg').classList.add('hidden');
-                 protocols.forEach(post => {
-                    const card = document.createElement('div');
-                    card.className = "bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-full";
-                    card.onclick = () => openPost(post.id);
-                    card.innerHTML = `
-                        <div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-primary bg-blue-50 px-2 py-1 rounded">${post.category}</span>
-                        ${isAdmin ? `<button onclick="event.stopPropagation(); openEditor('${post.id}')" class="text-gray-400 hover:text-blue-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button>` : ''}</div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">${post.title}</h3>
-                        <p class="text-sm text-gray-600 mb-4 line-clamp-3 flex-grow">${post.summary || ''}</p>
-                        <div class="flex items-center text-primary text-sm font-medium mt-auto">Ler protocolo <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></div>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-            lucide.createIcons();
-            document.getElementById('btn-new-protocol').classList.toggle('hidden', !isAdmin);
+            // Carrega Abas
+            await renderTabs(pageId);
         }
 
-        // Renderiza o Menu de Prontuário Dinamicamente
-        function renderProntuarioMenu() {
-            const menu = document.getElementById('prontuario-menu');
-            menu.innerHTML = '';
+        async function renderTabs(pageId) {
+            const tabsContainer = document.getElementById('dynamic-tabs');
+            tabsContainer.innerHTML = '';
             
-            // Itens com categoria 'Prontuário'
-            const items = Object.values(contentCache).filter(item => item.category === 'Prontuário');
-            // Ordenação básica (opcional, por ID ou Título)
-            items.sort((a,b) => a.title.localeCompare(b.title));
+            let tabs = [];
+            if(isFirebaseActive) {
+                const q = await db.collection('tabs').where('pageId', '==', pageId).orderBy('order').get();
+                tabs = q.docs.map(d => ({id: d.id, ...d.data()}));
+            } else {
+                tabs = localTabs.filter(t => t.pageId === pageId).sort((a,b) => a.order - b.order);
+            }
+
+            if(tabs.length === 0 && isAdmin) {
+                 // Cria aba default se não houver
+                 if(!isFirebaseActive) localTabs.push({id: `tab-${Date.now()}`, pageId: pageId, title: 'Geral', order: 1});
+                 renderTabs(pageId); return;
+            }
+
+            tabs.forEach((tab, index) => {
+                const btn = document.createElement('button');
+                btn.className = `tab-btn flex-1 ${index === 0 ? 'active' : ''}`;
+                btn.textContent = tab.title;
+                btn.onclick = (e) => selectTab(e, tab.id);
+                tabsContainer.appendChild(btn);
+                if(index === 0) loadTabContent(tab.id); // Carrega a primeira
+            });
+            
+            document.getElementById('btn-manage-tabs').classList.toggle('hidden', !isAdmin);
+        }
+
+        function selectTab(e, tabId) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            loadTabContent(tabId);
+        }
+
+        async function loadTabContent(tabId) {
+            currentTabId = tabId;
+            const contentArea = document.getElementById('tab-content-area');
+            contentArea.innerHTML = '<div class="flex justify-center p-4"><div class="spinner"></div></div>';
+            
+            let items = [];
+            if(isFirebaseActive) {
+                const q = await db.collection('items').where('tabId', '==', tabId).get();
+                items = q.docs.map(d => ({id: d.id, ...d.data()}));
+            } else {
+                items = localItems.filter(i => i.tabId === tabId);
+            }
+            
+            contentArea.innerHTML = '';
             
             items.forEach(item => {
-                let iconName = 'file-text';
-                if(item.id.includes('siglas')) iconName = 'type';
-                if(item.id.includes('exemplos')) iconName = 'file-check';
-                if(item.id.includes('odontograma')) iconName = 'grid-3x3';
-
-                const btn = document.createElement('button');
-                btn.onclick = () => showProntuarioSection(item.id);
-                btn.className = "w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left group";
+                const btn = document.createElement('div');
+                btn.className = "w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left cursor-pointer group";
+                btn.onclick = () => openPost(item);
                 btn.innerHTML = `
-                    <div class="p-3 bg-blue-100 rounded-full text-primary shrink-0"><i data-lucide="${iconName}" class="w-5 h-5"></i></div>
+                    <div class="p-3 bg-blue-100 rounded-full text-primary shrink-0"><i data-lucide="${item.icon || 'file-text'}" class="w-5 h-5"></i></div>
                     <div class="flex-grow"><span class="block font-semibold text-gray-800">${item.title}</span><span class="text-xs text-gray-500">${item.summary || ''}</span></div>
                     <div class="flex gap-2">
-                         ${isAdmin ? `<span onclick="event.stopPropagation(); openEditor('${item.id}')" class="text-gray-400 hover:text-blue-600 p-1 rounded"><i data-lucide="edit-3" class="w-4 h-4"></i></span>` : ''}
+                        ${isAdmin ? `<span onclick="event.stopPropagation(); openEditor('${item.id}', '${item.title}', '${item.summary}', false)" class="text-gray-400 hover:text-blue-600 p-1"><i data-lucide="edit-3" class="w-4 h-4"></i></span>` : ''}
                         <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
                     </div>
                 `;
-                menu.appendChild(btn);
+                contentArea.appendChild(btn);
             });
+            
             lucide.createIcons();
-            document.getElementById('prontuario-admin-actions').classList.toggle('hidden', !isAdmin);
+            document.getElementById('page-admin-actions').classList.toggle('hidden', !isAdmin);
         }
 
-        function renderInstrumentais() {
-            const id = 'dentistica-materiais';
-            const data = contentCache[id] || { content: '<p class="text-gray-400 italic">Conteúdo não cadastrado.</p>' };
-            document.getElementById('instrumentais-list').innerHTML = data.content;
-        }
-
-        function showProntuarioSection(id) {
-            const data = contentCache[id];
-            if(!data) return;
-
-            document.getElementById('prontuario-menu').classList.add('hidden');
-            document.getElementById('prontuario-admin-actions').classList.add('hidden');
-            const area = document.getElementById('dynamic-content-area');
-            area.classList.remove('hidden');
+        // --- GESTÃO DE ABAS (ADMIN) ---
+        function openTabsManager() {
+            const list = document.getElementById('tabs-list-edit');
+            list.innerHTML = '';
+            // Pega abas atuais (da memória ou recarrega) - Simplificado usando a view atual
+            // Idealmente faria nova query
+            let tabs = isFirebaseActive ? [] : localTabs.filter(t => t.pageId === currentPageId); 
+            // Mock para firebase no frontend simples (assumindo que renderTabs já rodou)
             
-            document.getElementById('dynamic-title').textContent = data.title;
-            document.getElementById('dynamic-body').innerHTML = data.content;
-            
-            // Lógica Especial para Odontograma (Mostra a ferramenta visual se for a seção correta)
-            const featureOdon = document.getElementById('feature-odontograma');
-            if(id === 'dentistica-odontograma') featureOdon.classList.remove('hidden');
-            else featureOdon.classList.add('hidden');
-            
-            const btnEdit = document.getElementById('btn-edit-dynamic');
-            btnEdit.onclick = () => openEditor(id, data.title, 'Prontuário', data.summary);
-            btnEdit.classList.toggle('hidden', !isAdmin);
-        }
+            // Renderiza lista simples
+            const container = document.getElementById('dynamic-tabs');
+            Array.from(container.children).forEach(btn => {
+                const div = document.createElement('div');
+                div.className = "flex justify-between items-center bg-gray-50 p-2 rounded";
+                div.innerHTML = `<span>${btn.textContent}</span> <button class="text-red-500 text-xs">X</button>`; 
+                // Implementação real exigiria IDs.
+                list.appendChild(div);
+            });
 
-        window.hideProntuarioSections = function() {
-            document.getElementById('dynamic-content-area').classList.add('hidden');
-            document.getElementById('prontuario-menu').classList.remove('hidden');
-            if(isAdmin) document.getElementById('prontuario-admin-actions').classList.remove('hidden');
+            document.getElementById('modal-tabs').classList.remove('hidden');
         }
         
-        window.openFixedContent = function(id, title, defaultContent) {
-            const data = contentCache[id] || { id: id, title: title, category: 'Geral', content: defaultContent || '<p>Conteúdo em breve.</p>' };
-            openPost(null, data);
-        }
-        
-        window.openPost = function(id, dataObj = null) {
-            const post = dataObj || contentCache[id];
-            if (!post) return;
-
-            document.getElementById('post-category').textContent = post.category;
-            document.getElementById('post-title').textContent = post.title;
-            document.getElementById('post-content').innerHTML = post.content;
+        async function addNewTab() {
+            const name = document.getElementById('new-tab-name').value;
+            if(!name) return;
             
-            const btnEdit = document.getElementById('btn-edit-post');
-            btnEdit.onclick = () => openEditor(post.id, post.title, post.category, post.summary);
-            btnEdit.classList.toggle('hidden', !isAdmin);
-
-            navigateTo('post');
+            const newTab = { pageId: currentPageId, title: name, order: 99 }; // Order simplificado
+            if(isFirebaseActive) await db.collection('tabs').add(newTab);
+            else localTabs.push({id: `tab-${Date.now()}`, ...newTab});
+            
+            document.getElementById('new-tab-name').value = '';
+            document.getElementById('modal-tabs').classList.add('hidden');
+            renderTabs(currentPageId);
         }
 
-        window.openEditor = function(id = null, title = '', category = '', summary = '') {
-            if(id && contentCache[id]) {
-                const data = contentCache[id];
-                title = data.title;
-                category = data.category;
-                summary = data.summary;
-                document.getElementById('editor-content').innerHTML = data.content;
+        // --- EDITOR & ITEMS ---
+        function createNewItem() {
+            openEditor(null, '', '', true); // Novo item
+        }
+
+        function openEditor(id, title, summary, isNew = false) {
+            document.getElementById('edit-id').value = id || '';
+            document.getElementById('edit-page-id').value = currentPageId;
+            document.getElementById('edit-tab-id').value = currentTabId;
+            document.getElementById('edit-title').value = title || '';
+            document.getElementById('edit-summary').value = summary || '';
+            
+            if(id && !isNew) {
+                // Carregar conteúdo
+                const item = isFirebaseActive ? null : localItems.find(i => i.id === id); // Mock
+                document.getElementById('editor-content').innerHTML = item ? item.content : '';
                 document.getElementById('btn-delete').classList.remove('hidden');
+                 if(isFirebaseActive) {
+                    db.collection('items').doc(id).get().then(doc => {
+                        if(doc.exists) document.getElementById('editor-content').innerHTML = doc.data().content;
+                    });
+                }
             } else {
                 document.getElementById('editor-content').innerHTML = '';
                 document.getElementById('btn-delete').classList.add('hidden');
             }
-
-            document.getElementById('edit-id').value = id || '';
-            document.getElementById('edit-title').value = title;
-            document.getElementById('edit-category').value = category;
-            document.getElementById('edit-summary').value = summary || '';
-            
-            const isFixedContent = id && (id.includes('materiais') || id.includes('prescricoes') || id.includes('biosseguranca'));
-            document.getElementById('summary-container').style.display = isFixedContent ? 'none' : 'block';
-
             navigateTo('editor');
         }
 
-        // --- ADMIN & NAV ---
-        window.toggleAdmin = function() {
-            if (isAdmin) {
-                isAdmin = false;
-                document.getElementById('admin-badge').classList.add('hidden');
-                alert("Modo Administrador desativado.");
-                navigateTo('home');
-            } else {
-                document.getElementById('admin-modal').classList.remove('hidden');
-            }
-        }
-        
-        window.checkAdmin = function() {
-            if(document.getElementById('admin-pass').value === 'admin') {
-                isAdmin = true;
-                document.getElementById('admin-modal').classList.add('hidden');
-                document.getElementById('admin-badge').classList.remove('hidden');
-                loadSiteContent(); 
-            } else alert("Senha incorreta");
-        }
-
-        function updateEditButtons() {
-            document.getElementById('btn-edit-inst').classList.toggle('hidden', !isAdmin);
-        }
-
-        window.saveProtocol = async function(e) {
+        async function saveItem(e) {
             e.preventDefault();
-            const btn = document.getElementById('btn-save');
-            const spinner = document.getElementById('save-spinner');
-            btn.disabled = true; spinner.classList.remove('hidden');
-
-            let id = document.getElementById('edit-id').value;
+            const id = document.getElementById('edit-id').value;
             const data = {
                 title: document.getElementById('edit-title').value,
-                category: document.getElementById('edit-category').value,
                 summary: document.getElementById('edit-summary').value,
                 content: document.getElementById('editor-content').innerHTML,
-                updatedAt: new Date()
+                pageId: document.getElementById('edit-page-id').value,
+                tabId: document.getElementById('edit-tab-id').value,
+                icon: 'file-text' // Default icon
             };
-
-            try {
-                if (isFirebaseActive) {
-                    if (id) {
-                        await db.collection('protocols').doc(id).set(data, { merge: true });
-                    } else {
-                        const docRef = await db.collection('protocols').add(data);
-                        id = docRef.id;
-                    }
-                } else {
-                    if(!id) id = Date.now().toString();
-                    contentCache[id] = { id, ...data };
-                    // Persist for offline demo not implemented fully to prefer live logic
-                }
-                contentCache[id] = { id, ...data };
-                
-                if(data.category === 'Prontuário') {
-                     window.history.back(); // Volta pro menu prontuario
-                     updateUI(); // Força update do menu
-                } else if(data.summary && data.category !== 'Geral') {
-                    navigateTo('blog'); 
-                } else {
-                    window.history.back(); 
-                }
-
-            } catch (err) { console.error(err); alert("Erro ao salvar."); } 
-            finally { btn.disabled = false; spinner.classList.add('hidden'); }
-        }
-
-        window.deleteProtocol = async function() {
-            if(!confirm("Excluir?")) return;
-            const id = document.getElementById('edit-id').value;
-            if(isFirebaseActive) await db.collection('protocols').doc(id).delete();
-            delete contentCache[id];
             
-            // Decide para onde voltar
-            if(document.getElementById('edit-category').value === 'Prontuário') {
-                 navigateTo('dentistica');
+            if(isFirebaseActive) {
+                if(id) await db.collection('items').doc(id).update(data);
+                else await db.collection('items').add(data);
             } else {
-                 navigateTo('blog');
+                if(id) { 
+                    const idx = localItems.findIndex(i => i.id === id);
+                    if(idx > -1) localItems[idx] = { id, ...data };
+                } else {
+                    localItems.push({ id: `item-${Date.now()}`, ...data });
+                }
             }
+            window.history.back();
+        }
+        
+        async function deleteItem() {
+            if(!confirm("Excluir item?")) return;
+            const id = document.getElementById('edit-id').value;
+            if(isFirebaseActive) await db.collection('items').doc(id).delete();
+            else localItems = localItems.filter(i => i.id !== id);
+            window.history.back();
         }
 
-        window.navigateTo = function(viewId) {
+        // --- FUNÇÕES UTILITÁRIAS ---
+        function execCmd(cmd, val=null) { document.execCommand(cmd, false, val); }
+        document.getElementById('editor-content').addEventListener('paste', (e) => {
+            e.preventDefault();
+            document.execCommand('insertText', false, (e.clipboardData || window.clipboardData).getData('text/plain'));
+        });
+
+        function navigateTo(viewId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
             document.getElementById(`view-${viewId}`).classList.add('active');
             window.scrollTo(0, 0);
             const backBtn = document.getElementById('back-btn');
             if (viewId === 'home') backBtn.classList.add('hidden');
             else backBtn.classList.remove('hidden');
-            updateUI();
-        }
-
-        window.switchTab = function(tabName) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`tab-btn-${tabName}`).classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            updateUI();
+            
+            if(viewId === 'blog') renderBlog(); // Re-render blog se necessário
         }
         
-        window.showModal = function(title) { alert(`Seção ${title} em desenvolvimento.`); }
+        function openPost(item) {
+             document.getElementById('post-title').textContent = item.title;
+             document.getElementById('post-category').textContent = item.summary || 'Detalhes';
+             document.getElementById('post-content').innerHTML = item.content;
+             navigateTo('post');
+             // Botão de editar no post view
+             const btn = document.getElementById('btn-edit-post');
+             btn.classList.toggle('hidden', !isAdmin);
+             btn.onclick = () => openEditor(item.id, item.title, item.summary);
+        }
 
-        // Init
-        loadSiteContent();
+        function toggleAdmin() {
+            if(isAdmin) { isAdmin = false; document.getElementById('admin-badge').classList.add('hidden'); navigateTo('home'); }
+            else document.getElementById('admin-modal').classList.remove('hidden');
+        }
+        function checkAdmin() {
+            if(document.getElementById('admin-pass').value === 'admin') {
+                isAdmin = true; document.getElementById('admin-modal').classList.add('hidden');
+                document.getElementById('admin-badge').classList.remove('hidden');
+                // Refresh current view if needed
+                if(document.getElementById('view-dynamic-page').classList.contains('active')) renderTabs(currentPageId);
+            } else alert("Senha incorreta");
+        }
+
         lucide.createIcons();
     </script>
 </body>
