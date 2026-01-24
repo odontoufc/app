@@ -8,6 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -31,6 +32,7 @@
                         primary: '#0e7490', 
                         secondary: '#155e75', 
                         accent: '#ecfeff',
+                        paper: '#ffffff',
                     },
                     screens: { 'xs': '375px' }
                 }
@@ -39,7 +41,7 @@
     </script>
 
     <style>
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; background-color: #f3f4f6; } /* Fundo cinza claro para destacar o papel */
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
@@ -49,7 +51,6 @@
             .btn-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); border-color: #0e7490; }
         }
 
-        /* Animations */
         .view-section { display: none; }
         .view-section.active { display: block; animation: fadeInView 0.3s ease; }
         @keyframes fadeInView { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -63,16 +64,80 @@
         .spinner { border: 3px solid rgba(0,0,0,0.1); border-left-color: #0e7490; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Estilo para o conteúdo gerado */
-        #post-content ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
-        #post-content ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
-        #post-content li { margin-bottom: 0.5em; }
-        #post-content p { margin-bottom: 1em; }
-        #post-content strong { font-weight: 700; color: #155e75; }
-        #post-content em { font-style: italic; }
+        /* --- ESTILOS DO EDITOR TIPO GOOGLE DOCS --- */
         
-        /* Indentação visual baseada em inline styles do parser */
-        #post-content li[style*="margin-left"] { list-style-type: circle; } 
+        /* Área de Edição (Papel) */
+        .editor-paper {
+            background: white;
+            min-height: 29.7cm; /* Tamanho A4 aprox */
+            padding: 2.5cm 2cm;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            outline: none;
+            color: #333;
+            line-height: 1.6;
+            font-size: 11pt;
+        }
+        
+        /* Responsividade do Papel */
+        @media (max-width: 640px) {
+            .editor-paper {
+                padding: 1.5rem;
+                min-height: 60vh;
+            }
+        }
+
+        /* Barra de Ferramentas */
+        .editor-toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: #f3f4f6;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 0.5rem;
+            display: flex;
+            gap: 0.25rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .toolbar-btn {
+            padding: 0.4rem;
+            border-radius: 0.25rem;
+            color: #4b5563;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .toolbar-btn:hover { background-color: #e5e7eb; color: #111827; }
+        .toolbar-btn.active { background-color: #dbeafe; color: #0e7490; }
+
+        /* --- ESTILOS DE CONTEÚDO RICO (Editor e Visualização) --- */
+        .rich-text h1 { font-size: 1.8em; font-weight: 700; margin-bottom: 0.5em; margin-top: 1em; color: #111827; }
+        .rich-text h2 { font-size: 1.4em; font-weight: 700; margin-bottom: 0.5em; margin-top: 1em; color: #1f2937; }
+        .rich-text h3 { font-size: 1.1em; font-weight: 700; margin-bottom: 0.5em; margin-top: 1em; color: #374151; }
+        .rich-text p { margin-bottom: 1em; }
+        .rich-text ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
+        .rich-text ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
+        .rich-text li { margin-bottom: 0.25em; }
+        
+        /* Hierarquia de Listas (Google Docs Style) */
+        .rich-text ul ul { list-style-type: circle; }
+        .rich-text ul ul ul { list-style-type: square; }
+        
+        .rich-text ol ol { list-style-type: lower-alpha; } /* 1. -> a. */
+        .rich-text ol ol ol { list-style-type: lower-roman; } /* a. -> i. */
+        
+        .rich-text blockquote { border-left: 4px solid #e5e7eb; padding-left: 1em; color: #6b7280; font-style: italic; }
+        
+        /* Placeholder para o ContentEditable vazio */
+        [contenteditable]:empty:before {
+            content: attr(placeholder);
+            color: #9ca3af;
+            cursor: text;
+            display: block; /* For Firefox */
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen text-base antialiased">
@@ -163,8 +228,8 @@
                 </div>
             </section>
 
-            <!-- Outros -->
-            <section>
+            <!-- Outros e Manual... (Mantidos) -->
+             <section>
                 <div class="flex items-center gap-2 mb-4 border-b border-gray-200 pb-2">
                     <i data-lucide="package-plus" class="w-5 h-5 text-primary"></i>
                     <h3 class="text-lg font-semibold text-gray-800">Recursos</h3>
@@ -191,7 +256,6 @@
                 </div>
             </section>
 
-            <!-- Manual -->
             <section class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
                 <div class="p-5 flex flex-col md:flex-row items-center md:items-start gap-4">
                     <div class="bg-primary/10 p-3 rounded-xl shrink-0">
@@ -244,20 +308,22 @@
 
         <!-- ================= VIEW: LEITURA DO PROTOCOLO ================= -->
         <div id="view-post" class="view-section">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[60vh]">
-                <div class="bg-gray-50 border-b border-gray-100 p-6">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase mb-2">Categoria</span>
-                            <h2 id="post-title" class="text-2xl font-bold text-gray-900 leading-tight">Título do Protocolo</h2>
+            <div class="max-w-4xl mx-auto"> <!-- Centralizado para leitura melhor -->
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[60vh]">
+                    <div class="bg-gray-50 border-b border-gray-100 p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase mb-2">Categoria</span>
+                                <h2 id="post-title" class="text-2xl font-bold text-gray-900 leading-tight">Título do Protocolo</h2>
+                            </div>
+                            <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2">
+                                <i data-lucide="edit-3" class="w-5 h-5"></i>
+                            </button>
                         </div>
-                        <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2">
-                            <i data-lucide="edit-3" class="w-5 h-5"></i>
-                        </button>
                     </div>
+                    <!-- Área de Visualização Rica -->
+                    <div id="post-content" class="p-8 rich-text"></div>
                 </div>
-                <!-- Área onde o texto processado será exibido -->
-                <div id="post-content" class="p-6 text-gray-700 text-sm leading-relaxed"></div>
             </div>
         </div>
 
@@ -318,51 +384,59 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: EDITOR (ADMIN) ================= -->
+        <!-- ================= VIEW: EDITOR (ADMIN) WYSIWYG ================= -->
         <div id="view-editor" class="view-section">
-            <div class="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-                <h2 class="text-xl font-bold mb-6 text-gray-800">Editor de Protocolo</h2>
+            <div class="max-w-4xl mx-auto">
                 <form id="editor-form" onsubmit="saveProtocol(event)" class="space-y-4">
                     <input type="hidden" id="edit-id">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                        <input type="text" id="edit-title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                    
+                    <!-- Metadata Inputs -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
+                            <input type="text" id="edit-title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+                            <select id="edit-category" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                                <option value="Dentística">Dentística</option>
+                                <option value="Periodontia">Periodontia</option>
+                                <option value="Endodontia">Endodontia</option>
+                                <option value="Cirurgia">Cirurgia</option>
+                            </select>
+                        </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-                        <select id="edit-category" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
-                            <option value="Dentística">Dentística</option>
-                            <option value="Periodontia">Periodontia</option>
-                            <option value="Endodontia">Endodontia</option>
-                            <option value="Cirurgia">Cirurgia</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Resumo (Card)</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Resumo (Para o Card)</label>
                         <input type="text" id="edit-summary" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo</label>
-                        
-                        <!-- BARRA DE FERRAMENTAS DO EDITOR -->
-                        <div class="flex gap-2 mb-2 p-2 bg-gray-50 rounded-lg border border-gray-200 items-center overflow-x-auto">
-                            <button type="button" onclick="formatText('bold')" class="p-2 hover:bg-white rounded text-gray-600 font-bold" title="Negrito (Ctrl+B)">B</button>
-                            <button type="button" onclick="formatText('italic')" class="p-2 hover:bg-white rounded text-gray-600 italic" title="Itálico (Ctrl+I)">I</button>
-                            <div class="w-px h-4 bg-gray-300 mx-1"></div>
-                            <button type="button" onclick="formatText('list-ul')" class="p-2 hover:bg-white rounded text-gray-600" title="Lista com Marcadores"><i data-lucide="list" class="w-4 h-4"></i></button>
-                            <button type="button" onclick="formatText('list-ol')" class="p-2 hover:bg-white rounded text-gray-600" title="Lista Numerada"><i data-lucide="list-ordered" class="w-4 h-4"></i></button>
-                            <div class="w-px h-4 bg-gray-300 mx-1"></div>
-                            <button type="button" onclick="formatText('indent')" class="p-2 hover:bg-white rounded text-gray-600" title="Aumentar Recuo (Tab)"><i data-lucide="indent" class="w-4 h-4"></i></button>
-                            <button type="button" onclick="formatText('outdent')" class="p-2 hover:bg-white rounded text-gray-600" title="Diminuir Recuo (Shift+Tab)"><i data-lucide="outdent" class="w-4 h-4"></i></button>
-                        </div>
 
-                        <textarea id="edit-content" onpaste="handleEditorPaste(event)" rows="15" required onkeydown="handleEditorKeydown(event)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none font-mono text-sm placeholder-gray-400" placeholder="Escreva o protocolo aqui..."></textarea>
+                    <!-- BARRA DE FERRAMENTAS DO EDITOR -->
+                    <div class="editor-toolbar rounded-t-lg border border-gray-300 border-b-0 bg-gray-50">
+                        <button type="button" onclick="execCmd('undo')" class="toolbar-btn" title="Desfazer"><i data-lucide="undo" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="execCmd('redo')" class="toolbar-btn" title="Refazer"><i data-lucide="redo" class="w-4 h-4"></i></button>
+                        <div class="w-px h-6 bg-gray-300 mx-2"></div>
+                        <button type="button" onclick="execCmd('bold')" class="toolbar-btn font-bold" title="Negrito">B</button>
+                        <button type="button" onclick="execCmd('italic')" class="toolbar-btn italic" title="Itálico">I</button>
+                        <button type="button" onclick="execCmd('underline')" class="toolbar-btn underline" title="Sublinhado">U</button>
+                        <div class="w-px h-6 bg-gray-300 mx-2"></div>
+                        <button type="button" onclick="execCmd('formatBlock', 'H3')" class="toolbar-btn font-bold text-sm" title="Título">H1</button>
+                        <button type="button" onclick="execCmd('insertUnorderedList')" class="toolbar-btn" title="Lista com Marcadores"><i data-lucide="list" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="execCmd('insertOrderedList')" class="toolbar-btn" title="Lista Numerada"><i data-lucide="list-ordered" class="w-4 h-4"></i></button>
+                        <div class="w-px h-6 bg-gray-300 mx-2"></div>
+                        <button type="button" onclick="execCmd('outdent')" class="toolbar-btn" title="Diminuir Recuo"><i data-lucide="outdent" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="execCmd('indent')" class="toolbar-btn" title="Aumentar Recuo (Subseção)"><i data-lucide="indent" class="w-4 h-4"></i></button>
                     </div>
-                    <div class="flex gap-3 pt-4">
-                        <button type="button" onclick="deleteProtocol()" id="btn-delete" class="px-4 py-3 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hidden">Excluir</button>
+
+                    <!-- ÁREA DE EDIÇÃO (PAPEL WYSIWYG) -->
+                    <div id="editor-content" class="editor-paper rich-text rounded-b-lg border border-gray-300" contenteditable="true" placeholder="Comece a digitar o protocolo aqui..."></div>
+
+                    <!-- Botões de Ação -->
+                    <div class="flex gap-3 pt-4 sticky bottom-0 bg-gray-50 p-4 border-t border-gray-200 z-50">
+                        <button type="button" onclick="deleteProtocol()" id="btn-delete" class="px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hidden text-sm font-medium">Excluir</button>
                         <div class="flex-grow"></div>
-                        <button type="button" onclick="navigateTo('blog')" class="px-6 py-3 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">Cancelar</button>
-                        <button type="submit" id="btn-save" class="px-6 py-3 bg-primary hover:bg-secondary text-white rounded-lg shadow-md flex items-center gap-2">
+                        <button type="button" onclick="navigateTo('blog')" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-white text-sm font-medium">Cancelar</button>
+                        <button type="submit" id="btn-save" class="px-6 py-2 bg-primary hover:bg-secondary text-white rounded-lg shadow-md flex items-center gap-2 text-sm font-medium">
                             <span>Salvar</span>
                             <div id="save-spinner" class="spinner border-white border-l-transparent w-4 h-4 hidden"></div>
                         </button>
@@ -452,300 +526,49 @@
         let protocols = []; 
         let currentProtocolId = null;
 
+        // DADOS PADRÃO (Convertidos para HTML para funcionar com o novo editor)
         const defaultProtocols = [
             {
                 id: 'demo1',
                 title: "Classe I - Oclusal",
                 category: "Dentística",
                 summary: "Restauração de lesões oclusais com resina composta.",
-                content: `1. **Diagnóstico:** (radiografia).
-2. **Verificação dos contatos oclusais:** (Papel carbono e Pinça de Willis).
-3. **Profilaxia:** (Caneta de baixa, Escova de Robson, Pote Dappen e Pasta profilática).
-4. **Seleção de cor:** (90% dos casos - A2, A3 ou A3,5).
-5. **Anestesia:** (Carpule e Anestésico).
-6. **Isolamento absoluto:** (Lençol, Arco de Young, Perfurador, Grampo, Fio dental, Pinça porta-grampo, Espátula de invaginação).
-7. **Acesso à lesão:** (Pontas esféricas em alta rotação).
-8. **Forma de contorno:** (se necessário).
-9. **Remoção de tecido cariado:** (Broca esférica CA4/CA6 em baixa rotação e colher de dentina).
-10. **Procedimento Adesivo:**
-    - Condicionamento ácido (Ácido fosfórico) 1 - 2 mm aquém das margens por 30 seg
-    - Lavagem e secagem (dentina por absorção e esmalte com jatos de ar) por 30 seg
-    - Aplicação do Primer (microbrush)
-    - Evaporação do solvente (jatos de ar à distância)
-    - Aplicação do Adesivo (microbrush)
-    - Fotoativação
-11. **Inserção incremental da resina composta + Fotoativação.**
-12. **Remoção do isolamento.**
-13. **Checagem dos contatos oclusais.**
-14. **Ajuste oclusal:** (Pontas diamantadas de granulações finas e extrafinas).
-15. **Acabamento e polimento:** (borrachas sequências: verde, amarela e azul) com lubrificação.`
+                content: `<ol><li><strong>Diagnóstico:</strong> (radiografia).</li><li><strong>Verificação dos contatos oclusais:</strong> (Papel carbono e Pinça de Willis).</li><li><strong>Profilaxia:</strong> (Caneta de baixa, Escova de Robson, Pote Dappen e Pasta profilática).</li><li><strong>Seleção de cor:</strong> (90% dos casos - A2, A3 ou A3,5).</li><li><strong>Anestesia:</strong> (Carpule e Anestésico).</li><li><strong>Isolamento absoluto:</strong> (Lençol, Arco de Young, Perfurador, Grampo, Fio dental, Pinça porta-grampo, Espátula de invaginação).</li><li><strong>Acesso à lesão:</strong> (Pontas esféricas em alta rotação).</li><li><strong>Forma de contorno:</strong> (se necessário).</li><li><strong>Remoção de tecido cariado:</strong> (Broca esférica CA4/CA6 em baixa rotação e colher de dentina).</li><li><strong>Procedimento Adesivo:</strong><ul><li>Condicionamento ácido (Ácido fosfórico) 1 - 2 mm aquém das margens por 30 seg</li><li>Lavagem e secagem (dentina por absorção e esmalte com jatos de ar) por 30 seg</li><li>Aplicação do Primer (microbrush)</li><li>Evaporação do solvente (jatos de ar à distância)</li><li>Aplicação do Adesivo (microbrush)</li><li>Fotoativação</li></ul></li><li><strong>Inserção incremental da resina composta + Fotoativação.</strong></li><li><strong>Remoção do isolamento.</strong></li><li><strong>Checagem dos contatos oclusais.</strong></li><li><strong>Ajuste oclusal:</strong> (Pontas diamantadas de granulações finas e extrafinas).</li><li><strong>Acabamento e polimento:</strong> (borrachas sequências: verde, amarela e azul) com lubrificação.</li></ol>`
             },
             {
                 id: 'demo2',
                 title: "Classe II - Simples",
                 category: "Dentística",
                 summary: "Técnica do slot horizontal (estritamente proximal).",
-                content: `1. **Profilaxia.**
-2. **Seleção de cor** (90% dos casos - A2, A3 ou A3,5).
-3. **Anestesia infiltrativa** (Lidocaína 2%).
-4. **Isolamento absoluto:**
-    - Verificação dos contatos proximais (fio dental).
-    - Ajuste dos contatos proximais (tira de lixa).
-    - Seleção e teste do grampo.
-    - Colocação do lençol de borracha no arco.
-    - Posição do conjunto arco/lençol na face do paciente.
-    - Marcação dos dentes que serão isolados.
-    - Perfuração do dique de borracha.
-    - Lubrificação da superfície interna.
-    - Passar os dentes pelo lençol de borracha.
-    - Instalação dos grampos e estabilização do lençol.
-5. **Preparo cavitário:**
-    - Proteção do dente adjacente com matriz metálica.
-    - Remoção de tecido cariado/restauração defeituosa.
-    - Limpeza da cavidade.
-6. **Procedimento adesivo:**
-    - Proteção do dente adjacente com tira de poliéster.
-    - Condicionamento ácido (1 - 2 mm além das margens).
-    - Lavagem e secagem: Dentina com algodão, Esmalte com jatos de ar.
-    - Aplicação do Primer (microbrush).
-    - Evaporação do solvente (jatos de ar à distância).
-    - Aplicação do Adesivo (microbrush).
-    - Fotoativação.
-7. **Inserção incremental da resina composta + Fotoativação.**
-8. **Acabamento e polimento:**
-    - Lâmina número 12.
-    - Tiras de granulação fina.`
+                content: `<ol><li><strong>Profilaxia.</strong></li><li><strong>Seleção de cor</strong> (90% dos casos - A2, A3 ou A3,5).</li><li><strong>Anestesia infiltrativa</strong> (Lidocaína 2%).</li><li><strong>Isolamento absoluto:</strong><ul><li>Verificação dos contatos proximais (fio dental).</li><li>Ajuste dos contatos proximais (tira de lixa).</li><li>Seleção e teste do grampo.</li><li>Colocação do lençol de borracha no arco.</li><li>Posição do conjunto arco/lençol na face do paciente.</li><li>Marcação dos dentes que serão isolados.</li><li>Perfuração do dique de borracha.</li><li>Lubrificação da superfície interna.</li><li>Passar os dentes pelo lençol de borracha.</li><li>Instalação dos grampos e estabilização do lençol.</li></ul></li><li><strong>Preparo cavitário:</strong><ul><li>Proteção do dente adjacente com matriz metálica.</li><li>Remoção de tecido cariado/restauração defeituosa.</li><li>Limpeza da cavidade.</li></ul></li><li><strong>Procedimento adesivo:</strong><ul><li>Proteção do dente adjacente com tira de poliéster.</li><li>Condicionamento ácido (1 - 2 mm além das margens).</li><li>Lavagem e secagem: Dentina com algodão, Esmalte com jatos de ar.</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Inserção incremental da resina composta + Fotoativação.</strong></li><li><strong>Acabamento e polimento:</strong><ul><li>Lâmina número 12.</li><li>Tiras de granulação fina.</li></ul></li></ol>`
             },
             {
                 id: 'demo3',
                 title: "Classe II - Composta",
                 category: "Dentística",
                 summary: "Técnica da matriz metálica parcial biconvexa.",
-                content: `1. **Diagnóstico** e **Aferição dos contatos oclusais.**
-2. **Profilaxia** e **Seleção de cor.**
-3. **Anestesia.**
-4. **Isolamento absoluto:** Teste do grampo.
-5. **Preparo cavitário:** remoção de tecido cariado/restauração defeituosa:
-    - (Proteger o dente adjacente com matriz metálica).
-6. **Procedimento adesivo:**
-    - O procedimento adesivo deve ser realizado antes da adaptação da matriz. Será realizado após a adaptação da matriz quando esta atua como isolante nos casos de isolamento relativo.
-    - Condicionamento ácido (1-2 mm além das margens):
-        - Aplica em esmalte - 15 seg.
-        - Estende p/ dentina - 15 seg.
-    - Lavagem e secagem (dentina com algodão e esmalte com jatos de ar).
-    - Aplicação do Primer (microbrush).
-    - Evaporação do solvente (jatos de ar à distância).
-    - Aplicação do Adesivo (microbrush).
-    - Fotoativação.
-7. **Adaptação da matriz metálica e estabilização com cunha.**
-8. **Inserção incremental da resina + Fotoativação:**
-    - Inicia pela caixa proximal com incrementos oblíquos.
-    - Para compensar a distância entre o fotopolimerizador e o incremento, **aumentar o tempo de fotopolimerização**.
-    - Remoção da matriz.
-    - Finaliza a inserção da resina na oclusal.
-9. **Remoção do isolamento.**
-10. **Checagem dos contatos oclusais + Ajuste oclusal** (Pontas diamantadas de granulação fina e extrafina).
-11. **Acabamento:** Discos abrasivos flexíveis, tiras de lixa (proximal).
-12. **Polimento:** borrachas abrasivas sequenciais em ordem decrescente / escovas abrasivas especiais.`
+                content: `<ol><li><strong>Diagnóstico</strong> e <strong>Aferição dos contatos oclusais.</strong></li><li><strong>Profilaxia</strong> e <strong>Seleção de cor.</strong></li><li><strong>Anestesia.</strong></li><li><strong>Isolamento absoluto:</strong> Teste do grampo.</li><li><strong>Preparo cavitário:</strong> remoção de tecido cariado/restauração defeituosa:<ul><li>(Proteger o dente adjacente com matriz metálica).</li></ul></li><li><strong>Procedimento adesivo:</strong><ul><li>O procedimento adesivo deve ser realizado antes da adaptação da matriz. Será realizado após a adaptação da matriz quando esta atua como isolante nos casos de isolamento relativo.</li><li>Condicionamento ácido (1-2 mm além das margens):<ul><li>Aplica em esmalte - 15 seg.</li><li>Estende p/ dentina - 15 seg.</li></ul></li><li>Lavagem e secagem (dentina com algodão e esmalte com jatos de ar).</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Adaptação da matriz metálica e estabilização com cunha.</strong></li><li><strong>Inserção incremental da resina + Fotoativação:</strong><ul><li>Inicia pela caixa proximal com incrementos oblíquos.</li><li>Para compensar a distância entre o fotopolimerizador e o incremento, <strong>aumentar o tempo de fotopolimerização</strong>.</li><li>Remoção da matriz.</li><li>Finaliza a inserção da resina na oclusal.</li></ul></li><li><strong>Remoção do isolamento.</strong></li><li><strong>Checagem dos contatos oclusais + Ajuste oclusal</strong> (Pontas diamantadas de granulação fina e extrafina).</li><li><strong>Acabamento:</strong> Discos abrasivos flexíveis, tiras de lixa (proximal).</li><li><strong>Polimento:</strong> borrachas abrasivas sequenciais em ordem decrescente / escovas abrasivas especiais.</li></ol>`
             }
         ];
 
-        // --- MANIPULAÇÃO DE TEXTO AVANÇADA (EDITOR) ---
-        function handleEditorKeydown(e) {
-            const textarea = e.target;
-            
-            // INDENTAÇÃO (TAB)
+        // --- MANIPULAÇÃO DO EDITOR WYSIWYG ---
+        function execCmd(command, value = null) {
+            document.execCommand(command, false, value);
+            document.getElementById('editor-content').focus();
+        }
+
+        // Intercepta o TAB para fazer indentação ao invés de mudar o foco
+        document.getElementById('editor-content').addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
                 e.preventDefault();
-                const start = textarea.selectionStart;
-                const end = textarea.selectionEnd;
-                const value = textarea.value;
-                const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-                const lineEnd = value.indexOf('\n', end);
-                const endLinePos = lineEnd === -1 ? value.length : lineEnd;
-                
+                // Indentar ou Desindentar
                 if (e.shiftKey) {
-                    // Outdent (Shift+Tab)
-                    const currentLine = value.substring(lineStart, endLinePos);
-                    if (currentLine.startsWith('    ')) {
-                        textarea.setRangeText('', lineStart, lineStart + 4, 'end');
-                    }
+                    document.execCommand('outdent');
                 } else {
-                    // Indent (Tab)
-                    document.execCommand('insertText', false, '    ');
+                    document.execCommand('indent');
                 }
             }
-
-            // AUTO-LISTA (ENTER)
-            if (e.key === 'Enter') {
-                const start = textarea.selectionStart;
-                const value = textarea.value;
-                const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-                const currentLine = value.substring(lineStart, start);
-
-                // Regex para detectar listas
-                const ulMatch = currentLine.match(/^(\s*)([-])\s/); // - Item
-                const olMatch = currentLine.match(/^(\s*)(\d+)\.\s/); // 1. Item
-
-                if (ulMatch || olMatch) {
-                    e.preventDefault();
-                    let insertion = '';
-                    
-                    if (ulMatch) {
-                        // Continua lista com marcadores
-                        if (currentLine.trim() === '-') {
-                            // Se linha vazia com marcador, encerra lista
-                            textarea.setRangeText('', lineStart, start, 'end');
-                            insertion = '\n';
-                        } else {
-                            const spaces = ulMatch[1];
-                            insertion = `\n${spaces}- `;
-                        }
-                    } else if (olMatch) {
-                        // Continua lista numerada
-                        if (currentLine.trim() === olMatch[2] + '.') {
-                            textarea.setRangeText('', lineStart, start, 'end');
-                            insertion = '\n';
-                        } else {
-                            const spaces = olMatch[1];
-                            const currentNum = parseInt(olMatch[2]);
-                            insertion = `\n${spaces}${currentNum + 1}. `;
-                        }
-                    }
-                    
-                    document.execCommand('insertText', false, insertion);
-                }
-            }
-        }
-
-        // --- COLAGEM INTELIGENTE ---
-        function handleEditorPaste(e) {
-            const textarea = e.target;
-            const start = textarea.selectionStart;
-            const value = textarea.value;
-            const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-            const currentLinePrefix = value.substring(lineStart, start);
-
-            const ulMatch = currentLinePrefix.match(/^(\s*)([-])\s/);
-            const olMatch = currentLinePrefix.match(/^(\s*)(\d+)\.\s/);
-
-            if (!ulMatch && !olMatch) return;
-
-            e.preventDefault();
-            const clipboardData = (e.clipboardData || window.clipboardData).getData('text');
-            const lines = clipboardData.split(/\r\n|\r|\n/);
-
-            let insertion = '';
-            
-            if (ulMatch) {
-                const spaces = ulMatch[1];
-                insertion += lines[0];
-                for (let i = 1; i < lines.length; i++) {
-                    insertion += `\n${spaces}- ${lines[i]}`;
-                }
-            } else if (olMatch) {
-                const spaces = olMatch[1];
-                let currentNum = parseInt(olMatch[2]);
-                
-                insertion += lines[0];
-                for (let i = 1; i < lines.length; i++) {
-                    currentNum++;
-                    insertion += `\n${spaces}${currentNum}. ${lines[i]}`;
-                }
-            }
-
-            document.execCommand('insertText', false, insertion);
-        }
-
-        function formatText(command) {
-            const textarea = document.getElementById('edit-content');
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-            const text = textarea.value;
-            const lineStart = text.lastIndexOf('\n', start - 1) + 1;
-            let insertion = '';
-            
-            if (command === 'bold') {
-                const selectedText = text.substring(start, end);
-                insertion = `**${selectedText || 'texto'}**`;
-                textarea.setRangeText(insertion, start, end, 'select');
-            } else if (command === 'italic') {
-                const selectedText = text.substring(start, end);
-                insertion = `*${selectedText || 'texto'}*`;
-                textarea.setRangeText(insertion, start, end, 'select');
-            } else if (command === 'list-ul') {
-                insertion = `\n- `;
-                textarea.setRangeText(insertion, start, start, 'end');
-            } else if (command === 'list-ol') {
-                insertion = `\n1. `;
-                textarea.setRangeText(insertion, start, start, 'end');
-            } else if (command === 'indent') {
-                textarea.setRangeText('    ', lineStart, lineStart, 'end');
-                textarea.selectionStart = start + 4;
-                textarea.selectionEnd = end + 4;
-            } else if (command === 'outdent') {
-                const currentLine = text.substring(lineStart, text.indexOf('\n', lineStart));
-                if (currentLine.startsWith('    ')) {
-                    textarea.setRangeText('', lineStart, lineStart + 4, 'end');
-                    textarea.selectionStart = Math.max(lineStart, start - 4);
-                    textarea.selectionEnd = Math.max(lineStart, end - 4);
-                }
-            }
-            
-            textarea.focus();
-        }
-
-        // --- PARSER DE TEXTO PARA HTML ---
-        function parseProtocolText(text) {
-            if (!text) return '';
-            
-            let safeText = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-            let lines = safeText.split('\n');
-            let html = '';
-            let listType = null; 
-
-            lines.forEach(line => {
-                const indentMatch = line.match(/^(\s*)/);
-                const indentLevel = indentMatch ? Math.floor(indentMatch[1].length / 4) : 0;
-                let trimmed = line.trim();
-                let marginStyle = indentLevel > 0 ? `style="margin-left: ${indentLevel * 20}px"` : '';
-
-                if (trimmed.startsWith('- ')) {
-                    if (listType !== 'ul') {
-                        if (listType === 'ol') html += '</ol>';
-                        html += '<ul>';
-                        listType = 'ul';
-                    }
-                    html += `<li ${marginStyle}>${processInlineFormatting(trimmed.substring(2))}</li>`;
-                } 
-                else if (/^\d+\.\s/.test(trimmed)) {
-                    if (listType !== 'ol') {
-                        if (listType === 'ul') html += '</ul>';
-                        html += '<ol>';
-                        listType = 'ol';
-                    }
-                    html += `<li ${marginStyle}>${processInlineFormatting(trimmed.replace(/^\d+\.\s/, ''))}</li>`;
-                } 
-                else {
-                    if (listType) {
-                        html += listType === 'ul' ? '</ul>' : '</ol>';
-                        listType = null;
-                    }
-                    if (trimmed !== '') {
-                        html += `<p>${processInlineFormatting(trimmed)}</p>`;
-                    }
-                }
-            });
-
-            if (listType) html += listType === 'ul' ? '</ul>' : '</ol>';
-            return html;
-        }
-
-        function processInlineFormatting(text) {
-            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-            text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
-            return text;
-        }
+        });
 
         // --- NAVEGAÇÃO ---
         function navigateTo(viewId) {
@@ -833,7 +656,8 @@
             document.getElementById('post-category').textContent = post.category;
             document.getElementById('post-title').textContent = post.title;
             
-            document.getElementById('post-content').innerHTML = parseProtocolText(post.content);
+            // Injeta HTML direto (o editor já salvou como HTML)
+            document.getElementById('post-content').innerHTML = post.content;
             
             const editBtn = document.getElementById('btn-edit-post');
             if(isAdmin) {
@@ -874,6 +698,7 @@
         function openEditor() {
             document.getElementById('editor-form').reset();
             document.getElementById('edit-id').value = '';
+            document.getElementById('editor-content').innerHTML = ''; // Limpa o contenteditable
             document.getElementById('btn-delete').classList.add('hidden');
             navigateTo('editor');
         }
@@ -886,7 +711,7 @@
             document.getElementById('edit-title').value = post.title;
             document.getElementById('edit-category').value = post.category;
             document.getElementById('edit-summary').value = post.summary;
-            document.getElementById('edit-content').value = post.content;
+            document.getElementById('editor-content').innerHTML = post.content; // Carrega HTML no contenteditable
             document.getElementById('btn-delete').classList.remove('hidden');
             
             navigateTo('editor');
@@ -901,11 +726,15 @@
             spinner.classList.remove('hidden');
 
             const idInput = document.getElementById('edit-id').value;
+            
+            // Pega o HTML gerado pelo contenteditable
+            const contentHTML = document.getElementById('editor-content').innerHTML;
+
             const data = {
                 title: document.getElementById('edit-title').value,
                 category: document.getElementById('edit-category').value,
                 summary: document.getElementById('edit-summary').value,
-                content: document.getElementById('edit-content').value,
+                content: contentHTML, // Salva o HTML
                 updatedAt: new Date()
             };
 
