@@ -60,16 +60,19 @@
 
         .tab-btn.active { color: #0e7490; border-bottom: 2px solid #0e7490; background-color: #ecfeff; }
         
-        /* Loading Spinner */
         .spinner { border: 3px solid rgba(0,0,0,0.1); border-left-color: #0e7490; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* Estilo para Texto Puro (Preserva quebras de linha e espaços) */
-        .pre-wrap-text {
-            white-space: pre-wrap;
-            font-family: inherit;
-            line-height: 1.6;
-        }
+        /* Estilo para o conteúdo gerado */
+        #post-content ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
+        #post-content ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
+        #post-content li { margin-bottom: 0.5em; }
+        #post-content p { margin-bottom: 1em; }
+        #post-content strong { font-weight: 700; color: #155e75; }
+        #post-content em { font-style: italic; }
+        
+        /* Indentação visual baseada em inline styles do parser */
+        #post-content li[style*="margin-left"] { list-style-type: circle; } 
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen text-base antialiased">
@@ -253,8 +256,8 @@
                         </button>
                     </div>
                 </div>
-                <!-- Classe pre-wrap-text garante que o texto puro seja formatado com quebras de linha -->
-                <div id="post-content" class="p-6 text-gray-700 text-sm pre-wrap-text"></div>
+                <!-- Área onde o texto processado será exibido -->
+                <div id="post-content" class="p-6 text-gray-700 text-sm leading-relaxed"></div>
             </div>
         </div>
 
@@ -339,9 +342,21 @@
                         <input type="text" id="edit-summary" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo (Texto Puro)</label>
-                        <!-- TEXTAREA AGORA É APENAS TEXTO, SEM HTML -->
-                        <textarea id="edit-content" rows="12" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none font-sans text-sm placeholder-gray-400" placeholder="Digite o protocolo aqui. Use quebras de linha e hifens (-) para criar listas."></textarea>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo</label>
+                        
+                        <!-- BARRA DE FERRAMENTAS DO EDITOR -->
+                        <div class="flex gap-2 mb-2 p-2 bg-gray-50 rounded-lg border border-gray-200 items-center overflow-x-auto">
+                            <button type="button" onclick="formatText('bold')" class="p-2 hover:bg-white rounded text-gray-600 font-bold" title="Negrito (Ctrl+B)">B</button>
+                            <button type="button" onclick="formatText('italic')" class="p-2 hover:bg-white rounded text-gray-600 italic" title="Itálico (Ctrl+I)">I</button>
+                            <div class="w-px h-4 bg-gray-300 mx-1"></div>
+                            <button type="button" onclick="formatText('list-ul')" class="p-2 hover:bg-white rounded text-gray-600" title="Lista com Marcadores"><i data-lucide="list" class="w-4 h-4"></i></button>
+                            <button type="button" onclick="formatText('list-ol')" class="p-2 hover:bg-white rounded text-gray-600" title="Lista Numerada"><i data-lucide="list-ordered" class="w-4 h-4"></i></button>
+                            <div class="w-px h-4 bg-gray-300 mx-1"></div>
+                            <button type="button" onclick="formatText('indent')" class="p-2 hover:bg-white rounded text-gray-600" title="Aumentar Recuo (Tab)"><i data-lucide="indent" class="w-4 h-4"></i></button>
+                            <button type="button" onclick="formatText('outdent')" class="p-2 hover:bg-white rounded text-gray-600" title="Diminuir Recuo (Shift+Tab)"><i data-lucide="outdent" class="w-4 h-4"></i></button>
+                        </div>
+
+                        <textarea id="edit-content" onpaste="handleEditorPaste(event)" rows="15" required onkeydown="handleEditorKeydown(event)" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none font-mono text-sm placeholder-gray-400" placeholder="Escreva o protocolo aqui..."></textarea>
                     </div>
                     <div class="flex gap-3 pt-4">
                         <button type="button" onclick="deleteProtocol()" id="btn-delete" class="px-4 py-3 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hidden">Excluir</button>
@@ -406,9 +421,7 @@
 
     <!-- Scripts -->
     <script>
-        // =================================================================
-        // CONFIGURAÇÃO DO FIREBASE (Chaves fornecidas)
-        // =================================================================
+        // CONFIGURAÇÃO DO FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyCtPyXA4TJMvxeX3vNdelzvADQTyzVRCfw",
             authDomain: "guia-clinico-odonto.firebaseapp.com",
@@ -419,7 +432,6 @@
             measurementId: "G-5287NREP2D"
         };
 
-        // Inicialização
         let db;
         let isFirebaseActive = false;
 
@@ -440,107 +452,300 @@
         let protocols = []; 
         let currentProtocolId = null;
 
-        // Dados padrão (Fallback inicial se o banco estiver vazio - CONVERTIDO PARA TEXTO PURO)
         const defaultProtocols = [
             {
                 id: 'demo1',
-                title: "Classe I",
+                title: "Classe I - Oclusal",
                 category: "Dentística",
                 summary: "Restauração de lesões oclusais com resina composta.",
-                content: `1. Diagnóstico (radiografia)
-2. Verificação dos contatos oclusais (Papel carbono e Pinça de Willis)
-3. Profilaxia (Caneta de baixa, Escova de Robson, Pote Dappen e Pasta profilática)
-4. Seleção de cor (90% dos casos - A2, A3 ou A3,5)
-5. Anestesia (Carpule e Anestésico)
-6. Isolamento absoluto (Lençol, Arco de Young, Perfurador, Grampo, Fio dental, Pinça porta-grampo, Espátula de invaginação)
-7. Acesso à lesão (Pontas esféricas em alta rotação)
-8. Forma de contorno (se necessário)
-9. Remoção de tecido cariado (Broca esférica CA4/CA6 em baixa rotação e colher de dentina)
-10. Procedimento Adesivo
-- Condicionamento ácido (Ácido fosfórico) 1 - 2 mm aquém das margens por 30 seg
-- Lavagem e secagem (dentina por absorção e esmalte com jatos de ar) por 30 seg
-- Aplicação do Primer (microbrush)
-- Evaporação do solvente (jatos de ar à distância)
-- Aplicação do Adesivo (microbrush)
-- Fotoativação
-11. Inserção incremental da resina composta + Fotoativação
-12. Remoção do isolamento
-13. Checagem dos contatos oclusais
-14. Ajuste oclusal (Pontas diamantadas de granulações finas e extrafinas)
-15. Acabamento e polimento (borrachas sequências: verde, amarela e azul) com lubrificação`
+                content: `1. **Diagnóstico:** (radiografia).
+2. **Verificação dos contatos oclusais:** (Papel carbono e Pinça de Willis).
+3. **Profilaxia:** (Caneta de baixa, Escova de Robson, Pote Dappen e Pasta profilática).
+4. **Seleção de cor:** (90% dos casos - A2, A3 ou A3,5).
+5. **Anestesia:** (Carpule e Anestésico).
+6. **Isolamento absoluto:** (Lençol, Arco de Young, Perfurador, Grampo, Fio dental, Pinça porta-grampo, Espátula de invaginação).
+7. **Acesso à lesão:** (Pontas esféricas em alta rotação).
+8. **Forma de contorno:** (se necessário).
+9. **Remoção de tecido cariado:** (Broca esférica CA4/CA6 em baixa rotação e colher de dentina).
+10. **Procedimento Adesivo:**
+    - Condicionamento ácido (Ácido fosfórico) 1 - 2 mm aquém das margens por 30 seg
+    - Lavagem e secagem (dentina por absorção e esmalte com jatos de ar) por 30 seg
+    - Aplicação do Primer (microbrush)
+    - Evaporação do solvente (jatos de ar à distância)
+    - Aplicação do Adesivo (microbrush)
+    - Fotoativação
+11. **Inserção incremental da resina composta + Fotoativação.**
+12. **Remoção do isolamento.**
+13. **Checagem dos contatos oclusais.**
+14. **Ajuste oclusal:** (Pontas diamantadas de granulações finas e extrafinas).
+15. **Acabamento e polimento:** (borrachas sequências: verde, amarela e azul) com lubrificação.`
             },
             {
                 id: 'demo2',
                 title: "Classe II - Simples",
                 category: "Dentística",
                 summary: "Técnica do slot horizontal (estritamente proximal).",
-                content: `1. Profilaxia.
-2. Seleção de cor (90% dos casos - A2, A3 ou A3,5).
-3. Anestesia infiltrativa (Lidocaína 2%).
-4. Isolamento absoluto:
-- Verificação dos contatos proximais (fio dental).
-- Ajuste dos contatos proximais (tira de lixa).
-- Seleção e teste do grampo.
-- Colocação do lençol de borracha no arco.
-- Posição do conjunto arco/lençol na face do paciente.
-- Marcação dos dentes que serão isolados.
-- Perfuração do dique de borracha.
-- Lubrificação da superfície interna.
-- Passar os dentes pelo lençol de borracha.
-- Instalação dos grampos e estabilização do lençol.
-5. Preparo cavitário:
-- Proteção do dente adjacente com matriz metálica.
-- Remoção de tecido cariado/restauração defeituosa.
-- Limpeza da cavidade.
-6. Procedimento adesivo:
-- Proteção do dente adjacente com tira de poliéster.
-- Condicionamento ácido (1 - 2 mm além das margens).
-- Lavagem e secagem: Dentina com algodão, Esmalte com jatos de ar.
-- Aplicação do Primer (microbrush).
-- Evaporação do solvente (jatos de ar à distância).
-- Aplicação do Adesivo (microbrush).
-- Fotoativação.
-7. Inserção incremental da resina composta + Fotoativação.
-8. Acabamento e polimento:
-- Lâmina número 12.
-- Tiras de granulação fina.`
+                content: `1. **Profilaxia.**
+2. **Seleção de cor** (90% dos casos - A2, A3 ou A3,5).
+3. **Anestesia infiltrativa** (Lidocaína 2%).
+4. **Isolamento absoluto:**
+    - Verificação dos contatos proximais (fio dental).
+    - Ajuste dos contatos proximais (tira de lixa).
+    - Seleção e teste do grampo.
+    - Colocação do lençol de borracha no arco.
+    - Posição do conjunto arco/lençol na face do paciente.
+    - Marcação dos dentes que serão isolados.
+    - Perfuração do dique de borracha.
+    - Lubrificação da superfície interna.
+    - Passar os dentes pelo lençol de borracha.
+    - Instalação dos grampos e estabilização do lençol.
+5. **Preparo cavitário:**
+    - Proteção do dente adjacente com matriz metálica.
+    - Remoção de tecido cariado/restauração defeituosa.
+    - Limpeza da cavidade.
+6. **Procedimento adesivo:**
+    - Proteção do dente adjacente com tira de poliéster.
+    - Condicionamento ácido (1 - 2 mm além das margens).
+    - Lavagem e secagem: Dentina com algodão, Esmalte com jatos de ar.
+    - Aplicação do Primer (microbrush).
+    - Evaporação do solvente (jatos de ar à distância).
+    - Aplicação do Adesivo (microbrush).
+    - Fotoativação.
+7. **Inserção incremental da resina composta + Fotoativação.**
+8. **Acabamento e polimento:**
+    - Lâmina número 12.
+    - Tiras de granulação fina.`
             },
             {
                 id: 'demo3',
                 title: "Classe II - Composta",
                 category: "Dentística",
                 summary: "Técnica da matriz metálica parcial biconvexa.",
-                content: `1. Diagnóstico.
-2. Aferição dos contatos oclusais.
-3. Profilaxia.
-4. Seleção de cor.
-5. Anestesia.
-6. Isolamento absoluto:
-- Teste do grampo.
-7. Preparo cavitário: remoção de tecido cariado/restauração defeituosa:
-- (Proteger o dente adjacente com matriz metálica).
-8. Procedimento adesivo:
-- O procedimento adesivo deve ser realizado antes da adaptação da matriz. Será realizado após a adaptação da matriz quando esta atua como isolante nos casos de isolamento relativo.
-- Condicionamento ácido (1-2 mm além das margens):
-  - Aplica em esmalte - 15 seg.
-  - Estende p/ dentina - 15 seg.
-- Lavagem e secagem (dentina com algodão e esmalte com jatos de ar).
-- Aplicação do Primer (microbrush).
-- Evaporação do solvente (jatos de ar à distância).
-- Aplicação do Adesivo (microbrush).
-- Fotoativação.
-9. Adaptação da matriz metálica e estabilização com cunha.
-10. Inserção incremental da resina + Fotoativação:
-- Inicia pela caixa proximal com incrementos oblíquos.
-- Para compensar a distância entre o fotopolimerizador e o incremento, aumentar o tempo de fotopolimerização.
-- Remoção da matriz.
-- Finaliza a inserção da resina na oclusal.
-11. Remoção do isolamento.
-12. Checagem dos contatos oclusais + Ajuste oclusal (Pontas diamantadas de granulação fina e extrafina).
-13. Acabamento: Discos abrasivos flexíveis, tiras de lixa (proximal).
-14. Polimento: borrachas abrasivas sequenciais em ordem decrescente / escovas abrasivas especiais.`
+                content: `1. **Diagnóstico** e **Aferição dos contatos oclusais.**
+2. **Profilaxia** e **Seleção de cor.**
+3. **Anestesia.**
+4. **Isolamento absoluto:** Teste do grampo.
+5. **Preparo cavitário:** remoção de tecido cariado/restauração defeituosa:
+    - (Proteger o dente adjacente com matriz metálica).
+6. **Procedimento adesivo:**
+    - O procedimento adesivo deve ser realizado antes da adaptação da matriz. Será realizado após a adaptação da matriz quando esta atua como isolante nos casos de isolamento relativo.
+    - Condicionamento ácido (1-2 mm além das margens):
+        - Aplica em esmalte - 15 seg.
+        - Estende p/ dentina - 15 seg.
+    - Lavagem e secagem (dentina com algodão e esmalte com jatos de ar).
+    - Aplicação do Primer (microbrush).
+    - Evaporação do solvente (jatos de ar à distância).
+    - Aplicação do Adesivo (microbrush).
+    - Fotoativação.
+7. **Adaptação da matriz metálica e estabilização com cunha.**
+8. **Inserção incremental da resina + Fotoativação:**
+    - Inicia pela caixa proximal com incrementos oblíquos.
+    - Para compensar a distância entre o fotopolimerizador e o incremento, **aumentar o tempo de fotopolimerização**.
+    - Remoção da matriz.
+    - Finaliza a inserção da resina na oclusal.
+9. **Remoção do isolamento.**
+10. **Checagem dos contatos oclusais + Ajuste oclusal** (Pontas diamantadas de granulação fina e extrafina).
+11. **Acabamento:** Discos abrasivos flexíveis, tiras de lixa (proximal).
+12. **Polimento:** borrachas abrasivas sequenciais em ordem decrescente / escovas abrasivas especiais.`
             }
         ];
+
+        // --- MANIPULAÇÃO DE TEXTO AVANÇADA (EDITOR) ---
+        function handleEditorKeydown(e) {
+            const textarea = e.target;
+            
+            // INDENTAÇÃO (TAB)
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                const value = textarea.value;
+                const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+                const lineEnd = value.indexOf('\n', end);
+                const endLinePos = lineEnd === -1 ? value.length : lineEnd;
+                
+                if (e.shiftKey) {
+                    // Outdent (Shift+Tab)
+                    const currentLine = value.substring(lineStart, endLinePos);
+                    if (currentLine.startsWith('    ')) {
+                        textarea.setRangeText('', lineStart, lineStart + 4, 'end');
+                    }
+                } else {
+                    // Indent (Tab)
+                    document.execCommand('insertText', false, '    ');
+                }
+            }
+
+            // AUTO-LISTA (ENTER)
+            if (e.key === 'Enter') {
+                const start = textarea.selectionStart;
+                const value = textarea.value;
+                const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+                const currentLine = value.substring(lineStart, start);
+
+                // Regex para detectar listas
+                const ulMatch = currentLine.match(/^(\s*)([-])\s/); // - Item
+                const olMatch = currentLine.match(/^(\s*)(\d+)\.\s/); // 1. Item
+
+                if (ulMatch || olMatch) {
+                    e.preventDefault();
+                    let insertion = '';
+                    
+                    if (ulMatch) {
+                        // Continua lista com marcadores
+                        if (currentLine.trim() === '-') {
+                            // Se linha vazia com marcador, encerra lista
+                            textarea.setRangeText('', lineStart, start, 'end');
+                            insertion = '\n';
+                        } else {
+                            const spaces = ulMatch[1];
+                            insertion = `\n${spaces}- `;
+                        }
+                    } else if (olMatch) {
+                        // Continua lista numerada
+                        if (currentLine.trim() === olMatch[2] + '.') {
+                            textarea.setRangeText('', lineStart, start, 'end');
+                            insertion = '\n';
+                        } else {
+                            const spaces = olMatch[1];
+                            const currentNum = parseInt(olMatch[2]);
+                            insertion = `\n${spaces}${currentNum + 1}. `;
+                        }
+                    }
+                    
+                    document.execCommand('insertText', false, insertion);
+                }
+            }
+        }
+
+        // --- COLAGEM INTELIGENTE ---
+        function handleEditorPaste(e) {
+            const textarea = e.target;
+            const start = textarea.selectionStart;
+            const value = textarea.value;
+            const lineStart = value.lastIndexOf('\n', start - 1) + 1;
+            const currentLinePrefix = value.substring(lineStart, start);
+
+            const ulMatch = currentLinePrefix.match(/^(\s*)([-])\s/);
+            const olMatch = currentLinePrefix.match(/^(\s*)(\d+)\.\s/);
+
+            if (!ulMatch && !olMatch) return;
+
+            e.preventDefault();
+            const clipboardData = (e.clipboardData || window.clipboardData).getData('text');
+            const lines = clipboardData.split(/\r\n|\r|\n/);
+
+            let insertion = '';
+            
+            if (ulMatch) {
+                const spaces = ulMatch[1];
+                insertion += lines[0];
+                for (let i = 1; i < lines.length; i++) {
+                    insertion += `\n${spaces}- ${lines[i]}`;
+                }
+            } else if (olMatch) {
+                const spaces = olMatch[1];
+                let currentNum = parseInt(olMatch[2]);
+                
+                insertion += lines[0];
+                for (let i = 1; i < lines.length; i++) {
+                    currentNum++;
+                    insertion += `\n${spaces}${currentNum}. ${lines[i]}`;
+                }
+            }
+
+            document.execCommand('insertText', false, insertion);
+        }
+
+        function formatText(command) {
+            const textarea = document.getElementById('edit-content');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const lineStart = text.lastIndexOf('\n', start - 1) + 1;
+            let insertion = '';
+            
+            if (command === 'bold') {
+                const selectedText = text.substring(start, end);
+                insertion = `**${selectedText || 'texto'}**`;
+                textarea.setRangeText(insertion, start, end, 'select');
+            } else if (command === 'italic') {
+                const selectedText = text.substring(start, end);
+                insertion = `*${selectedText || 'texto'}*`;
+                textarea.setRangeText(insertion, start, end, 'select');
+            } else if (command === 'list-ul') {
+                insertion = `\n- `;
+                textarea.setRangeText(insertion, start, start, 'end');
+            } else if (command === 'list-ol') {
+                insertion = `\n1. `;
+                textarea.setRangeText(insertion, start, start, 'end');
+            } else if (command === 'indent') {
+                textarea.setRangeText('    ', lineStart, lineStart, 'end');
+                textarea.selectionStart = start + 4;
+                textarea.selectionEnd = end + 4;
+            } else if (command === 'outdent') {
+                const currentLine = text.substring(lineStart, text.indexOf('\n', lineStart));
+                if (currentLine.startsWith('    ')) {
+                    textarea.setRangeText('', lineStart, lineStart + 4, 'end');
+                    textarea.selectionStart = Math.max(lineStart, start - 4);
+                    textarea.selectionEnd = Math.max(lineStart, end - 4);
+                }
+            }
+            
+            textarea.focus();
+        }
+
+        // --- PARSER DE TEXTO PARA HTML ---
+        function parseProtocolText(text) {
+            if (!text) return '';
+            
+            let safeText = text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            let lines = safeText.split('\n');
+            let html = '';
+            let listType = null; 
+
+            lines.forEach(line => {
+                const indentMatch = line.match(/^(\s*)/);
+                const indentLevel = indentMatch ? Math.floor(indentMatch[1].length / 4) : 0;
+                let trimmed = line.trim();
+                let marginStyle = indentLevel > 0 ? `style="margin-left: ${indentLevel * 20}px"` : '';
+
+                if (trimmed.startsWith('- ')) {
+                    if (listType !== 'ul') {
+                        if (listType === 'ol') html += '</ol>';
+                        html += '<ul>';
+                        listType = 'ul';
+                    }
+                    html += `<li ${marginStyle}>${processInlineFormatting(trimmed.substring(2))}</li>`;
+                } 
+                else if (/^\d+\.\s/.test(trimmed)) {
+                    if (listType !== 'ol') {
+                        if (listType === 'ul') html += '</ul>';
+                        html += '<ol>';
+                        listType = 'ol';
+                    }
+                    html += `<li ${marginStyle}>${processInlineFormatting(trimmed.replace(/^\d+\.\s/, ''))}</li>`;
+                } 
+                else {
+                    if (listType) {
+                        html += listType === 'ul' ? '</ul>' : '</ol>';
+                        listType = null;
+                    }
+                    if (trimmed !== '') {
+                        html += `<p>${processInlineFormatting(trimmed)}</p>`;
+                    }
+                }
+            });
+
+            if (listType) html += listType === 'ul' ? '</ul>' : '</ol>';
+            return html;
+        }
+
+        function processInlineFormatting(text) {
+            text = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            text = text.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            return text;
+        }
 
         // --- NAVEGAÇÃO ---
         function navigateTo(viewId) {
@@ -579,16 +784,14 @@
                     if (!snapshot.empty) {
                         protocols = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     } else {
-                        // Se vazio, usa os defaults (apenas para visualização inicial)
                         protocols = defaultProtocols;
                     }
                 } else {
-                    // Modo Offline
                     protocols = JSON.parse(localStorage.getItem('gc_protocols')) || defaultProtocols;
                 }
             } catch (error) {
                 console.error("Erro ao carregar:", error);
-                protocols = defaultProtocols; // Fallback
+                protocols = defaultProtocols;
             }
 
             loader.classList.add('hidden');
@@ -629,8 +832,8 @@
 
             document.getElementById('post-category').textContent = post.category;
             document.getElementById('post-title').textContent = post.title;
-            // Injeta o texto puro. A classe CSS .pre-wrap-text cuidará da formatação
-            document.getElementById('post-content').textContent = post.content;
+            
+            document.getElementById('post-content').innerHTML = parseProtocolText(post.content);
             
             const editBtn = document.getElementById('btn-edit-post');
             if(isAdmin) {
