@@ -15,7 +15,7 @@
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Firebase SDKs (Versão Compatível - v9 Compat) -->
+    <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -63,6 +63,13 @@
         /* Loading Spinner */
         .spinner { border: 3px solid rgba(0,0,0,0.1); border-left-color: #0e7490; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Estilo para Texto Puro (Preserva quebras de linha e espaços) */
+        .pre-wrap-text {
+            white-space: pre-wrap;
+            font-family: inherit;
+            line-height: 1.6;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen text-base antialiased">
@@ -246,7 +253,8 @@
                         </button>
                     </div>
                 </div>
-                <div id="post-content" class="p-6 prose prose-blue max-w-none text-gray-700 text-sm leading-relaxed"></div>
+                <!-- Classe pre-wrap-text garante que o texto puro seja formatado com quebras de linha -->
+                <div id="post-content" class="p-6 text-gray-700 text-sm pre-wrap-text"></div>
             </div>
         </div>
 
@@ -331,9 +339,9 @@
                         <input type="text" id="edit-summary" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo (HTML Permitido)</label>
-                        <textarea id="edit-content" rows="10" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none font-mono text-sm"></textarea>
-                        <p class="text-xs text-gray-500 mt-1">Dica: Use &lt;ol&gt;, &lt;li&gt;, &lt;strong&gt; para formatar.</p>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Conteúdo (Texto Puro)</label>
+                        <!-- TEXTAREA AGORA É APENAS TEXTO, SEM HTML -->
+                        <textarea id="edit-content" rows="12" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none font-sans text-sm placeholder-gray-400" placeholder="Digite o protocolo aqui. Use quebras de linha e hifens (-) para criar listas."></textarea>
                     </div>
                     <div class="flex gap-3 pt-4">
                         <button type="button" onclick="deleteProtocol()" id="btn-delete" class="px-4 py-3 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hidden">Excluir</button>
@@ -399,7 +407,7 @@
     <!-- Scripts -->
     <script>
         // =================================================================
-        // CONFIGURAÇÃO DO FIREBASE (Com chaves fornecidas)
+        // CONFIGURAÇÃO DO FIREBASE (Chaves fornecidas)
         // =================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyCtPyXA4TJMvxeX3vNdelzvADQTyzVRCfw",
@@ -432,29 +440,105 @@
         let protocols = []; 
         let currentProtocolId = null;
 
-        // Dados padrão (Fallback inicial se o banco estiver vazio)
-        // ATUALIZADO: Protocolo Classe II Composta Completo
+        // Dados padrão (Fallback inicial se o banco estiver vazio - CONVERTIDO PARA TEXTO PURO)
         const defaultProtocols = [
             {
                 id: 'demo1',
-                title: "Classe I - Oclusal",
+                title: "Classe I",
                 category: "Dentística",
                 summary: "Restauração de lesões oclusais com resina composta.",
-                content: `<ol class="list-decimal list-inside space-y-2"><li><strong>Diagnóstico:</strong> (radiografia).</li><li><strong>Verificação dos contatos oclusais:</strong> (Papel carbono e Pinça de Willis).</li><li><strong>Profilaxia:</strong> (Caneta de baixa, Escova de Robson, Pote Dappen e Pasta profilática).</li><li><strong>Seleção de cor:</strong> (90% dos casos - A2, A3 ou A3,5).</li><li><strong>Anestesia:</strong> (Carpule e Anestésico).</li><li><strong>Isolamento absoluto:</strong> (Lençol, Arco de Young, Perfurador, Grampo, Fio dental, Pinça porta-grampo, Espátula de invaginação).</li><li><strong>Acesso à lesão:</strong> (Pontas esféricas em alta rotação).</li><li><strong>Forma de contorno:</strong> (se necessário).</li><li><strong>Remoção de tecido cariado:</strong> (Broca esférica CA4/CA6 em baixa rotação e colher de dentina).</li><li><strong>Procedimento Adesivo:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Condicionamento ácido (Ácido fosfórico) 1 - 2 mm aquém das margens por 30 seg.</li><li>Lavagem e secagem (dentina por absorção e esmalte com jatos de ar) por 30 seg.</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Inserção incremental da resina composta + Fotoativação.</strong></li><li><strong>Remoção do isolamento.</strong></li><li><strong>Checagem dos contatos oclusais.</strong></li><li><strong>Ajuste oclusal:</strong> (Pontas diamantadas de granulações finas e extrafinas).</li><li><strong>Acabamento e polimento:</strong> (borrachas sequências: verde, amarela e azul) com lubrificação.</li></ol>`
+                content: `1. Diagnóstico (radiografia)
+2. Verificação dos contatos oclusais (Papel carbono e Pinça de Willis)
+3. Profilaxia (Caneta de baixa, Escova de Robson, Pote Dappen e Pasta profilática)
+4. Seleção de cor (90% dos casos - A2, A3 ou A3,5)
+5. Anestesia (Carpule e Anestésico)
+6. Isolamento absoluto (Lençol, Arco de Young, Perfurador, Grampo, Fio dental, Pinça porta-grampo, Espátula de invaginação)
+7. Acesso à lesão (Pontas esféricas em alta rotação)
+8. Forma de contorno (se necessário)
+9. Remoção de tecido cariado (Broca esférica CA4/CA6 em baixa rotação e colher de dentina)
+10. Procedimento Adesivo
+- Condicionamento ácido (Ácido fosfórico) 1 - 2 mm aquém das margens por 30 seg
+- Lavagem e secagem (dentina por absorção e esmalte com jatos de ar) por 30 seg
+- Aplicação do Primer (microbrush)
+- Evaporação do solvente (jatos de ar à distância)
+- Aplicação do Adesivo (microbrush)
+- Fotoativação
+11. Inserção incremental da resina composta + Fotoativação
+12. Remoção do isolamento
+13. Checagem dos contatos oclusais
+14. Ajuste oclusal (Pontas diamantadas de granulações finas e extrafinas)
+15. Acabamento e polimento (borrachas sequências: verde, amarela e azul) com lubrificação`
             },
             {
                 id: 'demo2',
                 title: "Classe II - Simples",
                 category: "Dentística",
                 summary: "Técnica do slot horizontal (estritamente proximal).",
-                content: `<ol class="list-decimal list-inside space-y-2"><li><strong>Profilaxia.</strong></li><li><strong>Seleção de cor</strong> (90% dos casos - A2, A3 ou A3,5).</li><li><strong>Anestesia infiltrativa</strong> (Lidocaína 2%).</li><li><strong>Isolamento absoluto:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Verificação dos contatos proximais (fio dental).</li><li>Ajuste dos contatos proximais (tira de lixa).</li><li>Seleção e teste do grampo.</li><li>Colocação do lençol de borracha no arco.</li><li>Posição do conjunto arco/lençol na face do paciente.</li><li>Marcação dos dentes que serão isolados.</li><li>Perfuração do dique de borracha.</li><li>Lubrificação da superfície interna.</li><li>Passar os dentes pelo lençol de borracha.</li><li>Instalação dos grampos e estabilização do lençol.</li></ul></li><li><strong>Preparo cavitário:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Proteção do dente adjacente com matriz metálica.</li><li>Remoção de tecido cariado/restauração defeituosa.</li><li>Limpeza da cavidade.</li></ul></li><li><strong>Procedimento adesivo:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Proteção do dente adjacente com tira de poliéster.</li><li>Condicionamento ácido (1-2 mm além das margens).</li><li>Lavagem e secagem: Dentina com algodão, Esmalte com jatos de ar.</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Inserção incremental da resina composta + Fotoativação.</strong></li><li><strong>Acabamento e polimento:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Lâmina número 12.</li><li>Tiras de granulação fina.</li></ul></li></ol>`
+                content: `1. Profilaxia.
+2. Seleção de cor (90% dos casos - A2, A3 ou A3,5).
+3. Anestesia infiltrativa (Lidocaína 2%).
+4. Isolamento absoluto:
+- Verificação dos contatos proximais (fio dental).
+- Ajuste dos contatos proximais (tira de lixa).
+- Seleção e teste do grampo.
+- Colocação do lençol de borracha no arco.
+- Posição do conjunto arco/lençol na face do paciente.
+- Marcação dos dentes que serão isolados.
+- Perfuração do dique de borracha.
+- Lubrificação da superfície interna.
+- Passar os dentes pelo lençol de borracha.
+- Instalação dos grampos e estabilização do lençol.
+5. Preparo cavitário:
+- Proteção do dente adjacente com matriz metálica.
+- Remoção de tecido cariado/restauração defeituosa.
+- Limpeza da cavidade.
+6. Procedimento adesivo:
+- Proteção do dente adjacente com tira de poliéster.
+- Condicionamento ácido (1 - 2 mm além das margens).
+- Lavagem e secagem: Dentina com algodão, Esmalte com jatos de ar.
+- Aplicação do Primer (microbrush).
+- Evaporação do solvente (jatos de ar à distância).
+- Aplicação do Adesivo (microbrush).
+- Fotoativação.
+7. Inserção incremental da resina composta + Fotoativação.
+8. Acabamento e polimento:
+- Lâmina número 12.
+- Tiras de granulação fina.`
             },
             {
                 id: 'demo3',
                 title: "Classe II - Composta",
                 category: "Dentística",
                 summary: "Técnica da matriz metálica parcial biconvexa.",
-                content: `<ol class="list-decimal list-inside space-y-2"><li><strong>Diagnóstico</strong> e <strong>Aferição dos contatos oclusais.</strong></li><li><strong>Profilaxia</strong> e <strong>Seleção de cor.</strong></li><li><strong>Anestesia.</strong></li><li><strong>Isolamento absoluto:</strong> Teste do grampo.</li><li><strong>Preparo cavitário:</strong> remoção de tecido cariado/restauração defeituosa (Proteger o dente adjacente com matriz metálica).</li><li><strong>Procedimento adesivo:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Realizado <strong>ANTES</strong> da adaptação da matriz (exceto se a matriz atuar como isolante).</li><li>Condicionamento ácido (1-2 mm além das margens):<ul class="list-disc list-inside ml-4"><li>Aplica em esmalte - 15 seg.</li><li>Estende p/ dentina - 15 seg.</li></ul></li><li>Lavagem e secagem (dentina com algodão e esmalte com jatos de ar).</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Adaptação da matriz metálica e estabilização com cunha.</strong></li><li><strong>Inserção incremental da resina + Fotoativação:</strong><ul class="list-disc list-inside ml-4 mt-1 space-y-1"><li>Inicia pela caixa proximal com incrementos oblíquos.</li><li>Para compensar a distância entre o fotopolimerizador e o incremento, <strong>aumentar o tempo de fotopolimerização</strong>.</li><li>Remoção da matriz.</li><li>Finaliza a inserção da resina na oclusal.</li></ul></li><li><strong>Remoção do isolamento.</strong></li><li><strong>Checagem dos contatos oclusais + Ajuste oclusal</strong> (Pontas diamantadas de granulação fina e extrafina).</li><li><strong>Acabamento:</strong> Discos abrasivos flexíveis, tiras de lixa (proximal).</li><li><strong>Polimento:</strong> borrachas abrasivas sequenciais em ordem decrescente / escovas abrasivas especiais.</li></ol>`
+                content: `1. Diagnóstico.
+2. Aferição dos contatos oclusais.
+3. Profilaxia.
+4. Seleção de cor.
+5. Anestesia.
+6. Isolamento absoluto:
+- Teste do grampo.
+7. Preparo cavitário: remoção de tecido cariado/restauração defeituosa:
+- (Proteger o dente adjacente com matriz metálica).
+8. Procedimento adesivo:
+- O procedimento adesivo deve ser realizado antes da adaptação da matriz. Será realizado após a adaptação da matriz quando esta atua como isolante nos casos de isolamento relativo.
+- Condicionamento ácido (1-2 mm além das margens):
+  - Aplica em esmalte - 15 seg.
+  - Estende p/ dentina - 15 seg.
+- Lavagem e secagem (dentina com algodão e esmalte com jatos de ar).
+- Aplicação do Primer (microbrush).
+- Evaporação do solvente (jatos de ar à distância).
+- Aplicação do Adesivo (microbrush).
+- Fotoativação.
+9. Adaptação da matriz metálica e estabilização com cunha.
+10. Inserção incremental da resina + Fotoativação:
+- Inicia pela caixa proximal com incrementos oblíquos.
+- Para compensar a distância entre o fotopolimerizador e o incremento, aumentar o tempo de fotopolimerização.
+- Remoção da matriz.
+- Finaliza a inserção da resina na oclusal.
+11. Remoção do isolamento.
+12. Checagem dos contatos oclusais + Ajuste oclusal (Pontas diamantadas de granulação fina e extrafina).
+13. Acabamento: Discos abrasivos flexíveis, tiras de lixa (proximal).
+14. Polimento: borrachas abrasivas sequenciais em ordem decrescente / escovas abrasivas especiais.`
             }
         ];
 
@@ -495,19 +579,16 @@
                     if (!snapshot.empty) {
                         protocols = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     } else {
-                        // Se o banco estiver vazio, usa os padrões para popular (apenas visualização inicial)
+                        // Se vazio, usa os defaults (apenas para visualização inicial)
                         protocols = defaultProtocols;
-                        // Opcional: Salvar os defaults no banco se estiver vazio
-                        // defaultProtocols.forEach(p => db.collection('protocols').add(p));
                     }
                 } else {
-                    // Modo Offline (teste)
+                    // Modo Offline
                     protocols = JSON.parse(localStorage.getItem('gc_protocols')) || defaultProtocols;
                 }
             } catch (error) {
                 console.error("Erro ao carregar:", error);
-                // Fallback silencioso para dados locais em caso de erro de rede
-                protocols = defaultProtocols;
+                protocols = defaultProtocols; // Fallback
             }
 
             loader.classList.add('hidden');
@@ -548,7 +629,8 @@
 
             document.getElementById('post-category').textContent = post.category;
             document.getElementById('post-title').textContent = post.title;
-            document.getElementById('post-content').innerHTML = post.content;
+            // Injeta o texto puro. A classe CSS .pre-wrap-text cuidará da formatação
+            document.getElementById('post-content').textContent = post.content;
             
             const editBtn = document.getElementById('btn-edit-post');
             if(isAdmin) {
@@ -575,7 +657,7 @@
 
         function checkAdmin() {
             const pass = document.getElementById('admin-pass').value;
-            if (pass === 'admin') { // Senha simples
+            if (pass === 'admin') { 
                 isAdmin = true;
                 document.getElementById('admin-modal').classList.add('hidden');
                 document.getElementById('admin-badge').classList.remove('hidden');
@@ -626,13 +708,12 @@
 
             try {
                 if (isFirebaseActive) {
-                    if (idInput && !idInput.startsWith('demo')) { // Evita editar demos no Firebase sem ID real
+                    if (idInput && !idInput.startsWith('demo')) {
                         await db.collection('protocols').doc(idInput).update(data);
                     } else {
                         await db.collection('protocols').add(data);
                     }
                 } else {
-                    // Fallback LocalStorage
                     let localProts = JSON.parse(localStorage.getItem('gc_protocols')) || [];
                     if(idInput) {
                         const idx = localProts.findIndex(p => p.id == idInput);
@@ -668,7 +749,6 @@
 
         // --- LEGADO: Prontuário ---
         function renderProntuarioContent() {
-            // Renderiza Siglas
             document.getElementById('content-siglas').innerHTML = `
                 <div class="flex justify-between items-center mb-4"><h3 class="font-bold flex gap-2"><i data-lucide="type" class="w-5 text-primary"></i> Siglas</h3><button onclick="hideProntuarioSections()" class="text-xs bg-gray-100 px-3 py-1 rounded-full">Voltar</button></div>
                 <div class="grid grid-cols-1 gap-2 text-sm h-[60vh] overflow-y-auto">
@@ -681,7 +761,6 @@
                 </div>
             `;
             
-            // Renderiza Instrumentais
             const instList = document.getElementById('instrumentais-list');
             if(instList.innerHTML === '') {
                instList.innerHTML = `
@@ -692,7 +771,6 @@
             lucide.createIcons();
         }
 
-        // Navegação interna do Prontuário
         function showProntuarioSection(id) {
             document.getElementById('prontuario-menu').classList.add('hidden');
             document.querySelectorAll('#tab-prontuario > div:not(#prontuario-menu)').forEach(el => el.classList.add('hidden'));
@@ -703,10 +781,8 @@
             document.getElementById('prontuario-menu').classList.remove('hidden');
         }
 
-        // Modal dummy
         function showModal(title) { alert(`Seção ${title} em desenvolvimento.`); }
         
-        // Init
         renderProntuarioContent();
     </script>
 </body>
