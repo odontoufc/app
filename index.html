@@ -41,7 +41,7 @@
     </script>
 
     <style>
-        html { scroll-behavior: smooth; background-color: #f3f4f6; } /* Fundo cinza claro para destacar o papel */
+        html { scroll-behavior: smooth; background-color: #f3f4f6; } 
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
@@ -66,7 +66,7 @@
 
         /* --- ESTILOS DO EDITOR TIPO GOOGLE DOCS --- */
         
-        /* Área de Edição (Papel) */
+        /* Área de Edição (Papel) - FORÇANDO FONTE PADRÃO */
         .editor-paper {
             background: white;
             min-height: 29.7cm; /* Tamanho A4 aprox */
@@ -77,9 +77,14 @@
             color: #333;
             line-height: 1.6;
             font-size: 11pt;
+            font-family: 'Inter', sans-serif !important; /* Força a fonte */
         }
         
-        /* Responsividade do Papel */
+        /* Garante que elementos colados herdem a fonte */
+        .editor-paper * {
+            font-family: 'Inter', sans-serif !important;
+        }
+        
         @media (max-width: 640px) {
             .editor-paper {
                 padding: 1.5rem;
@@ -113,30 +118,31 @@
         .toolbar-btn:hover { background-color: #e5e7eb; color: #111827; }
         .toolbar-btn.active { background-color: #dbeafe; color: #0e7490; }
 
-        /* --- ESTILOS DE CONTEÚDO RICO (Editor e Visualização) --- */
+        /* --- ESTILOS DE CONTEÚDO RICO --- */
         .rich-text h1 { font-size: 1.8em; font-weight: 700; margin-bottom: 0.5em; margin-top: 1em; color: #111827; }
         .rich-text h2 { font-size: 1.4em; font-weight: 700; margin-bottom: 0.5em; margin-top: 1em; color: #1f2937; }
         .rich-text h3 { font-size: 1.1em; font-weight: 700; margin-bottom: 0.5em; margin-top: 1em; color: #374151; }
         .rich-text p { margin-bottom: 1em; }
+        
+        /* Listas Principais */
         .rich-text ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
         .rich-text ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
         .rich-text li { margin-bottom: 0.25em; }
         
-        /* Hierarquia de Listas (Google Docs Style) */
+        /* Hierarquia de Listas */
         .rich-text ul ul { list-style-type: circle; }
         .rich-text ul ul ul { list-style-type: square; }
         
-        .rich-text ol ol { list-style-type: lower-alpha; } /* 1. -> a. */
-        .rich-text ol ol ol { list-style-type: lower-roman; } /* a. -> i. */
+        .rich-text ol ol { list-style-type: lower-alpha; } 
+        .rich-text ol ol ol { list-style-type: lower-roman; }
         
         .rich-text blockquote { border-left: 4px solid #e5e7eb; padding-left: 1em; color: #6b7280; font-style: italic; }
         
-        /* Placeholder para o ContentEditable vazio */
         [contenteditable]:empty:before {
             content: attr(placeholder);
             color: #9ca3af;
             cursor: text;
-            display: block; /* For Firefox */
+            display: block;
         }
     </style>
 </head>
@@ -228,8 +234,8 @@
                 </div>
             </section>
 
-            <!-- Outros e Manual... (Mantidos) -->
-             <section>
+            <!-- Outros -->
+            <section>
                 <div class="flex items-center gap-2 mb-4 border-b border-gray-200 pb-2">
                     <i data-lucide="package-plus" class="w-5 h-5 text-primary"></i>
                     <h3 class="text-lg font-semibold text-gray-800">Recursos</h3>
@@ -256,6 +262,7 @@
                 </div>
             </section>
 
+            <!-- Manual -->
             <section class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
                 <div class="p-5 flex flex-col md:flex-row items-center md:items-start gap-4">
                     <div class="bg-primary/10 p-3 rounded-xl shrink-0">
@@ -308,22 +315,19 @@
 
         <!-- ================= VIEW: LEITURA DO PROTOCOLO ================= -->
         <div id="view-post" class="view-section">
-            <div class="max-w-4xl mx-auto"> <!-- Centralizado para leitura melhor -->
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[60vh]">
-                    <div class="bg-gray-50 border-b border-gray-100 p-6">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase mb-2">Categoria</span>
-                                <h2 id="post-title" class="text-2xl font-bold text-gray-900 leading-tight">Título do Protocolo</h2>
-                            </div>
-                            <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2">
-                                <i data-lucide="edit-3" class="w-5 h-5"></i>
-                            </button>
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[60vh]">
+                <div class="bg-gray-50 border-b border-gray-100 p-6">
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase mb-2">Categoria</span>
+                            <h2 id="post-title" class="text-2xl font-bold text-gray-900 leading-tight">Título do Protocolo</h2>
                         </div>
+                        <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2">
+                            <i data-lucide="edit-3" class="w-5 h-5"></i>
+                        </button>
                     </div>
-                    <!-- Área de Visualização Rica -->
-                    <div id="post-content" class="p-8 rich-text"></div>
                 </div>
+                <div id="post-content" class="p-6 rich-text"></div>
             </div>
         </div>
 
@@ -557,6 +561,14 @@
             document.getElementById('editor-content').focus();
         }
 
+        // --- FIX DE COLAGEM (Paste as Plain Text) ---
+        // Isso garante que a fonte do site seja preservada ao colar texto de fora
+        document.getElementById('editor-content').addEventListener('paste', function(e) {
+            e.preventDefault();
+            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+            document.execCommand('insertText', false, text);
+        });
+
         // Intercepta o TAB para fazer indentação ao invés de mudar o foco
         document.getElementById('editor-content').addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
@@ -607,13 +619,16 @@
                     if (!snapshot.empty) {
                         protocols = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     } else {
+                        // Se vazio, usa os defaults (apenas para visualização inicial)
                         protocols = defaultProtocols;
                     }
                 } else {
+                    // Modo Offline (teste)
                     protocols = JSON.parse(localStorage.getItem('gc_protocols')) || defaultProtocols;
                 }
             } catch (error) {
                 console.error("Erro ao carregar:", error);
+                // Fallback silencioso para dados locais em caso de erro de rede
                 protocols = defaultProtocols;
             }
 
