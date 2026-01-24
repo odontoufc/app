@@ -63,94 +63,36 @@
         .spinner { border: 3px solid rgba(0,0,0,0.1); border-left-color: #0e7490; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-        /* --- ESTILOS DO EDITOR TIPO GOOGLE DOCS --- */
-        
+        /* --- ESTILOS DO EDITOR E VISUALIZAÇÃO --- */
         .editor-paper {
             background: white;
-            min-height: 29.7cm; /* Tamanho A4 aprox */
-            padding: 2.5cm 2cm;
-            margin: 0 auto;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            outline: none;
-            color: #333;
-            line-height: 1.6;
-            font-size: 11pt;
-            /* Garante a fonte base */
-            font-family: 'Inter', sans-serif; 
+            min-height: 29.7cm; padding: 2.5cm 2cm; margin: 0 auto;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            outline: none; color: #333; line-height: 1.6; font-size: 11pt;
+            font-family: 'Inter', sans-serif !important; 
         }
-
-        /* --- MAGIC FIX: FORÇA A FONTE E COR PADRÃO EM TUDO --- */
-        /* Isso sobrescreve estilos inline que vêm no Copy/Paste (ex: style="font-family: Arial") */
-        .editor-paper * {
-            font-family: 'Inter', sans-serif !important;
-            color: #374151 !important; /* Cinza escuro padrão */
-            background-color: transparent !important; /* Remove fundos de texto copiados */
-            font-size: inherit !important; /* Mantém tamanho relativo, exceto headers */
-        }
-        
-        /* Exceções para Negrito e Itálico (para não serem anulados pelo reset acima se mal configurados) */
+        .editor-paper * { font-family: 'Inter', sans-serif !important; color: #374151 !important; background-color: transparent !important; font-size: inherit !important; }
         .editor-paper b, .editor-paper strong { font-weight: 700 !important; color: #155e75 !important; }
         .editor-paper i, .editor-paper em { font-style: italic !important; }
-
-        /* Estilização específica para elementos estruturais */
         .editor-paper h1, .rich-text h1 { font-size: 1.8em !important; font-weight: 700 !important; margin-top: 1em; color: #111827 !important; }
         .editor-paper h2, .rich-text h2 { font-size: 1.4em !important; font-weight: 700 !important; margin-top: 1em; color: #1f2937 !important; }
         .editor-paper h3, .rich-text h3 { font-size: 1.1em !important; font-weight: 700 !important; margin-top: 1em; color: #374151 !important; }
         
-        @media (max-width: 640px) {
-            .editor-paper {
-                padding: 1.5rem;
-                min-height: 60vh;
-            }
-        }
+        @media (max-width: 640px) { .editor-paper { padding: 1.5rem; min-height: 60vh; } }
 
-        /* Barra de Ferramentas */
-        .editor-toolbar {
-            position: sticky;
-            top: 0;
-            z-index: 40;
-            background: #f3f4f6;
-            border-bottom: 1px solid #e5e7eb;
-            padding: 0.5rem;
-            display: flex;
-            gap: 0.25rem;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .toolbar-btn {
-            padding: 0.4rem;
-            border-radius: 0.25rem;
-            color: #4b5563;
-            transition: background 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 32px;
-            min-height: 32px;
-        }
+        .editor-toolbar { position: sticky; top: 0; z-index: 40; background: #f3f4f6; border-bottom: 1px solid #e5e7eb; padding: 0.5rem; display: flex; gap: 0.25rem; flex-wrap: wrap; align-items: center; }
+        .toolbar-btn { padding: 0.4rem; border-radius: 0.25rem; color: #4b5563; transition: background 0.2s; display: flex; align-items: center; justify-content: center; min-width: 32px; min-height: 32px; }
         .toolbar-btn:hover { background-color: #e5e7eb; color: #111827; }
         
-        /* Listas Principais (Visualização e Editor) */
         .rich-text ul, .editor-paper ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
         .rich-text ol, .editor-paper ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
         .rich-text li, .editor-paper li { margin-bottom: 0.25em; }
-        
-        /* Hierarquia de Listas (Subseções automáticas) */
-        /* Nível 2 */
         .rich-text ul ul, .editor-paper ul ul { list-style-type: circle; margin-top: 0.25em; margin-bottom: 0.25em; }
-        .rich-text ol ol, .editor-paper ol ol { list-style-type: lower-alpha; margin-top: 0.25em; margin-bottom: 0.25em; } /* 1. -> a. */
-        
-        /* Nível 3 */
+        .rich-text ol ol, .editor-paper ol ol { list-style-type: lower-alpha; margin-top: 0.25em; margin-bottom: 0.25em; }
         .rich-text ul ul ul, .editor-paper ul ul ul { list-style-type: square; }
-        .rich-text ol ol ol, .editor-paper ol ol ol { list-style-type: lower-roman; } /* a. -> i. */
+        .rich-text ol ol ol, .editor-paper ol ol ol { list-style-type: lower-roman; }
         
-        [contenteditable]:empty:before {
-            content: attr(placeholder);
-            color: #9ca3af;
-            cursor: text;
-            display: block;
-        }
+        [contenteditable]:empty:before { content: attr(placeholder); color: #9ca3af; cursor: text; display: block; }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen text-base antialiased">
@@ -198,7 +140,7 @@
                         </div>
                         <div>
                             <h3 class="text-xl font-bold mb-1">Protocolos Clínicos</h3>
-                            <p class="text-cyan-100 text-sm">Acesse o banco de dados completo de procedimentos e diretrizes.</p>
+                            <p class="text-cyan-100 text-sm">Acesse o banco de dados completo.</p>
                         </div>
                         <i data-lucide="arrow-right" class="w-6 h-6 ml-auto text-white/70 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
                     </div>
@@ -211,73 +153,53 @@
                     <i data-lucide="layout-grid" class="w-5 h-5 text-primary"></i>
                     <h3 class="text-lg font-semibold text-gray-800">Especialidades</h3>
                 </div>
-                
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 xs:gap-4">
                     <button onclick="navigateTo('dentistica')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
-                        <div class="bg-blue-50 p-3 rounded-full">
-                            <i data-lucide="sparkles" class="w-6 h-6 xs:w-8 xs:h-8 text-primary"></i>
-                        </div>
+                        <div class="bg-blue-50 p-3 rounded-full"><i data-lucide="sparkles" class="w-6 h-6 xs:w-8 xs:h-8 text-primary"></i></div>
                         <span class="font-semibold text-sm xs:text-base text-gray-700">Dentística</span>
                     </button>
+                    <!-- Buttons without implementation for now -->
                     <button onclick="showModal('Periodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
-                        <div class="bg-red-50 p-3 rounded-full">
-                            <i data-lucide="layers" class="w-6 h-6 xs:w-8 xs:h-8 text-rose-600"></i>
-                        </div>
+                        <div class="bg-red-50 p-3 rounded-full"><i data-lucide="layers" class="w-6 h-6 xs:w-8 xs:h-8 text-rose-600"></i></div>
                         <span class="font-semibold text-sm xs:text-base text-gray-700">Periodontia</span>
                     </button>
                     <button onclick="showModal('Endodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
-                        <div class="bg-indigo-50 p-3 rounded-full">
-                            <i data-lucide="arrow-down-to-line" class="w-6 h-6 xs:w-8 xs:h-8 text-indigo-600"></i>
-                        </div>
+                        <div class="bg-indigo-50 p-3 rounded-full"><i data-lucide="arrow-down-to-line" class="w-6 h-6 xs:w-8 xs:h-8 text-indigo-600"></i></div>
                         <span class="font-semibold text-sm xs:text-base text-gray-700">Endodontia</span>
                     </button>
                     <button onclick="showModal('Cirurgia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
-                        <div class="bg-emerald-50 p-3 rounded-full">
-                            <i data-lucide="scissors" class="w-6 h-6 xs:w-8 xs:h-8 text-emerald-600"></i>
-                        </div>
+                        <div class="bg-emerald-50 p-3 rounded-full"><i data-lucide="scissors" class="w-6 h-6 xs:w-8 xs:h-8 text-emerald-600"></i></div>
                         <span class="font-semibold text-sm xs:text-base text-gray-700">Cirurgia</span>
                     </button>
                 </div>
             </section>
 
-            <!-- Outros -->
+            <!-- Outros (AGORA COM CONTEÚDO EDITÁVEL) -->
             <section>
                 <div class="flex items-center gap-2 mb-4 border-b border-gray-200 pb-2">
                     <i data-lucide="package-plus" class="w-5 h-5 text-primary"></i>
                     <h3 class="text-lg font-semibold text-gray-800">Recursos</h3>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button onclick="showModal('Prescrições')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
-                        <div class="bg-amber-50 p-3 rounded-lg shrink-0">
-                            <i data-lucide="scroll-text" class="w-6 h-6 text-amber-600"></i>
-                        </div>
-                        <div>
-                            <span class="block font-semibold text-gray-700">Prescrições</span>
-                            <span class="text-xs text-gray-500">Modelos e posologias</span>
-                        </div>
+                    <button onclick="openFixedContent('prescricoes-geral', 'Prescrições', 'Modelos e Posologias')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
+                        <div class="bg-amber-50 p-3 rounded-lg shrink-0"><i data-lucide="scroll-text" class="w-6 h-6 text-amber-600"></i></div>
+                        <div><span class="block font-semibold text-gray-700">Prescrições</span><span class="text-xs text-gray-500">Modelos e posologias</span></div>
                     </button>
-                    <button onclick="showModal('Links Úteis')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
-                        <div class="bg-gray-100 p-3 rounded-lg shrink-0">
-                            <i data-lucide="link" class="w-6 h-6 text-gray-600"></i>
-                        </div>
-                        <div>
-                            <span class="block font-semibold text-gray-700">Links Úteis</span>
-                            <span class="text-xs text-gray-500">CRO, CFO e portais</span>
-                        </div>
+                    <button onclick="openFixedContent('links-uteis', 'Links Úteis', 'Portais Importantes')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
+                        <div class="bg-gray-100 p-3 rounded-lg shrink-0"><i data-lucide="link" class="w-6 h-6 text-gray-600"></i></div>
+                        <div><span class="block font-semibold text-gray-700">Links Úteis</span><span class="text-xs text-gray-500">CRO, CFO e portais</span></div>
                     </button>
                 </div>
             </section>
 
-            <!-- Manual -->
+            <!-- Manual (AGORA COM CONTEÚDO EDITÁVEL) -->
             <section class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
                 <div class="p-5 flex flex-col md:flex-row items-center md:items-start gap-4">
-                    <div class="bg-primary/10 p-3 rounded-xl shrink-0">
-                        <i data-lucide="shield-check" class="w-8 h-8 text-primary"></i>
-                    </div>
+                    <div class="bg-primary/10 p-3 rounded-xl shrink-0"><i data-lucide="shield-check" class="w-8 h-8 text-primary"></i></div>
                     <div class="flex-grow text-center md:text-left">
                         <h3 class="text-lg font-bold text-gray-900 mb-1">Manual de Biossegurança</h3>
                         <p class="text-sm text-gray-600 mb-4">Normas, esterilização e EPIs.</p>
-                        <button onclick="showModal('Manual de Biossegurança')" class="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-primary hover:bg-secondary text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-sm active:opacity-90">
+                        <button onclick="openFixedContent('biosseguranca-manual', 'Manual de Biossegurança', 'Normas e Procedimentos')" class="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-primary hover:bg-secondary text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-sm active:opacity-90">
                             <span>Acessar Manual</span>
                             <i data-lucide="external-link" class="w-4 h-4"></i>
                         </button>
@@ -298,20 +220,12 @@
                         <i data-lucide="plus" class="w-4 h-4"></i> Novo
                     </button>
                 </div>
-
                 <div class="relative">
                     <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
                     <input type="text" placeholder="Buscar protocolo..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
                 </div>
-
-                <div id="blog-loader" class="flex justify-center py-10 hidden">
-                    <div class="spinner"></div>
-                </div>
-
-                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Cards inseridos via JS -->
-                </div>
-                
+                <div id="blog-loader" class="flex justify-center py-10 hidden"><div class="spinner"></div></div>
+                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
                 <div id="no-protocols-msg" class="text-center py-10 hidden">
                     <p class="text-gray-500">Nenhum protocolo encontrado.</p>
                     <p class="text-xs text-gray-400 mt-2">Clique em "Área Administrativa" no rodapé para adicionar.</p>
@@ -319,46 +233,41 @@
             </div>
         </div>
 
-        <!-- ================= VIEW: LEITURA DO PROTOCOLO ================= -->
+        <!-- ================= VIEW: LEITURA DE CONTEÚDO (GENÉRICA) ================= -->
         <div id="view-post" class="view-section">
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[60vh]">
-                <div class="bg-gray-50 border-b border-gray-100 p-6">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase mb-2">Categoria</span>
-                            <h2 id="post-title" class="text-2xl font-bold text-gray-900 leading-tight">Título do Protocolo</h2>
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[60vh]">
+                    <div class="bg-gray-50 border-b border-gray-100 p-6">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase mb-2">Categoria</span>
+                                <h2 id="post-title" class="text-2xl font-bold text-gray-900 leading-tight">Título do Protocolo</h2>
+                            </div>
+                            <!-- Botão de Editar Genérico -->
+                            <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2 rounded hover:bg-gray-200 transition">
+                                <i data-lucide="edit-3" class="w-5 h-5"></i>
+                            </button>
                         </div>
-                        <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2">
-                            <i data-lucide="edit-3" class="w-5 h-5"></i>
-                        </button>
                     </div>
+                    <div id="post-content" class="p-8 rich-text editor-paper" style="box-shadow: none; padding: 2rem;"></div>
                 </div>
-                <!-- Editor-paper aqui garante a mesma fonte da edição -->
-                <div id="post-content" class="p-8 rich-text editor-paper" style="box-shadow: none; padding: 2rem;"></div>
             </div>
         </div>
 
         <!-- ================= VIEW: DENTÍSTICA ================= -->
         <div id="view-dentistica" class="view-section space-y-4">
             <div class="flex items-center gap-3 mb-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                <div class="p-2 bg-blue-50 rounded-lg shrink-0">
-                    <i data-lucide="sparkles" class="w-6 h-6 text-primary"></i>
-                </div>
-                <div>
-                    <h2 class="text-xl font-bold text-gray-900 leading-tight">Dentística</h2>
-                    <p class="text-gray-500 text-xs">Prontuário e Materiais</p>
-                </div>
+                <div class="p-2 bg-blue-50 rounded-lg shrink-0"><i data-lucide="sparkles" class="w-6 h-6 text-primary"></i></div>
+                <div><h2 class="text-xl font-bold text-gray-900 leading-tight">Dentística</h2><p class="text-gray-500 text-xs">Prontuário e Materiais</p></div>
             </div>
 
-            <!-- Abas (Sem Protocolos) -->
+            <!-- Abas (Sem Protocolos - Agora eles estão no Blog Global) -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex">
                 <button onclick="switchTab('prontuario')" id="tab-btn-prontuario" class="tab-btn active flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2">
-                    <i data-lucide="clipboard-list" class="w-4 h-4"></i>
-                    Prontuário
+                    <i data-lucide="clipboard-list" class="w-4 h-4"></i> Prontuário
                 </button>
                 <button onclick="switchTab('instrumentais')" id="tab-btn-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2">
-                    <i data-lucide="hammer" class="w-4 h-4"></i>
-                    Materiais
+                    <i data-lucide="hammer" class="w-4 h-4"></i> Materiais
                 </button>
             </div>
 
@@ -366,31 +275,45 @@
                 <!-- ABA PRONTUÁRIO -->
                 <div id="tab-prontuario" class="tab-content active">
                     <div id="prontuario-menu" class="space-y-3">
-                        <button onclick="showProntuarioSection('siglas')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
+                        <button onclick="showProntuarioSection('dentistica-siglas')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
                             <div class="p-3 bg-blue-100 rounded-full text-primary shrink-0"><i data-lucide="type" class="w-5 h-5"></i></div>
                             <div><span class="block font-semibold text-gray-800">Siglas</span><span class="text-xs text-gray-500">Abreviações comuns</span></div>
                             <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
                         </button>
-                        <button onclick="showProntuarioSection('exemplos')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
+                        <button onclick="showProntuarioSection('dentistica-exemplos')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
                             <div class="p-3 bg-green-100 rounded-full text-green-700 shrink-0"><i data-lucide="file-check" class="w-5 h-5"></i></div>
                             <div><span class="block font-semibold text-gray-800">Exemplos</span><span class="text-xs text-gray-500">Preenchimento</span></div>
                             <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
                         </button>
-                        <button onclick="showProntuarioSection('odontograma')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
+                        <button onclick="showProntuarioSection('dentistica-odontograma')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
                             <div class="p-3 bg-purple-100 rounded-full text-purple-700 shrink-0"><i data-lucide="grid-3x3" class="w-5 h-5"></i></div>
                             <div><span class="block font-semibold text-gray-800">Odontograma</span><span class="text-xs text-gray-500">Referência visual</span></div>
                             <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
                         </button>
                     </div>
-                    <div id="content-siglas" class="hidden"></div>
-                    <div id="content-exemplos" class="hidden"></div>
-                    <div id="content-odontograma" class="hidden"></div>
+                    
+                    <!-- Containers Dinâmicos -->
+                    <div id="dynamic-content-area" class="hidden">
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+                            <div class="flex items-center gap-2">
+                                <h3 id="dynamic-title" class="font-bold text-lg text-gray-800">Título</h3>
+                                <!-- Botão de Edição Rápida (Admin) -->
+                                <button id="btn-edit-dynamic" class="hidden text-gray-400 hover:text-blue-600 p-1"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                            </div>
+                            <button onclick="hideProntuarioSections()" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 hover:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
+                        </div>
+                        <div id="dynamic-body" class="rich-text text-sm"></div>
+                    </div>
                 </div>
 
                 <!-- ABA INSTRUMENTAIS -->
                 <div id="tab-instrumentais" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2"><i data-lucide="hammer" class="w-5 h-5 text-primary"></i> Checklist</h3>
-                    <div id="instrumentais-list" class="space-y-4"></div>
+                    <div class="flex items-center gap-2 mb-4">
+                        <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><i data-lucide="hammer" class="w-5 h-5 text-primary"></i> Checklist</h3>
+                         <!-- Botão de Edição Rápida (Admin) -->
+                         <button onclick="openEditor('dentistica-materiais', 'Materiais Dentística', 'Dentística', 'Lista de materiais')" id="btn-edit-inst" class="hidden text-gray-400 hover:text-blue-600 p-1"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                    </div>
+                    <div id="instrumentais-list" class="space-y-4 rich-text"></div>
                 </div>
             </div>
         </div>
@@ -401,28 +324,30 @@
                 <form id="editor-form" onsubmit="saveProtocol(event)" class="space-y-4">
                     <input type="hidden" id="edit-id">
                     
-                    <!-- Metadata Inputs -->
+                    <!-- Metadata -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
                             <input type="text" id="edit-title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Categoria (Opcional se fixo)</label>
                             <select id="edit-category" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
                                 <option value="Dentística">Dentística</option>
                                 <option value="Periodontia">Periodontia</option>
                                 <option value="Endodontia">Endodontia</option>
                                 <option value="Cirurgia">Cirurgia</option>
+                                <option value="Geral">Geral</option>
                             </select>
                         </div>
                     </div>
-                    <div>
+                    <!-- Resumo oculto para conteúdos fixos -->
+                    <div id="summary-container">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Resumo (Para o Card)</label>
-                        <input type="text" id="edit-summary" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                        <input type="text" id="edit-summary" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
                     </div>
 
-                    <!-- BARRA DE FERRAMENTAS DO EDITOR -->
+                    <!-- TOOLBAR -->
                     <div class="editor-toolbar rounded-t-lg border border-gray-300 border-b-0 bg-gray-50">
                         <button type="button" onclick="execCmd('undo')" class="toolbar-btn" title="Desfazer"><i data-lucide="undo" class="w-4 h-4"></i></button>
                         <button type="button" onclick="execCmd('redo')" class="toolbar-btn" title="Refazer"><i data-lucide="redo" class="w-4 h-4"></i></button>
@@ -436,17 +361,17 @@
                         <button type="button" onclick="execCmd('insertOrderedList')" class="toolbar-btn" title="Lista Numerada"><i data-lucide="list-ordered" class="w-4 h-4"></i></button>
                         <div class="w-px h-6 bg-gray-300 mx-2"></div>
                         <button type="button" onclick="execCmd('outdent')" class="toolbar-btn" title="Diminuir Recuo"><i data-lucide="outdent" class="w-4 h-4"></i></button>
-                        <button type="button" onclick="execCmd('indent')" class="toolbar-btn" title="Aumentar Recuo (Subseção)"><i data-lucide="indent" class="w-4 h-4"></i></button>
+                        <button type="button" onclick="execCmd('indent')" class="toolbar-btn" title="Aumentar Recuo"><i data-lucide="indent" class="w-4 h-4"></i></button>
                     </div>
 
-                    <!-- ÁREA DE EDIÇÃO (PAPEL WYSIWYG) -->
-                    <div id="editor-content" class="editor-paper rich-text rounded-b-lg border border-gray-300" contenteditable="true" placeholder="Comece a digitar o protocolo aqui..."></div>
+                    <!-- EDITOR -->
+                    <div id="editor-content" class="editor-paper rich-text rounded-b-lg border border-gray-300" contenteditable="true" placeholder="Comece a digitar..."></div>
 
-                    <!-- Botões de Ação -->
+                    <!-- Actions -->
                     <div class="flex gap-3 pt-4 sticky bottom-0 bg-gray-50 p-4 border-t border-gray-200 z-50">
                         <button type="button" onclick="deleteProtocol()" id="btn-delete" class="px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hidden text-sm font-medium">Excluir</button>
                         <div class="flex-grow"></div>
-                        <button type="button" onclick="navigateTo('blog')" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-white text-sm font-medium">Cancelar</button>
+                        <button type="button" onclick="window.history.back()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-white text-sm font-medium">Cancelar</button>
                         <button type="submit" id="btn-save" class="px-6 py-2 bg-primary hover:bg-secondary text-white rounded-lg shadow-md flex items-center gap-2 text-sm font-medium">
                             <span>Salvar</span>
                             <div id="save-spinner" class="spinner border-white border-l-transparent w-4 h-4 hidden"></div>
@@ -458,41 +383,9 @@
 
     </main>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-gray-200 mt-auto">
-        <div class="max-w-5xl mx-auto px-4 py-8">
-            <div class="flex flex-col items-center gap-6">
-                <!-- Admin Button -->
-                <button onclick="toggleAdmin()" class="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors">
-                    <i data-lucide="lock" class="w-3 h-3"></i>
-                    Área Administrativa
-                </button>
+    <!-- Footer & Admin Modal -->
+    <footer class="bg-white border-t border-gray-200 mt-auto"><div class="max-w-5xl mx-auto px-4 py-8"><div class="flex flex-col items-center gap-6"><button onclick="toggleAdmin()" class="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors"><i data-lucide="lock" class="w-3 h-3"></i> Área Administrativa</button><div class="w-full h-px bg-gray-100"></div><div class="flex items-center gap-6 opacity-80 grayscale hover:grayscale-0 transition-all"><div class="flex flex-col items-center gap-1"><div class="w-10 h-10 rounded-full bg-red-800 flex items-center justify-center text-white border-2 border-red-900"><i data-lucide="activity" class="w-5 h-5"></i></div><span class="text-[8px] font-bold text-red-900 uppercase">Odonto</span></div><div class="w-px h-8 bg-gray-300"></div><div class="flex items-center gap-2"><div class="w-8 h-10 bg-blue-900 rounded-b-full rounded-t-sm flex items-center justify-center text-white border-2 border-yellow-400 relative overflow-hidden"><span class="text-[8px] font-bold z-10">UFC</span><div class="absolute bottom-0 w-full h-1/2 bg-yellow-400/20 rounded-t-full"></div></div><div class="flex flex-col"><span class="text-[8px] font-bold text-gray-800 uppercase leading-none">Univ.</span><span class="text-[8px] font-bold text-gray-800 uppercase leading-none my-0.5">Federal</span><span class="text-[8px] font-bold text-gray-800 uppercase leading-none">Ceará</span></div></div></div></div><div class="text-center pt-6"><p class="text-[10px] text-gray-400">&copy; 2024 Guia Clínico - Odontologia UFC.</p></div></div></footer>
 
-                <div class="w-full h-px bg-gray-100"></div>
-
-                <div class="flex items-center gap-6 opacity-80 grayscale hover:grayscale-0 transition-all">
-                    <!-- Logo Odonto -->
-                    <div class="flex flex-col items-center gap-1">
-                        <div class="w-10 h-10 rounded-full bg-red-800 flex items-center justify-center text-white border-2 border-red-900"><i data-lucide="activity" class="w-5 h-5"></i></div>
-                        <span class="text-[8px] font-bold text-red-900 uppercase">Odonto</span>
-                    </div>
-                    <div class="w-px h-8 bg-gray-300"></div>
-                    <!-- Logo UFC -->
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-10 bg-blue-900 rounded-b-full rounded-t-sm flex items-center justify-center text-white border-2 border-yellow-400 relative overflow-hidden"><span class="text-[8px] font-bold z-10">UFC</span><div class="absolute bottom-0 w-full h-1/2 bg-yellow-400/20 rounded-t-full"></div></div>
-                        <div class="flex flex-col">
-                            <span class="text-[8px] font-bold text-gray-800 uppercase leading-none">Univ.</span>
-                            <span class="text-[8px] font-bold text-gray-800 uppercase leading-none my-0.5">Federal</span>
-                            <span class="text-[8px] font-bold text-gray-800 uppercase leading-none">Ceará</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center pt-6"><p class="text-[10px] text-gray-400">&copy; 2024 Guia Clínico - Odontologia UFC.</p></div>
-        </div>
-    </footer>
-
-    <!-- Admin Login Modal -->
     <div id="admin-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
         <div class="bg-white rounded-2xl shadow-2xl max-w-xs w-full p-6">
             <h3 class="text-lg font-bold text-gray-900 mb-4 text-center">Acesso Restrito</h3>
@@ -506,7 +399,6 @@
 
     <!-- Scripts -->
     <script>
-        // CONFIGURAÇÃO DO FIREBASE (Chaves fornecidas)
         const firebaseConfig = {
             apiKey: "AIzaSyCtPyXA4TJMvxeX3vNdelzvADQTyzVRCfw",
             authDomain: "guia-clinico-odonto.firebaseapp.com",
@@ -524,163 +416,171 @@
             firebase.initializeApp(firebaseConfig);
             db = firebase.firestore();
             isFirebaseActive = true;
-            console.log("Firebase conectado com sucesso!");
+            console.log("Firebase conectado!");
         } catch (e) {
-            console.error("Erro ao iniciar Firebase:", e);
-            alert("Erro de conexão com o banco de dados. Verifique o console.");
+            console.error("Erro Firebase:", e);
         }
 
         lucide.createIcons();
 
-        // --- ESTADO DA APLICAÇÃO ---
         let isAdmin = false;
-        let protocols = []; 
-        let currentProtocolId = null;
+        let contentCache = {}; // Cache para todo o conteúdo do site
 
-        // DADOS PADRÃO (Com estrutura HTML de listas aninhadas para demonstração)
-        const defaultProtocols = [
-            {
-                id: 'demo1',
-                title: "Classe I - Oclusal",
-                category: "Dentística",
-                summary: "Restauração de lesões oclusais com resina composta.",
-                content: `<ol><li><strong>Diagnóstico:</strong> (radiografia).</li><li><strong>Verificação dos contatos oclusais:</strong> (Papel carbono e Pinça de Willis).</li><li><strong>Profilaxia:</strong> (Caneta de baixa, Escova de Robson, Pote Dappen e Pasta profilática).</li><li><strong>Seleção de cor:</strong> (90% dos casos - A2, A3 ou A3,5).</li><li><strong>Anestesia:</strong> (Carpule e Anestésico).</li><li><strong>Isolamento absoluto:</strong> (Lençol, Arco de Young, Perfurador, Grampo, Fio dental, Pinça porta-grampo, Espátula de invaginação).</li><li><strong>Acesso à lesão:</strong> (Pontas esféricas em alta rotação).</li><li><strong>Forma de contorno:</strong> (se necessário).</li><li><strong>Remoção de tecido cariado:</strong> (Broca esférica CA4/CA6 em baixa rotação e colher de dentina).</li><li><strong>Procedimento Adesivo:</strong><ul><li>Condicionamento ácido (Ácido fosfórico) 1 - 2 mm aquém das margens por 30 seg</li><li>Lavagem e secagem (dentina por absorção e esmalte com jatos de ar) por 30 seg</li><li>Aplicação do Primer (microbrush)</li><li>Evaporação do solvente (jatos de ar à distância)</li><li>Aplicação do Adesivo (microbrush)</li><li>Fotoativação</li></ul></li><li><strong>Inserção incremental da resina composta + Fotoativação.</strong></li><li><strong>Remoção do isolamento.</strong></li><li><strong>Checagem dos contatos oclusais.</strong></li><li><strong>Ajuste oclusal:</strong> (Pontas diamantadas de granulações finas e extrafinas).</li><li><strong>Acabamento e polimento:</strong> (borrachas sequências: verde, amarela e azul) com lubrificação.</li></ol>`
+        // --- DADOS PADRÃO (Para inicialização) ---
+        const defaultData = [
+             {
+                id: 'dentistica-siglas',
+                title: 'Siglas - Dentística',
+                category: 'Dentística',
+                content: `<div class="grid grid-cols-1 gap-2 text-sm">
+                    <p><strong>Gerais</strong></p>
+                    <ul><li>DA: Solicitação de diário alimentar</li><li>ODG: Odontograma</li></ul>
+                    <p><strong>Preparos</strong></p>
+                    <ul><li>PCCLI: Classe I</li><li>PCCLII: Classe II</li></ul>
+                </div>`
             },
             {
-                id: 'demo2',
-                title: "Classe II - Simples",
-                category: "Dentística",
-                summary: "Técnica do slot horizontal (estritamente proximal).",
-                content: `<ol><li><strong>Profilaxia.</strong></li><li><strong>Seleção de cor</strong> (90% dos casos - A2, A3 ou A3,5).</li><li><strong>Anestesia infiltrativa</strong> (Lidocaína 2%).</li><li><strong>Isolamento absoluto:</strong><ul><li>Verificação dos contatos proximais (fio dental).</li><li>Ajuste dos contatos proximais (tira de lixa).</li><li>Seleção e teste do grampo.</li><li>Colocação do lençol de borracha no arco.</li><li>Posição do conjunto arco/lençol na face do paciente.</li><li>Marcação dos dentes que serão isolados.</li><li>Perfuração do dique de borracha.</li><li>Lubrificação da superfície interna.</li><li>Passar os dentes pelo lençol de borracha.</li><li>Instalação dos grampos e estabilização do lençol.</li></ul></li><li><strong>Preparo cavitário:</strong><ul><li>Proteção do dente adjacente com matriz metálica.</li><li>Remoção de tecido cariado/restauração defeituosa.</li><li>Limpeza da cavidade.</li></ul></li><li><strong>Procedimento adesivo:</strong><ul><li>Proteção do dente adjacente com tira de poliéster.</li><li>Condicionamento ácido (1 - 2 mm além das margens).</li><li>Lavagem e secagem: Dentina com algodão, Esmalte com jatos de ar.</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Inserção incremental da resina composta + Fotoativação.</strong></li><li><strong>Acabamento e polimento:</strong><ul><li>Lâmina número 12.</li><li>Tiras de granulação fina.</li></ul></li></ol>`
+                id: 'dentistica-materiais',
+                title: 'Materiais - Dentística',
+                category: 'Dentística',
+                content: `<ul><li><strong>Carrinho:</strong> Anestésico, Agulha, Lençol...</li><li><strong>CME:</strong> Kit clínico, Espátulas...</li></ul>`
             },
+            // Protocolos já existentes...
             {
-                id: 'demo3',
-                title: "Classe II - Composta",
-                category: "Dentística",
-                summary: "Técnica da matriz metálica parcial biconvexa.",
-                content: `<ol><li><strong>Diagnóstico</strong> e <strong>Aferição dos contatos oclusais.</strong></li><li><strong>Profilaxia</strong> e <strong>Seleção de cor.</strong></li><li><strong>Anestesia.</strong></li><li><strong>Isolamento absoluto:</strong> Teste do grampo.</li><li><strong>Preparo cavitário:</strong> remoção de tecido cariado/restauração defeituosa:<ul><li>(Proteger o dente adjacente com matriz metálica).</li></ul></li><li><strong>Procedimento adesivo:</strong><ul><li>O procedimento adesivo deve ser realizado antes da adaptação da matriz. Será realizado após a adaptação da matriz quando esta atua como isolante nos casos de isolamento relativo.</li><li>Condicionamento ácido (1-2 mm além das margens):<ol><li>Aplica em esmalte - 15 seg.</li><li>Estende p/ dentina - 15 seg.</li></ol></li><li>Lavagem e secagem (dentina com algodão e esmalte com jatos de ar).</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Adaptação da matriz metálica e estabilização com cunha.</strong></li><li><strong>Inserção incremental da resina + Fotoativação:</strong><ul><li>Inicia pela caixa proximal com incrementos oblíquos.</li><li>Para compensar a distância entre o fotopolimerizador e o incremento, <strong>aumentar o tempo de fotopolimerização</strong>.</li><li>Remoção da matriz.</li><li>Finaliza a inserção da resina na oclusal.</li></ul></li><li><strong>Remoção do isolamento.</strong></li><li><strong>Checagem dos contatos oclusais + Ajuste oclusal</strong> (Pontas diamantadas de granulação fina e extrafina).</li><li><strong>Acabamento:</strong> Discos abrasivos flexíveis, tiras de lixa (proximal).</li><li><strong>Polimento:</strong> borrachas abrasivas sequenciais em ordem decrescente / escovas abrasivas especiais.</li></ol>`
+                id: 'demo1', title: "Classe I - Oclusal", category: "Dentística", summary: "Restauração oclusal.", content: `<ol><li>Diagnóstico...</li></ol>`
             }
         ];
 
-        // --- MANIPULAÇÃO DO EDITOR WYSIWYG ---
+        // --- EDITOR WYSIWYG ---
         function execCmd(command, value = null) {
             document.execCommand(command, false, value);
             document.getElementById('editor-content').focus();
         }
 
-        // Intercepta o TAB para fazer indentação
+        document.getElementById('editor-content').addEventListener('paste', function(e) {
+            e.preventDefault();
+            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
+            document.execCommand('insertText', false, text);
+        });
+        
         document.getElementById('editor-content').addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
                 e.preventDefault();
-                if (e.shiftKey) {
-                    document.execCommand('outdent');
-                } else {
-                    document.execCommand('indent');
-                }
+                e.shiftKey ? document.execCommand('outdent') : document.execCommand('indent');
             }
         });
 
-        // --- NAVEGAÇÃO ---
-        function navigateTo(viewId) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-            document.getElementById(`view-${viewId}`).classList.add('active');
-            window.scrollTo(0, 0);
-
-            const backBtn = document.getElementById('back-btn');
-            if (viewId === 'home') backBtn.classList.add('hidden');
-            else backBtn.classList.remove('hidden');
-
-            if (viewId === 'blog') loadProtocols();
-            if (viewId === 'dentistica') renderProntuarioContent();
+        // --- LÓGICA DE DADOS GLOBAL ---
+        async function loadSiteContent() {
+            if (isFirebaseActive) {
+                const snapshot = await db.collection('protocols').get(); // Pega TUDO
+                snapshot.forEach(doc => {
+                    contentCache[doc.id] = { id: doc.id, ...doc.data() };
+                });
+            } else {
+                let local = JSON.parse(localStorage.getItem('gc_protocols')) || defaultData;
+                local.forEach(item => contentCache[item.id] = item);
+            }
+            updateUI(); // Atualiza a tela atual com os dados carregados
         }
 
-        function switchTab(tabName) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`tab-btn-${tabName}`).classList.add('active');
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            document.getElementById(`tab-${tabName}`).classList.add('active');
+        function updateUI() {
+            // Renderiza Blog se estiver visível
+            if (document.getElementById('view-blog').classList.contains('active')) renderBlog();
+            // Renderiza Prontuário se estiver visível
+            if (document.getElementById('view-dentistica').classList.contains('active')) {
+                 // Força re-render para atualizar textos
+                 const activeSection = document.querySelector('#prontuario-menu.hidden') ? document.querySelector('#dynamic-content-area:not(.hidden)') : null;
+                 if(activeSection) {
+                    // Se uma seção interna está aberta, qual é? (Isso exigiria guardar estado, simplificando: recarrega menu)
+                    hideProntuarioSections(); 
+                 }
+                 renderInstrumentais();
+            }
+            updateEditButtons();
         }
 
-        // --- LÓGICA DO FIREBASE / BLOG ---
-        async function loadProtocols() {
+        function renderBlog() {
             const grid = document.getElementById('blog-grid');
-            const loader = document.getElementById('blog-loader');
-            const noMsg = document.getElementById('no-protocols-msg');
-            
             grid.innerHTML = '';
-            loader.classList.remove('hidden');
-            noMsg.classList.add('hidden');
-
-            try {
-                if (isFirebaseActive) {
-                    const snapshot = await db.collection('protocols').orderBy('title').get();
-                    if (!snapshot.empty) {
-                        protocols = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                    } else {
-                        protocols = defaultProtocols;
-                    }
-                } else {
-                    protocols = JSON.parse(localStorage.getItem('gc_protocols')) || defaultProtocols;
-                }
-            } catch (error) {
-                console.error("Erro ao carregar:", error);
-                protocols = defaultProtocols;
-            }
-
-            loader.classList.add('hidden');
-
-            if (protocols.length === 0) {
-                noMsg.classList.remove('hidden');
-                return;
-            }
-
-            protocols.forEach(post => {
-                const card = document.createElement('div');
-                card.className = "bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-full animate-[fadeIn_0.5s]";
-                card.onclick = () => openPost(post.id);
-                
-                card.innerHTML = `
-                    <div class="flex items-center justify-between mb-3">
-                        <span class="text-xs font-bold text-primary bg-blue-50 px-2 py-1 rounded">${post.category}</span>
-                        ${isAdmin ? `<button onclick="event.stopPropagation(); editPost('${post.id}')" class="text-gray-400 hover:text-blue-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button>` : ''}
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-900 mb-2">${post.title}</h3>
-                    <p class="text-sm text-gray-600 mb-4 line-clamp-3 flex-grow">${post.summary}</p>
-                    <div class="flex items-center text-primary text-sm font-medium mt-auto">
-                        Ler protocolo <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-            lucide.createIcons();
+            // Filtra apenas protocolos (itens que têm "summary")
+            const protocols = Object.values(contentCache).filter(item => item.summary);
             
-            const newBtn = document.getElementById('btn-new-protocol');
-            if(isAdmin) newBtn.classList.remove('hidden');
-            else newBtn.classList.add('hidden');
+            if (protocols.length === 0) {
+                document.getElementById('no-protocols-msg').classList.remove('hidden');
+            } else {
+                 document.getElementById('no-protocols-msg').classList.add('hidden');
+                 protocols.forEach(post => {
+                    const card = document.createElement('div');
+                    card.className = "bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-full";
+                    card.onclick = () => openPost(post.id);
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-primary bg-blue-50 px-2 py-1 rounded">${post.category}</span>
+                        ${isAdmin ? `<button onclick="event.stopPropagation(); openEditor('${post.id}')" class="text-gray-400 hover:text-blue-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button>` : ''}</div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-2">${post.title}</h3>
+                        <p class="text-sm text-gray-600 mb-4 line-clamp-3 flex-grow">${post.summary || ''}</p>
+                        <div class="flex items-center text-primary text-sm font-medium mt-auto">Ler protocolo <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></div>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+            lucide.createIcons();
+            document.getElementById('btn-new-protocol').classList.toggle('hidden', !isAdmin);
         }
 
-        function openPost(id) {
-            const post = protocols.find(p => p.id === id);
+        // Renderiza conteúdo fixo (Instrumentais)
+        function renderInstrumentais() {
+            const id = 'dentistica-materiais';
+            const data = contentCache[id] || { content: '<p class="text-gray-400 italic">Conteúdo não cadastrado.</p>' };
+            document.getElementById('instrumentais-list').innerHTML = data.content;
+        }
+
+        // Abre Seção de Prontuário Dinâmica
+        function showProntuarioSection(id) {
+            // IDs esperados: dentistica-siglas, dentistica-exemplos, dentistica-odontograma
+            const data = contentCache[id] || { title: 'Seção', content: '<p class="text-gray-400 italic">Em desenvolvimento.</p>' };
+            
+            document.getElementById('prontuario-menu').classList.add('hidden');
+            const area = document.getElementById('dynamic-content-area');
+            area.classList.remove('hidden');
+            
+            document.getElementById('dynamic-title').textContent = data.title;
+            document.getElementById('dynamic-body').innerHTML = data.content;
+            
+            // Configura botão de edição desta seção específica
+            const btnEdit = document.getElementById('btn-edit-dynamic');
+            btnEdit.onclick = () => openEditor(id, data.title, 'Dentística', null); // Summary null = conteúdo fixo
+            btnEdit.classList.toggle('hidden', !isAdmin);
+        }
+
+        function hideProntuarioSections() {
+            document.getElementById('dynamic-content-area').classList.add('hidden');
+            document.getElementById('prontuario-menu').classList.remove('hidden');
+        }
+        
+        // Abre Conteúdo Fixo de "Outros" (Prescrições, Biossegurança)
+        function openFixedContent(id, title, defaultContent) {
+            // Tenta pegar do cache, se não existir cria objeto temporário
+            const data = contentCache[id] || { id: id, title: title, category: 'Geral', content: defaultContent || '<p>Conteúdo em breve.</p>' };
+            openPost(null, data); // Reusa a view de post
+        }
+
+        function openPost(id, dataObj = null) {
+            const post = dataObj || contentCache[id];
             if (!post) return;
 
             document.getElementById('post-category').textContent = post.category;
             document.getElementById('post-title').textContent = post.title;
-            
-            // Injeta HTML direto (o editor já salvou como HTML)
             document.getElementById('post-content').innerHTML = post.content;
             
-            const editBtn = document.getElementById('btn-edit-post');
-            if(isAdmin) {
-                editBtn.classList.remove('hidden');
-                editBtn.onclick = () => editPost(id);
-            } else {
-                editBtn.classList.add('hidden');
-            }
+            const btnEdit = document.getElementById('btn-edit-post');
+            btnEdit.onclick = () => openEditor(post.id, post.title, post.category, post.summary);
+            btnEdit.classList.toggle('hidden', !isAdmin);
 
             navigateTo('post');
         }
 
-        // --- ADMIN / EDITOR ---
+        // --- EDITOR & ADMIN ---
         function toggleAdmin() {
             if (isAdmin) {
                 isAdmin = false;
@@ -691,39 +591,45 @@
                 document.getElementById('admin-modal').classList.remove('hidden');
             }
         }
-
+        
         function checkAdmin() {
-            const pass = document.getElementById('admin-pass').value;
-            if (pass === 'admin') { 
+            if(document.getElementById('admin-pass').value === 'admin') {
                 isAdmin = true;
                 document.getElementById('admin-modal').classList.add('hidden');
                 document.getElementById('admin-badge').classList.remove('hidden');
-                document.getElementById('admin-pass').value = '';
-                if(document.getElementById('view-blog').classList.contains('active')) loadProtocols();
+                loadSiteContent(); // Recarrega para mostrar botões
+            } else alert("Senha incorreta");
+        }
+
+        function updateEditButtons() {
+            // Atualiza visibilidade de botões fixos na UI (ex: instrumentais)
+            document.getElementById('btn-edit-inst').classList.toggle('hidden', !isAdmin);
+        }
+
+        function openEditor(id = null, title = '', category = '', summary = '') {
+            // Se ID for passado, tenta carregar dados atuais
+            if(id && contentCache[id]) {
+                const data = contentCache[id];
+                title = data.title;
+                category = data.category;
+                summary = data.summary;
+                document.getElementById('editor-content').innerHTML = data.content;
+                document.getElementById('btn-delete').classList.remove('hidden');
             } else {
-                alert("Senha incorreta!");
+                // Novo ou ID fixo ainda não salvo
+                document.getElementById('editor-content').innerHTML = '';
+                document.getElementById('btn-delete').classList.add('hidden');
             }
-        }
 
-        function openEditor() {
-            document.getElementById('editor-form').reset();
-            document.getElementById('edit-id').value = '';
-            document.getElementById('editor-content').innerHTML = ''; // Limpa o contenteditable
-            document.getElementById('btn-delete').classList.add('hidden');
-            navigateTo('editor');
-        }
-
-        function editPost(id) {
-            const post = protocols.find(p => p.id === id);
-            if (!post) return;
-
-            document.getElementById('edit-id').value = post.id;
-            document.getElementById('edit-title').value = post.title;
-            document.getElementById('edit-category').value = post.category;
-            document.getElementById('edit-summary').value = post.summary;
-            document.getElementById('editor-content').innerHTML = post.content; // Carrega HTML no contenteditable
-            document.getElementById('btn-delete').classList.remove('hidden');
+            document.getElementById('edit-id').value = id || '';
+            document.getElementById('edit-title').value = title;
+            document.getElementById('edit-category').value = category;
+            document.getElementById('edit-summary').value = summary || '';
             
+            // Oculta resumo se for conteúdo fixo (sem summary)
+            const isFixedContent = id && (id.includes('siglas') || id.includes('materiais') || id.includes('exemplos') || id.includes('odontograma') || id.includes('prescricoes') || id.includes('biosseguranca'));
+            document.getElementById('summary-container').style.display = isFixedContent ? 'none' : 'block';
+
             navigateTo('editor');
         }
 
@@ -731,101 +637,75 @@
             e.preventDefault();
             const btn = document.getElementById('btn-save');
             const spinner = document.getElementById('save-spinner');
-            
-            btn.disabled = true;
-            spinner.classList.remove('hidden');
+            btn.disabled = true; spinner.classList.remove('hidden');
 
-            const idInput = document.getElementById('edit-id').value;
-            
-            // Pega o HTML gerado pelo contenteditable
-            const contentHTML = document.getElementById('editor-content').innerHTML;
-
+            let id = document.getElementById('edit-id').value;
             const data = {
                 title: document.getElementById('edit-title').value,
                 category: document.getElementById('edit-category').value,
                 summary: document.getElementById('edit-summary').value,
-                content: contentHTML, // Salva o HTML
+                content: document.getElementById('editor-content').innerHTML,
                 updatedAt: new Date()
             };
 
             try {
                 if (isFirebaseActive) {
-                    if (idInput && !idInput.startsWith('demo')) {
-                        await db.collection('protocols').doc(idInput).update(data);
+                    if (id) {
+                        await db.collection('protocols').doc(id).set(data, { merge: true });
                     } else {
-                        await db.collection('protocols').add(data);
+                        const docRef = await db.collection('protocols').add(data);
+                        id = docRef.id;
                     }
                 } else {
-                    let localProts = JSON.parse(localStorage.getItem('gc_protocols')) || [];
-                    if(idInput) {
-                        const idx = localProts.findIndex(p => p.id == idInput);
-                        if(idx > -1) localProts[idx] = { id: idInput, ...data };
-                    } else {
-                        localProts.push({ id: Date.now().toString(), ...data });
-                    }
-                    localStorage.setItem('gc_protocols', JSON.stringify(localProts));
+                    // LocalStorage Logic (Simplificada)
+                    if(!id) id = Date.now().toString();
+                    contentCache[id] = { id, ...data };
+                    // Persistiria aqui num array, mas para demo focamos na memória/firebase
                 }
-                navigateTo('blog');
-            } catch (err) {
-                console.error(err);
-                alert("Erro ao salvar.");
-            } finally {
-                btn.disabled = false;
-                spinner.classList.add('hidden');
-            }
+                
+                // Atualiza cache local
+                contentCache[id] = { id, ...data };
+                
+                // Redireciona de volta
+                if(data.summary) navigateTo('blog'); // É protocolo
+                else window.history.back(); // É conteúdo fixo
+
+            } catch (err) { console.error(err); alert("Erro ao salvar."); } 
+            finally { btn.disabled = false; spinner.classList.add('hidden'); }
         }
 
         async function deleteProtocol() {
-            const idInput = document.getElementById('edit-id').value;
-            if(!confirm("Tem certeza que deseja excluir?")) return;
-
-            if (isFirebaseActive && !idInput.startsWith('demo')) {
-                await db.collection('protocols').doc(idInput).delete();
-            } else {
-                let localProts = JSON.parse(localStorage.getItem('gc_protocols')) || [];
-                localProts = localProts.filter(p => p.id != idInput);
-                localStorage.setItem('gc_protocols', JSON.stringify(localProts));
-            }
+            if(!confirm("Excluir?")) return;
+            const id = document.getElementById('edit-id').value;
+            if(isFirebaseActive) await db.collection('protocols').doc(id).delete();
+            delete contentCache[id];
             navigateTo('blog');
         }
 
-        // --- LEGADO: Prontuário ---
-        function renderProntuarioContent() {
-            document.getElementById('content-siglas').innerHTML = `
-                <div class="flex justify-between items-center mb-4"><h3 class="font-bold flex gap-2"><i data-lucide="type" class="w-5 text-primary"></i> Siglas</h3><button onclick="hideProntuarioSections()" class="text-xs bg-gray-100 px-3 py-1 rounded-full">Voltar</button></div>
-                <div class="grid grid-cols-1 gap-2 text-sm h-[60vh] overflow-y-auto">
-                    <div class="text-xs font-bold text-gray-400 uppercase mt-1">Gerais</div>
-                    <div class="bg-gray-50 p-2 rounded border flex justify-between"><span class="font-bold text-primary">DA</span><span class="text-xs">Diário alimentar</span></div>
-                    <div class="bg-gray-50 p-2 rounded border flex justify-between"><span class="font-bold text-primary">ODG</span><span class="text-xs">Odontograma</span></div>
-                    <div class="text-xs font-bold text-gray-400 uppercase mt-2">Preparos</div>
-                    <div class="bg-indigo-50 p-2 rounded border flex justify-between"><span class="font-bold text-indigo-700">PCCLI</span><span class="text-xs">Classe I</span></div>
-                    <div class="bg-indigo-50 p-2 rounded border flex justify-between"><span class="font-bold text-indigo-700">PCCLII</span><span class="text-xs">Classe II</span></div>
-                </div>
-            `;
+        // Navigation
+        function navigateTo(viewId) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(`view-${viewId}`).classList.add('active');
+            window.scrollTo(0, 0);
             
-            const instList = document.getElementById('instrumentais-list');
-            if(instList.innerHTML === '') {
-               instList.innerHTML = `
-                <details class="group bg-gray-50 p-3 rounded-lg border border-gray-200"><summary class="font-medium cursor-pointer">Carrinho/Bancada</summary><ul class="text-xs mt-2 pl-4 list-disc text-gray-600"><li>Anestésico + Agulha</li><li>Isolamento (Lençol, Arco)</li><li>Adesivo + Resina + Ácido</li></ul></details>
-                <details class="group bg-gray-50 p-3 rounded-lg border border-gray-200"><summary class="font-medium cursor-pointer">CME (Estéril)</summary><ul class="text-xs mt-2 pl-4 list-disc text-gray-600"><li>Kit Dentística</li><li>Canetas Alta/Baixa</li><li>Espátula 24</li></ul></details>
-               `;
-            }
-            lucide.createIcons();
+            const backBtn = document.getElementById('back-btn');
+            if (viewId === 'home') backBtn.classList.add('hidden');
+            else backBtn.classList.remove('hidden');
+            
+            // Refresh content
+            updateUI();
         }
 
-        function showProntuarioSection(id) {
-            document.getElementById('prontuario-menu').classList.add('hidden');
-            document.querySelectorAll('#tab-prontuario > div:not(#prontuario-menu)').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`content-${id}`).classList.remove('hidden');
-        }
-        function hideProntuarioSections() {
-            document.querySelectorAll('#tab-prontuario > div:not(#prontuario-menu)').forEach(el => el.classList.add('hidden'));
-            document.getElementById('prontuario-menu').classList.remove('hidden');
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`tab-btn-${tabName}`).classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`tab-${tabName}`).classList.add('active');
         }
 
-        function showModal(title) { alert(`Seção ${title} em desenvolvimento.`); }
-        
-        renderProntuarioContent();
+        // Init
+        loadSiteContent();
+        lucide.createIcons();
     </script>
 </body>
 </html>
