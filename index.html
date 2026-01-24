@@ -423,6 +423,7 @@
                                 <span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase mb-2">Categoria</span>
                                 <h2 id="post-title" class="text-2xl font-bold text-gray-900 leading-tight">Título do Protocolo</h2>
                             </div>
+                            <!-- Botão de Editar (APENAS para Protocolos) -->
                             <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2 rounded hover:bg-gray-200 transition">
                                 <i data-lucide="edit-3" class="w-5 h-5"></i>
                             </button>
@@ -592,7 +593,108 @@
                     </div>
                 </div>`
             },
-            { id: 'dentistica-materiais', title: 'Materiais - Dentística', category: 'Dentística', content: `<ul><li><strong>Carrinho:</strong> Anestésico, Agulha, Lençol...</li><li><strong>CME:</strong> Kit clínico, Espátulas...</li></ul>` },
+            {
+                id: 'dentistica-exemplos',
+                title: 'Exemplos de Preenchimento',
+                category: 'Dentística',
+                content: `<div class="space-y-6 text-sm">
+                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <h4 class="font-bold text-primary mb-2 flex items-center gap-2">
+                            <i data-lucide="info" class="w-4 h-4"></i> Como preencher?
+                        </h4>
+                        <p class="text-gray-700 mb-2">A descrição no prontuário deve ser sucinta, utilizando as siglas padronizadas e a ordem lógica do procedimento clínico.</p>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Exemplo 1: Restauração Classe II Complexa</h4>
+                        <div class="mb-2">
+                            <span class="text-xs font-semibold text-gray-500 uppercase">Procedimento Realizado:</span>
+                            <p class="text-gray-700 italic">"Dente 16: Anestesia Infiltrativa, Isolamento Absoluto, Preparo Cavitário Classe II (Mesio-ocluso-distal), Proteção com Hidróxido de Cálcio e Ionômero, Restauração em Resina Composta (Cor A2), Acabamento, Polimento e Ajuste Oclusal."</p>
+                        </div>
+                        <div class="bg-gray-100 p-3 rounded-md font-mono text-gray-800 border-l-4 border-primary">
+                            16 - AI + IA + PCCL II (MOD) + PHC + PIV + RRC (OPALLIS A2) + ACAB + POL + AO
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Exemplo 2: Procedimentos Iniciais / Diagnóstico</h4>
+                        <div class="mb-2">
+                            <span class="text-xs font-semibold text-gray-500 uppercase">Procedimento Realizado:</span>
+                            <p class="text-gray-700 italic">"Anamnese, Profilaxia, Radiografia Periapical (36, 37), Radiografia Interproximal (14, 15), Odontograma e Plano de Tratamento."</p>
+                        </div>
+                        <div class="bg-gray-100 p-3 rounded-md font-mono text-gray-800 border-l-4 border-primary">
+                            ANM + PROF + Rx per (36, 37) + Rx inter (14, 15) + ODG + PT
+                        </div>
+                    </div>
+                    
+                     <div>
+                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Outras Siglas Comuns</h4>
+                         <p class="text-gray-600 font-mono text-xs bg-gray-50 p-2 rounded">POZE; ROZE; RIV; SEL; TEX</p>
+                    </div>
+                </div>`
+            },
+            {
+                id: 'dentistica-materiais',
+                title: 'Materiais - Dentística',
+                category: 'Dentística',
+                content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+                    <div>
+                        <h4 class="font-bold text-primary mb-2 border-b border-gray-200 pb-1">Carrinho e Bancada</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                            <li>Anestésico</li>
+                            <li>Agulha anestesia</li>
+                            <li>Lençol de borracha</li>
+                            <li>Ácido fosfórico</li>
+                            <li>Sistema Adesivo</li>
+                            <li>Resina composta</li>
+                            <li>CIV (Cimento de Ionômero de Vidro)</li>
+                            <li>Microbrush</li>
+                            <li>Lâmina de bisturi n°12</li>
+                            <li>Tira de Lixa</li>
+                            <li>Discos de Lixa</li>
+                            <li>Cunha de madeira</li>
+                            <li>Tira de Poliéster</li>
+                            <li>Papel carbono</li>
+                            <li>Escala Vita</li>
+                            <li>Gaze</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-primary mb-2 border-b border-gray-200 pb-1">CME (Esterilização)</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                            <li>Kit de Dentística</li>
+                            <li>Kit de Isolamento</li>
+                            <li>Arco de Young</li>
+                            <li>Caneta de Alta Rotação</li>
+                            <li>Caneta de Baixa Rotação</li>
+                            <li>Kit de acabamento e polimento</li>
+                            <li>Borrachas abrasivas</li>
+                            <li>Espátula 24</li>
+                            <li>Placa de vidro</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-primary mb-2 border-b border-gray-200 pb-1">Janelinha (Solicitar)</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                            <li>Grampos</li>
+                            <li>Brocas</li>
+                            <li>Pontas</li>
+                            <li>Matriz</li>
+                            <li>Fotopolimerizador</li>
+                            <li>CIV encapsulado</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-primary mb-2 border-b border-gray-200 pb-1">Material Pessoal</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                            <li>Fio dental</li>
+                            <li>Lubrificante</li>
+                            <li>Caneta permanente</li>
+                            <li>Pincel para acabamento</li>
+                        </ul>
+                    </div>
+                </div>`
+            },
             
             // PLACEHOLDERS NOVOS (Serão substituídos quando você enviar os textos)
             { id: 'periodontia-siglas', title: 'Siglas - Periodontia', category: 'Periodontia', content: '<p class="text-gray-400 italic">Conteúdo em breve.</p>' },
@@ -676,6 +778,9 @@
                      renderInstrumentais(spec);
                 }
             });
+            
+             // Re-inicializa ícones após renderizar conteúdo dinâmico
+            lucide.createIcons();
         }
 
         function renderBlog() {
@@ -721,6 +826,9 @@
             
             document.getElementById(`dynamic-title-${specialty}`).textContent = data.title;
             document.getElementById(`dynamic-body-${specialty}`).innerHTML = data.content;
+            
+            // Re-render icons for new content
+            lucide.createIcons();
         }
 
         function hideProntuarioSections(specialty) {
@@ -751,6 +859,8 @@
             }
 
             navigateTo('post');
+             // Re-render icons for new content
+            lucide.createIcons();
         }
 
         // --- EDITOR & ADMIN ---
