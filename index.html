@@ -8,7 +8,6 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -66,7 +65,6 @@
 
         /* --- ESTILOS DO EDITOR TIPO GOOGLE DOCS --- */
         
-        /* Área de Edição (Papel) - FORÇANDO FONTE PADRÃO */
         .editor-paper {
             background: white;
             min-height: 29.7cm; /* Tamanho A4 aprox */
@@ -77,13 +75,27 @@
             color: #333;
             line-height: 1.6;
             font-size: 11pt;
-            font-family: 'Inter', sans-serif !important; /* Força a fonte */
+            /* Garante a fonte base */
+            font-family: 'Inter', sans-serif; 
         }
-        
-        /* Garante que elementos colados herdem a fonte */
+
+        /* --- MAGIC FIX: FORÇA A FONTE E COR PADRÃO EM TUDO --- */
+        /* Isso sobrescreve estilos inline que vêm no Copy/Paste (ex: style="font-family: Arial") */
         .editor-paper * {
             font-family: 'Inter', sans-serif !important;
+            color: #374151 !important; /* Cinza escuro padrão */
+            background-color: transparent !important; /* Remove fundos de texto copiados */
+            font-size: inherit !important; /* Mantém tamanho relativo, exceto headers */
         }
+        
+        /* Exceções para Negrito e Itálico (para não serem anulados pelo reset acima se mal configurados) */
+        .editor-paper b, .editor-paper strong { font-weight: 700 !important; color: #155e75 !important; }
+        .editor-paper i, .editor-paper em { font-style: italic !important; }
+
+        /* Estilização específica para elementos estruturais */
+        .editor-paper h1, .rich-text h1 { font-size: 1.8em !important; font-weight: 700 !important; margin-top: 1em; color: #111827 !important; }
+        .editor-paper h2, .rich-text h2 { font-size: 1.4em !important; font-weight: 700 !important; margin-top: 1em; color: #1f2937 !important; }
+        .editor-paper h3, .rich-text h3 { font-size: 1.1em !important; font-weight: 700 !important; margin-top: 1em; color: #374151 !important; }
         
         @media (max-width: 640px) {
             .editor-paper {
@@ -114,29 +126,24 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 32px;
+            min-height: 32px;
         }
         .toolbar-btn:hover { background-color: #e5e7eb; color: #111827; }
-        .toolbar-btn.active { background-color: #dbeafe; color: #0e7490; }
-
-        /* --- ESTILOS DE CONTEÚDO RICO --- */
-        .rich-text h1 { font-size: 1.8em; font-weight: 700; margin-bottom: 0.5em; margin-top: 1em; color: #111827; }
-        .rich-text h2 { font-size: 1.4em; font-weight: 700; margin-bottom: 0.5em; margin-top: 1em; color: #1f2937; }
-        .rich-text h3 { font-size: 1.1em; font-weight: 700; margin-bottom: 0.5em; margin-top: 1em; color: #374151; }
-        .rich-text p { margin-bottom: 1em; }
         
-        /* Listas Principais */
-        .rich-text ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
-        .rich-text ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
-        .rich-text li { margin-bottom: 0.25em; }
+        /* Listas Principais (Visualização e Editor) */
+        .rich-text ul, .editor-paper ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1em; }
+        .rich-text ol, .editor-paper ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1em; }
+        .rich-text li, .editor-paper li { margin-bottom: 0.25em; }
         
-        /* Hierarquia de Listas */
-        .rich-text ul ul { list-style-type: circle; }
-        .rich-text ul ul ul { list-style-type: square; }
+        /* Hierarquia de Listas (Subseções automáticas) */
+        /* Nível 2 */
+        .rich-text ul ul, .editor-paper ul ul { list-style-type: circle; margin-top: 0.25em; margin-bottom: 0.25em; }
+        .rich-text ol ol, .editor-paper ol ol { list-style-type: lower-alpha; margin-top: 0.25em; margin-bottom: 0.25em; } /* 1. -> a. */
         
-        .rich-text ol ol { list-style-type: lower-alpha; } 
-        .rich-text ol ol ol { list-style-type: lower-roman; }
-        
-        .rich-text blockquote { border-left: 4px solid #e5e7eb; padding-left: 1em; color: #6b7280; font-style: italic; }
+        /* Nível 3 */
+        .rich-text ul ul ul, .editor-paper ul ul ul { list-style-type: square; }
+        .rich-text ol ol ol, .editor-paper ol ol ol { list-style-type: lower-roman; } /* a. -> i. */
         
         [contenteditable]:empty:before {
             content: attr(placeholder);
@@ -212,7 +219,6 @@
                         </div>
                         <span class="font-semibold text-sm xs:text-base text-gray-700">Dentística</span>
                     </button>
-                    <!-- Buttons without implementation for now -->
                     <button onclick="showModal('Periodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
                         <div class="bg-red-50 p-3 rounded-full">
                             <i data-lucide="layers" class="w-6 h-6 xs:w-8 xs:h-8 text-rose-600"></i>
@@ -327,7 +333,8 @@
                         </button>
                     </div>
                 </div>
-                <div id="post-content" class="p-6 rich-text"></div>
+                <!-- Editor-paper aqui garante a mesma fonte da edição -->
+                <div id="post-content" class="p-8 rich-text editor-paper" style="box-shadow: none; padding: 2rem;"></div>
             </div>
         </div>
 
@@ -499,7 +506,7 @@
 
     <!-- Scripts -->
     <script>
-        // CONFIGURAÇÃO DO FIREBASE
+        // CONFIGURAÇÃO DO FIREBASE (Chaves fornecidas)
         const firebaseConfig = {
             apiKey: "AIzaSyCtPyXA4TJMvxeX3vNdelzvADQTyzVRCfw",
             authDomain: "guia-clinico-odonto.firebaseapp.com",
@@ -530,7 +537,7 @@
         let protocols = []; 
         let currentProtocolId = null;
 
-        // DADOS PADRÃO (Convertidos para HTML para funcionar com o novo editor)
+        // DADOS PADRÃO (Com estrutura HTML de listas aninhadas para demonstração)
         const defaultProtocols = [
             {
                 id: 'demo1',
@@ -551,7 +558,7 @@
                 title: "Classe II - Composta",
                 category: "Dentística",
                 summary: "Técnica da matriz metálica parcial biconvexa.",
-                content: `<ol><li><strong>Diagnóstico</strong> e <strong>Aferição dos contatos oclusais.</strong></li><li><strong>Profilaxia</strong> e <strong>Seleção de cor.</strong></li><li><strong>Anestesia.</strong></li><li><strong>Isolamento absoluto:</strong> Teste do grampo.</li><li><strong>Preparo cavitário:</strong> remoção de tecido cariado/restauração defeituosa:<ul><li>(Proteger o dente adjacente com matriz metálica).</li></ul></li><li><strong>Procedimento adesivo:</strong><ul><li>O procedimento adesivo deve ser realizado antes da adaptação da matriz. Será realizado após a adaptação da matriz quando esta atua como isolante nos casos de isolamento relativo.</li><li>Condicionamento ácido (1-2 mm além das margens):<ul><li>Aplica em esmalte - 15 seg.</li><li>Estende p/ dentina - 15 seg.</li></ul></li><li>Lavagem e secagem (dentina com algodão e esmalte com jatos de ar).</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Adaptação da matriz metálica e estabilização com cunha.</strong></li><li><strong>Inserção incremental da resina + Fotoativação:</strong><ul><li>Inicia pela caixa proximal com incrementos oblíquos.</li><li>Para compensar a distância entre o fotopolimerizador e o incremento, <strong>aumentar o tempo de fotopolimerização</strong>.</li><li>Remoção da matriz.</li><li>Finaliza a inserção da resina na oclusal.</li></ul></li><li><strong>Remoção do isolamento.</strong></li><li><strong>Checagem dos contatos oclusais + Ajuste oclusal</strong> (Pontas diamantadas de granulação fina e extrafina).</li><li><strong>Acabamento:</strong> Discos abrasivos flexíveis, tiras de lixa (proximal).</li><li><strong>Polimento:</strong> borrachas abrasivas sequenciais em ordem decrescente / escovas abrasivas especiais.</li></ol>`
+                content: `<ol><li><strong>Diagnóstico</strong> e <strong>Aferição dos contatos oclusais.</strong></li><li><strong>Profilaxia</strong> e <strong>Seleção de cor.</strong></li><li><strong>Anestesia.</strong></li><li><strong>Isolamento absoluto:</strong> Teste do grampo.</li><li><strong>Preparo cavitário:</strong> remoção de tecido cariado/restauração defeituosa:<ul><li>(Proteger o dente adjacente com matriz metálica).</li></ul></li><li><strong>Procedimento adesivo:</strong><ul><li>O procedimento adesivo deve ser realizado antes da adaptação da matriz. Será realizado após a adaptação da matriz quando esta atua como isolante nos casos de isolamento relativo.</li><li>Condicionamento ácido (1-2 mm além das margens):<ol><li>Aplica em esmalte - 15 seg.</li><li>Estende p/ dentina - 15 seg.</li></ol></li><li>Lavagem e secagem (dentina com algodão e esmalte com jatos de ar).</li><li>Aplicação do Primer (microbrush).</li><li>Evaporação do solvente (jatos de ar à distância).</li><li>Aplicação do Adesivo (microbrush).</li><li>Fotoativação.</li></ul></li><li><strong>Adaptação da matriz metálica e estabilização com cunha.</strong></li><li><strong>Inserção incremental da resina + Fotoativação:</strong><ul><li>Inicia pela caixa proximal com incrementos oblíquos.</li><li>Para compensar a distância entre o fotopolimerizador e o incremento, <strong>aumentar o tempo de fotopolimerização</strong>.</li><li>Remoção da matriz.</li><li>Finaliza a inserção da resina na oclusal.</li></ul></li><li><strong>Remoção do isolamento.</strong></li><li><strong>Checagem dos contatos oclusais + Ajuste oclusal</strong> (Pontas diamantadas de granulação fina e extrafina).</li><li><strong>Acabamento:</strong> Discos abrasivos flexíveis, tiras de lixa (proximal).</li><li><strong>Polimento:</strong> borrachas abrasivas sequenciais em ordem decrescente / escovas abrasivas especiais.</li></ol>`
             }
         ];
 
@@ -561,19 +568,10 @@
             document.getElementById('editor-content').focus();
         }
 
-        // --- FIX DE COLAGEM (Paste as Plain Text) ---
-        // Isso garante que a fonte do site seja preservada ao colar texto de fora
-        document.getElementById('editor-content').addEventListener('paste', function(e) {
-            e.preventDefault();
-            var text = (e.originalEvent || e).clipboardData.getData('text/plain');
-            document.execCommand('insertText', false, text);
-        });
-
-        // Intercepta o TAB para fazer indentação ao invés de mudar o foco
+        // Intercepta o TAB para fazer indentação
         document.getElementById('editor-content').addEventListener('keydown', function(e) {
             if (e.key === 'Tab') {
                 e.preventDefault();
-                // Indentar ou Desindentar
                 if (e.shiftKey) {
                     document.execCommand('outdent');
                 } else {
@@ -619,16 +617,13 @@
                     if (!snapshot.empty) {
                         protocols = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
                     } else {
-                        // Se vazio, usa os defaults (apenas para visualização inicial)
                         protocols = defaultProtocols;
                     }
                 } else {
-                    // Modo Offline (teste)
                     protocols = JSON.parse(localStorage.getItem('gc_protocols')) || defaultProtocols;
                 }
             } catch (error) {
                 console.error("Erro ao carregar:", error);
-                // Fallback silencioso para dados locais em caso de erro de rede
                 protocols = defaultProtocols;
             }
 
