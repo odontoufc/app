@@ -514,7 +514,7 @@
                 </div>
             </div>
             <div class="text-center pt-6">
-                <p class="text-[10px] text-gray-400">&copy; 2024 Guia Clínico - Odontologia UFC.</p>
+                <p class="text-[10px] text-gray-400">&copy; <span id="copyright-year"></span> Guia Clínico - Odontologia UFC.</p>
             </div>
         </div>
     </footer>
@@ -1212,6 +1212,9 @@
                     contentCache[item.id] = item;
                 }
             });
+
+            // Atualiza o ano no rodapé
+            document.getElementById('copyright-year').textContent = new Date().getFullYear();
 
             updateUI();
         }
