@@ -1411,6 +1411,10 @@
                 btnEdit.classList.add('hidden');
             }
 
+            // Define para onde o botão voltar deve ir
+            // Se for Links Úteis (que está na home), volta pra home. Se não, volta pro Blog.
+            window.postBackTarget = (id === 'links-uteis') ? 'home' : 'blog';
+
             navigateTo('post');
              // Re-render icons for new content
             lucide.createIcons();
@@ -1515,8 +1519,24 @@
             window.scrollTo(0, 0);
             
             const backBtn = document.getElementById('back-btn');
-            if (viewId === 'home') backBtn.classList.add('hidden');
-            else backBtn.classList.remove('hidden');
+            
+            if (viewId === 'home') {
+                backBtn.classList.add('hidden');
+            } else {
+                backBtn.classList.remove('hidden');
+                
+                // Lógica Inteligente do Botão Voltar
+                if (viewId === 'post') {
+                    // Se estiver num post, usa o alvo definido anteriormente (Blog ou Home)
+                    backBtn.onclick = () => navigateTo(window.postBackTarget || 'blog');
+                } else if (viewId === 'editor') {
+                    // Se estiver no editor, volta para o blog
+                    backBtn.onclick = () => navigateTo('blog');
+                } else {
+                    // Padrão para especialidades (Dentística, etc): Volta para Home
+                    backBtn.onclick = () => navigateTo('home');
+                }
+            }
             
             updateUI();
         }
