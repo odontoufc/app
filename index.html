@@ -1020,8 +1020,84 @@
                     </div>
                 </div>` 
             },
+            {
+                id: 'prescricoes-geral',
+                title: 'Prescrições Medicamentosas',
+                category: 'Geral',
+                summary: 'Modelos de prescrição para analgésicos, anti-inflamatórios e antibióticos.',
+                content: `<div class="space-y-6 text-sm">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+                            <i data-lucide="pill" class="w-5 h-5 text-primary"></i> Uso Interno
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                <h4 class="font-bold text-primary mb-2">Analgésicos (Controle da Dor)</h4>
+                                <ul class="space-y-3 text-gray-700">
+                                    <li><strong>Dipirona 500mg:</strong> 12 cp. Tomar 01 cp a cada 06 horas, durante 03 dias.</li>
+                                    <li><strong>Paracetamol 750mg:</strong> 12 cp. Tomar 01 cp a cada 06 horas, durante 03 dias.</li>
+                                </ul>
+                            </div>
 
-            // O item demo1 foi removido daqui
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                <h4 class="font-bold text-primary mb-2">Anti-inflamatórios (AINES)</h4>
+                                <ul class="space-y-3 text-gray-700">
+                                    <li><strong>Ibuprofeno 600mg:</strong> 9 cp. Tomar 01 cp a cada 08 horas, durante 03 dias.</li>
+                                    <li><strong>Nimesulida 100mg:</strong> 6 cp. Tomar 01 cp a cada 12 horas, durante 03 dias.</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
+                                <h4 class="font-bold text-primary mb-2">Corticosteróides (Analgesia Preemptiva)</h4>
+                                <ul class="space-y-3 text-gray-700">
+                                    <li><strong>Dexametasona 4mg:</strong> 02 cp. Tomar 02 cp 01 hora antes do procedimento.</li>
+                                    <li><strong>Betametasona 2mg:</strong> 02 cp. Tomar 02 cp 01 hora antes do procedimento.</li>
+                                </ul>
+                            </div>
+
+                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 md:col-span-2">
+                                <h4 class="font-bold text-primary mb-2">Antibióticos</h4>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    <ul class="space-y-3 text-gray-700">
+                                        <li><strong>Amoxicilina 500mg:</strong> 21 cp. Tomar 1 cp a cada 8h por 7 dias.</li>
+                                        <li><strong>Ampicilina 500mg:</strong> 28 cp. Tomar 1 cp a cada 6h por 7 dias.</li>
+                                        <li><strong>Clavulin 500mg:</strong> 21 cp. Tomar 1 cp a cada 8h por 7 dias.</li>
+                                    </ul>
+                                    <ul class="space-y-3 text-gray-700">
+                                        <li><strong>Dalacin C 300mg (Clindamicina):</strong> 28 cp. Tomar 1 cp a cada 6h por 7 dias.</li>
+                                        <li><strong>Cefalexina 500mg:</strong> 28 cp. Tomar 1 cp a cada 6h por 7 dias.</li>
+                                        <li><strong>Flagyl 250mg (Metronidazol):</strong> 21 cp. Tomar 1 cp a cada 8h por 7 dias. (Associar a outro AB em infecções graves).</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+                            <i data-lucide="droplet" class="w-5 h-5 text-primary"></i> Uso Externo
+                        </h3>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                                <h4 class="font-bold text-blue-800 mb-2">Antifúngico</h4>
+                                <p class="text-gray-700"><strong>Nistatina 100.000 UI/ml:</strong> 01 frasco. Bochechar 05mL a cada 06 horas, durante 14 dias.</p>
+                            </div>
+                            
+                            <div class="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
+                                <h4 class="font-bold text-emerald-800 mb-2">Colutório</h4>
+                                <p class="text-gray-700"><strong>Digluconato de clorexidina 0,12%:</strong> 01 frasco. Bochechar 15mL por 01 minuto, a cada 12 horas (30 min após escovação), durante 07 dias.</p>
+                            </div>
+
+                            <div class="bg-purple-50 p-4 rounded-lg border border-purple-100 md:col-span-2">
+                                <h4 class="font-bold text-purple-800 mb-2">Corticosteroide Tópico</h4>
+                                <p class="text-gray-700"><strong>Omcilon 10g:</strong> 01 tubo. Aplicar pequena quantidade nas lesões, sem esfregar, até formar película, 03 vezes ao dia (após refeições), durante 07 dias.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>`
+            }
         ];
 
         // --- EDITOR WYSIWYG ---
@@ -1068,7 +1144,8 @@
                     'dentistica-siglas', 'dentistica-materiais', 'dentistica-exemplos', 'dentistica-odontograma',
                     'periodontia-siglas', 'periodontia-exemplos', 'periodontia-materiais',
                     'endodontia-siglas', 'endodontia-exemplos', 'endodontia-materiais',
-                    'cirurgia-siglas', 'cirurgia-exemplos', 'cirurgia-materiais'
+                    'cirurgia-siglas', 'cirurgia-exemplos', 'cirurgia-materiais',
+                    'prescricoes-geral'
                 ];
                 
                 if (systemIds.includes(item.id) || !contentCache[item.id]) {
