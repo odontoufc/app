@@ -1097,6 +1097,49 @@
                         </div>
                     </div>
                 </div>`
+            },
+            {
+                id: 'links-uteis',
+                title: 'Links Úteis',
+                category: 'Geral',
+                summary: 'Canais do YouTube e Podcasts recomendados.',
+                content: `<div class="space-y-6 text-sm">
+                    <div>
+                        <h4 class="font-bold text-gray-800 mt-6 mb-3 flex items-center gap-2"><i data-lucide="video" class="w-5 h-5 text-red-600"></i> Canais Recomendados</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <a href="https://youtube.com/@deolhonaperiodontiaufc-cam693?si=VatiQZ6QlFN97cdf" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
+                                <i data-lucide="youtube" class="w-6 h-6 text-red-600"></i>
+                                <div><span class="block font-semibold text-gray-800 text-sm">De Olho na Periodontia</span><span class="text-xs text-gray-500">UFC Sobral</span></div>
+                            </a>
+                            <a href="https://youtube.com/@dentisticaeesculturadental3098?si=GXLxIP-M6OBgPg-q" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
+                                <i data-lucide="youtube" class="w-6 h-6 text-red-600"></i>
+                                <div><span class="block font-semibold text-gray-800 text-sm">Dentística e Escultura Dental</span><span class="text-xs text-gray-500">Canal Educativo</span></div>
+                            </a>
+                            <a href="https://youtube.com/@equipededentisticaufcsobra6651?si=kfUdVhuAx5Qox4UT" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
+                                <i data-lucide="youtube" class="w-6 h-6 text-red-600"></i>
+                                <div><span class="block font-semibold text-gray-800 text-sm">Equipe de Dentística</span><span class="text-xs text-gray-500">UFC Sobral</span></div>
+                            </a>
+                            <a href="https://open.spotify.com/show/7nxXta4sQfycT6eU9NGMwC?si=Oyp7haWTS7qQN_cGLQqNVQ" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-green-500 transition shadow-sm">
+                                <i data-lucide="mic" class="w-6 h-6 text-green-600"></i>
+                                <div><span class="block font-semibold text-gray-800 text-sm">Podcast Odontologia</span><span class="text-xs text-gray-500">Spotify</span></div>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold text-gray-800 mt-6 mb-3 flex items-center gap-2"><i data-lucide="link" class="w-5 h-5 text-gray-600"></i> Portais Importantes</h4>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <a href="https://website.cfo.org.br/" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-blue-500 transition shadow-sm">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-600"></i>
+                                <div><span class="block font-semibold text-gray-800 text-sm">CFO</span><span class="text-xs text-gray-500">Conselho Federal</span></div>
+                            </a>
+                             <a href="https://www.cro-ce.org.br/" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-blue-500 transition shadow-sm">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-600"></i>
+                                <div><span class="block font-semibold text-gray-800 text-sm">CRO-CE</span><span class="text-xs text-gray-500">Conselho Regional</span></div>
+                            </a>
+                        </div>
+                    </div>
+                </div>`
             }
         ];
 
@@ -1145,7 +1188,7 @@
                     'periodontia-siglas', 'periodontia-exemplos', 'periodontia-materiais',
                     'endodontia-siglas', 'endodontia-exemplos', 'endodontia-materiais',
                     'cirurgia-siglas', 'cirurgia-exemplos', 'cirurgia-materiais',
-                    'prescricoes-geral'
+                    'prescricoes-geral', 'links-uteis'
                 ];
                 
                 if (systemIds.includes(item.id) || !contentCache[item.id]) {
