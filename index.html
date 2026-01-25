@@ -63,6 +63,23 @@
         .spinner { border: 3px solid rgba(0,0,0,0.1); border-left-color: #0e7490; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
+        .filter-btn {
+            white-space: nowrap;
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid #e5e7eb;
+            background-color: white;
+            color: #374151;
+            transition: all 0.2s;
+        }
+        .filter-btn.active {
+            background-color: #0e7490;
+            color: white;
+            border-color: #0e7490;
+        }
+
         /* --- ESTILOS DO EDITOR E VISUALIZAÇÃO --- */
         .editor-paper {
             background: white;
@@ -380,15 +397,27 @@
                         <i data-lucide="plus" class="w-4 h-4"></i> Novo
                     </button>
                 </div>
-                <div class="relative">
-                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                    <input type="text" placeholder="Buscar protocolo..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+                
+                <div class="space-y-3">
+                    <div class="relative">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
+                        <input type="text" id="search-input" oninput="renderBlog()" placeholder="Buscar protocolo..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+                    </div>
+                    
+                    <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" id="filter-container">
+                        <button onclick="setFilter('all')" class="filter-btn active" id="filter-all">Todos</button>
+                        <button onclick="setFilter('Dentística')" class="filter-btn" id="filter-dentistica">Dentística</button>
+                        <button onclick="setFilter('Periodontia')" class="filter-btn" id="filter-periodontia">Periodontia</button>
+                        <button onclick="setFilter('Endodontia')" class="filter-btn" id="filter-endodontia">Endodontia</button>
+                        <button onclick="setFilter('Cirurgia')" class="filter-btn" id="filter-cirurgia">Cirurgia</button>
+                        <button onclick="setFilter('Geral')" class="filter-btn" id="filter-geral">Geral</button>
+                    </div>
                 </div>
+
                 <div id="blog-loader" class="flex justify-center py-10 hidden"><div class="spinner"></div></div>
-                <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
-                <div id="no-protocols-msg" class="text-center py-10 hidden">
+                <div id="blog-grid" class="space-y-6"></div> <div id="no-protocols-msg" class="text-center py-10 hidden">
                     <p class="text-gray-500">Nenhum protocolo encontrado.</p>
-                    <p class="text-xs text-gray-400 mt-2">Clique em "Área Administrativa" no rodapé para adicionar.</p>
+                    <p class="text-xs text-gray-400 mt-2">Tente outro termo ou categoria.</p>
                 </div>
             </div>
         </div>
@@ -510,14 +539,16 @@
         lucide.createIcons();
 
         let isAdmin = false;
-        let contentCache = {}; 
+        let contentCache = {};
+        let currentFilter = 'all';
 
-        // --- DADOS PADRÃO (GARANTIA DE CONTEÚDO FIXO) ---
+        // --- DADOS COMPLETOS E ATUALIZADOS ---
         const defaultData = [
              {
                 id: 'dentistica-siglas',
                 title: 'Siglas - Dentística',
                 category: 'Dentística',
+                summary: 'Lista de abreviações e siglas comuns na Dentística.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
                         <p class="font-bold text-primary mb-2">Gerais / Diagnóstico</p>
@@ -570,8 +601,9 @@
             },
             {
                 id: 'dentistica-exemplos',
-                title: 'Exemplos de Preenchimento',
+                title: 'Exemplos de Preenchimento - Dentística',
                 category: 'Dentística',
+                summary: 'Modelos de como preencher o prontuário em procedimentos restauradores.',
                 content: `<div class="space-y-6 text-sm">
                     <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
                         <h4 class="font-bold text-primary mb-2 flex items-center gap-2">
@@ -612,6 +644,7 @@
                 id: 'dentistica-materiais',
                 title: 'Materiais - Dentística',
                 category: 'Dentística',
+                summary: 'Lista de instrumentais e materiais para clínica de Dentística.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
                         <h4 class="font-bold text-primary mb-2 border-b border-gray-200 pb-1">Carrinho e Bancada</h4>
@@ -674,6 +707,7 @@
                 id: 'periodontia-siglas',
                 title: 'Siglas - Periodontia',
                 category: 'Periodontia',
+                summary: 'Siglas para periodontograma e procedimentos básicos.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
                         <p class="font-bold text-rose-600 mb-2">Diagnóstico e Exames</p>
@@ -721,8 +755,9 @@
             },
             {
                 id: 'periodontia-exemplos',
-                title: 'Exemplos - Periodontia',
+                title: 'Exemplos de Preenchimento - Periodontia',
                 category: 'Periodontia',
+                summary: 'Modelos de evolução clínica para raspagem e cirurgias periodontais.',
                 content: `<div class="space-y-6 text-sm">
                     <div class="bg-rose-50 p-4 rounded-lg border border-rose-100">
                         <h4 class="font-bold text-rose-600 mb-2 flex items-center gap-2">
@@ -752,6 +787,7 @@
                 id: 'periodontia-materiais',
                 title: 'Materiais - Periodontia',
                 category: 'Periodontia',
+                summary: 'Checklist de materiais para raspagem e cirurgias periodontais.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
                         <h4 class="font-bold text-rose-600 mb-2 border-b border-rose-100 pb-1">CME (Esterilização)</h4>
@@ -783,6 +819,7 @@
                 id: 'endodontia-siglas',
                 title: 'Siglas - Endodontia',
                 category: 'Endodontia',
+                summary: 'Siglas para tratamentos endodônticos (canal).',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
                         <p class="font-bold text-indigo-600 mb-2">Procedimentos Iniciais</p>
@@ -816,8 +853,9 @@
             },
             {
                 id: 'endodontia-exemplos',
-                title: 'Exemplos - Endodontia',
+                title: 'Exemplos de Preenchimento - Endodontia',
                 category: 'Endodontia',
+                summary: 'Modelos para evolução de Biopulpectomia e Necropulpectomia.',
                 content: `<div class="space-y-6 text-sm">
                     <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
                         <h4 class="font-bold text-indigo-600 mb-2 flex items-center gap-2">
@@ -854,6 +892,7 @@
                 id: 'endodontia-materiais',
                 title: 'Materiais - Endodontia',
                 category: 'Endodontia',
+                summary: 'Lista completa de materiais para isolamento e tratamento de canal.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
                         <h4 class="font-bold text-indigo-600 mb-2 border-b border-indigo-100 pb-1">Carrinho e Bancada</h4>
@@ -900,6 +939,7 @@
                 id: 'cirurgia-siglas', 
                 title: 'Siglas - Cirurgia', 
                 category: 'Cirurgia', 
+                summary: 'Abreviações para procedimentos cirúrgicos e exodontias.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
                         <p class="font-bold text-emerald-600 mb-2">Gerais / Diagnóstico</p>
@@ -921,8 +961,9 @@
             },
             { 
                 id: 'cirurgia-exemplos', 
-                title: 'Exemplos - Cirurgia', 
+                title: 'Exemplos de Preenchimento - Cirurgia', 
                 category: 'Cirurgia', 
+                summary: 'Modelo de descrição cirúrgica para exodontias simples.',
                 content: `<div class="space-y-6 text-sm">
                     <div class="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
                         <h4 class="font-bold text-emerald-600 mb-2 flex items-center gap-2">
@@ -947,6 +988,7 @@
                 id: 'cirurgia-materiais', 
                 title: 'Materiais - Cirurgia', 
                 category: 'Cirurgia', 
+                summary: 'Checklist de materiais para cirurgias orais menores.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
                         <h4 class="font-bold text-emerald-600 mb-2 border-b border-emerald-100 pb-1">Carrinho e Bancada</h4>
@@ -979,7 +1021,6 @@
                 </div>` 
             },
 
-            // Protocolos já existentes...
             { id: 'demo1', title: "Classe I - Oclusal", category: "Dentística", summary: "Restauração oclusal.", content: `<ol><li>Diagnóstico...</li></ol>` }
         ];
 
@@ -1023,8 +1064,6 @@
 
             // Garante que os dados fixos padrão sobreponham qualquer cache antigo para esses IDs específicos
             defaultData.forEach(item => {
-                // Se é um ID de sistema (sem summary no defaultData), forçamos.
-                // Mas o demo1 tem summary, então deixamos editável se existir.
                 const systemIds = [
                     'dentistica-siglas', 'dentistica-materiais', 'dentistica-exemplos', 'dentistica-odontograma',
                     'periodontia-siglas', 'periodontia-exemplos', 'periodontia-materiais',
@@ -1040,14 +1079,30 @@
             updateUI();
         }
 
-        function updateUI() {
-            if (document.getElementById('view-blog').classList.contains('active')) renderBlog();
+        function setFilter(category) {
+            currentFilter = category;
             
-            // Verifica qual view de especialidade está ativa e renderiza seus instrumentais
+            // Atualiza botões
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const btnId = category === 'all' ? 'filter-all' : `filter-${category.toLowerCase().replace('í','i').replace('á','a')}`;
+            const btn = document.getElementById(btnId);
+            if(btn) btn.classList.add('active');
+            
+            renderBlog();
+        }
+
+        function updateUI() {
+            if (document.getElementById('view-blog').classList.contains('active')) {
+                renderBlog();
+            }
+            
+            // Verifica views de especialidade
             const specialties = ['dentistica', 'periodontia', 'endodontia', 'cirurgia'];
             specialties.forEach(spec => {
                 if (document.getElementById(`view-${spec}`).classList.contains('active')) {
-                     // Se área dinâmica estiver aberta e não visível no menu, reseta
                      const activeSection = document.querySelector(`#prontuario-menu-${spec}.hidden`) ? document.querySelector(`#dynamic-content-area-${spec}:not(.hidden)`) : null;
                      if(activeSection) {
                         hideProntuarioSections(spec); 
@@ -1056,36 +1111,112 @@
                 }
             });
             
-             // Re-inicializa ícones após renderizar conteúdo dinâmico
             lucide.createIcons();
         }
 
         function renderBlog() {
             const grid = document.getElementById('blog-grid');
+            const term = document.getElementById('search-input').value.toLowerCase();
             grid.innerHTML = '';
-            // Filtra protocolos editáveis (com summary)
-            const protocols = Object.values(contentCache).filter(item => item.summary);
+            
+            let protocols = Object.values(contentCache).filter(item => item.summary);
+            
+            // Filtragem por busca
+            if(term) {
+                protocols = protocols.filter(p => 
+                    p.title.toLowerCase().includes(term) || 
+                    p.category.toLowerCase().includes(term) ||
+                    (p.summary && p.summary.toLowerCase().includes(term))
+                );
+            }
+
+            // Filtragem por categoria (se não for "all")
+            if (currentFilter !== 'all') {
+                protocols = protocols.filter(p => p.category === currentFilter);
+            }
+
+            // Ordenação Alfabética por Título
+            protocols.sort((a, b) => a.title.localeCompare(b.title));
             
             if (protocols.length === 0) {
                 document.getElementById('no-protocols-msg').classList.remove('hidden');
+                return;
             } else {
-                 document.getElementById('no-protocols-msg').classList.add('hidden');
-                 protocols.forEach(post => {
-                    const card = document.createElement('div');
-                    card.className = "bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-full";
-                    card.onclick = () => openPost(post.id);
-                    card.innerHTML = `
-                        <div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-primary bg-blue-50 px-2 py-1 rounded">${post.category}</span>
-                        ${isAdmin ? `<button onclick="event.stopPropagation(); openEditor('${post.id}')" class="text-gray-400 hover:text-blue-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button>` : ''}</div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-2">${post.title}</h3>
-                        <p class="text-sm text-gray-600 mb-4 line-clamp-3 flex-grow">${post.summary || ''}</p>
-                        <div class="flex items-center text-primary text-sm font-medium mt-auto">Ler protocolo <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></div>
-                    `;
-                    grid.appendChild(card);
-                });
+                document.getElementById('no-protocols-msg').classList.add('hidden');
             }
+
+            // Renderização
+            if (currentFilter === 'all' && !term) {
+                // Modo Agrupado por Categoria (quando "Todos" e sem busca)
+                const grouped = {};
+                protocols.forEach(p => {
+                    if (!grouped[p.category]) grouped[p.category] = [];
+                    grouped[p.category].push(p);
+                });
+
+                // Ordem fixa de exibição das categorias
+                const catOrder = ['Dentística', 'Periodontia', 'Endodontia', 'Cirurgia', 'Geral'];
+                
+                catOrder.forEach(cat => {
+                    if (grouped[cat] && grouped[cat].length > 0) {
+                        // Título da Seção
+                        const sectionTitle = document.createElement('div');
+                        sectionTitle.className = "flex items-center gap-2 pt-4 pb-2 border-b border-gray-200";
+                        sectionTitle.innerHTML = `<h3 class="text-lg font-bold text-gray-800">${cat}</h3>`;
+                        grid.appendChild(sectionTitle);
+
+                        // Grid da Seção
+                        const sectionGrid = document.createElement('div');
+                        sectionGrid.className = "grid grid-cols-1 md:grid-cols-2 gap-4 pt-2";
+                        
+                        grouped[cat].forEach(post => {
+                            sectionGrid.appendChild(createProtocolCard(post));
+                        });
+                        grid.appendChild(sectionGrid);
+                    }
+                });
+                
+                // Renderizar outras categorias não listadas na ordem fixa
+                Object.keys(grouped).forEach(cat => {
+                    if (!catOrder.includes(cat)) {
+                         const sectionTitle = document.createElement('div');
+                        sectionTitle.className = "flex items-center gap-2 pt-4 pb-2 border-b border-gray-200";
+                        sectionTitle.innerHTML = `<h3 class="text-lg font-bold text-gray-800">${cat}</h3>`;
+                        grid.appendChild(sectionTitle);
+
+                        const sectionGrid = document.createElement('div');
+                        sectionGrid.className = "grid grid-cols-1 md:grid-cols-2 gap-4 pt-2";
+                        grouped[cat].forEach(post => sectionGrid.appendChild(createProtocolCard(post)));
+                        grid.appendChild(sectionGrid);
+                    }
+                });
+
+            } else {
+                // Modo Lista Simples (Filtrado ou com Busca)
+                const sectionGrid = document.createElement('div');
+                sectionGrid.className = "grid grid-cols-1 md:grid-cols-2 gap-4";
+                protocols.forEach(post => {
+                    sectionGrid.appendChild(createProtocolCard(post));
+                });
+                grid.appendChild(sectionGrid);
+            }
+
             lucide.createIcons();
             document.getElementById('btn-new-protocol').classList.toggle('hidden', !isAdmin);
+        }
+
+        function createProtocolCard(post) {
+            const card = document.createElement('div');
+            card.className = "bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-full";
+            card.onclick = () => openPost(post.id);
+            card.innerHTML = `
+                <div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-primary bg-blue-50 px-2 py-1 rounded">${post.category}</span>
+                ${isAdmin ? `<button onclick="event.stopPropagation(); openEditor('${post.id}')" class="text-gray-400 hover:text-blue-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button>` : ''}</div>
+                <h3 class="text-lg font-bold text-gray-900 mb-2">${post.title}</h3>
+                <p class="text-sm text-gray-600 mb-4 line-clamp-3 flex-grow">${post.summary || ''}</p>
+                <div class="flex items-center text-primary text-sm font-medium mt-auto">Ler protocolo <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></div>
+            `;
+            return card;
         }
 
         function renderInstrumentais(specialty) {
