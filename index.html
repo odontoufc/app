@@ -106,12 +106,12 @@
         /* Nível 1 - Bolinha preenchida e recuo menor */
         .rich-text ul, .editor-paper ul { 
             list-style-type: disc; 
-            padding-left: 1.2rem; /* Reduzido de 1.5em */
+            padding-left: 1.2rem;
             margin-bottom: 1em; 
         }
         .rich-text ol, .editor-paper ol { 
             list-style-type: decimal; 
-            padding-left: 1.2rem; /* Reduzido de 1.5em */
+            padding-left: 1.2rem; 
             margin-bottom: 1em; 
         }
 
@@ -1437,9 +1437,8 @@
                 btnEdit.classList.add('hidden');
             }
 
-            // Define para onde o botão voltar deve ir
-            // Se for Links Úteis (que está na home), volta pra home. Se não, volta pro Blog.
-            window.postBackTarget = (id === 'links-uteis') ? 'home' : 'blog';
+            // CORREÇÃO: Verificar o ID dentro do objeto 'post', pois 'id' pode vir nulo de openFixedContent
+            window.postBackTarget = (post.id === 'links-uteis') ? 'home' : 'blog';
 
             navigateTo('post');
              // Re-render icons for new content
