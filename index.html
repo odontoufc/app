@@ -103,7 +103,6 @@
         .toolbar-btn:hover { background-color: #e5e7eb; color: #111827; }
         
         /* CORREÇÃO DAS LISTAS E HIERARQUIA */
-        /* Nível 1 - Bolinha preenchida e recuo menor */
         .rich-text ul, .editor-paper ul { 
             list-style-type: disc; 
             padding-left: 1.2rem;
@@ -115,21 +114,19 @@
             margin-bottom: 1em; 
         }
 
-        /* Nível 2 (Lista dentro de Lista) - Bolinha vazia e recuo ajustado */
+        /* Nível 2 (Lista dentro de Lista) */
         .rich-text ul ul, .editor-paper ul ul { 
-            list-style-type: circle; /* Diferenciação visual */
+            list-style-type: circle; 
             padding-left: 1rem; 
             margin-bottom: 0.5em;
             margin-top: 0.25em;
         }
         .rich-text ol ol, .editor-paper ol ol { 
-            list-style-type: lower-alpha; /* Letras: a, b, c */
+            list-style-type: lower-alpha; 
             padding-left: 1rem; 
         }
         
-        /* Nível 3 (Se necessário) - Quadrado */
         .rich-text ul ul ul, .editor-paper ul ul ul { list-style-type: square; }
-
         .rich-text li, .editor-paper li { margin-bottom: 0.25em; }
         
         [contenteditable]:empty:before { content: attr(placeholder); color: #9ca3af; cursor: text; display: block; }
@@ -189,22 +186,35 @@
                     <h3 class="text-lg font-semibold text-gray-800">Especialidades</h3>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 xs:gap-4">
-                    <button onclick="navigateTo('dentistica')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
-                        <div class="bg-blue-50 p-3 rounded-full"><i data-lucide="gem" class="w-6 h-6 xs:w-8 xs:h-8 text-primary"></i></div>
-                        <span class="font-semibold text-sm xs:text-base text-gray-700">Dentística</span>
+                    
+                    <button onclick="navigateTo('dentistica')" class="btn-card bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
+                        <img src="https://drive.google.com/thumbnail?id=1IqbpU3Tc9JRrEtCTjUTq4yEzA81FgfLB&sz=w400" referrerpolicy="no-referrer" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Dentística">
+                        <div class="flex-grow flex items-center justify-center bg-white p-1">
+                            <span class="font-semibold text-sm xs:text-base text-gray-700 group-hover:text-primary transition-colors">Dentística</span>
+                        </div>
                     </button>
-                    <button onclick="navigateTo('periodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
-                        <div class="bg-rose-50 p-3 rounded-full"><i data-lucide="ruler" class="w-6 h-6 xs:w-8 xs:h-8 text-rose-600"></i></div>
-                        <span class="font-semibold text-sm xs:text-base text-gray-700">Periodontia</span>
+
+                    <button onclick="navigateTo('periodontia')" class="btn-card bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
+                        <img src="https://drive.google.com/thumbnail?id=1-zdkn1rejChLDhu414lakE65wpIqaItJ&sz=w400" referrerpolicy="no-referrer" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Periodontia">
+                        <div class="flex-grow flex items-center justify-center bg-white p-1">
+                            <span class="font-semibold text-sm xs:text-base text-gray-700 group-hover:text-primary transition-colors">Periodontia</span>
+                        </div>
                     </button>
-                    <button onclick="navigateTo('endodontia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
-                        <div class="bg-indigo-50 p-3 rounded-full"><i data-lucide="zap" class="w-6 h-6 xs:w-8 xs:h-8 text-indigo-600"></i></div>
-                        <span class="font-semibold text-sm xs:text-base text-gray-700">Endodontia</span>
+
+                    <button onclick="navigateTo('endodontia')" class="btn-card bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
+                        <img src="https://drive.google.com/thumbnail?id=1HXx0BQdMwo1exsz-yzlCISno-zLfnGaS&sz=w400" referrerpolicy="no-referrer" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Endodontia">
+                        <div class="flex-grow flex items-center justify-center bg-white p-1">
+                            <span class="font-semibold text-sm xs:text-base text-gray-700 group-hover:text-primary transition-colors">Endodontia</span>
+                        </div>
                     </button>
-                    <button onclick="navigateTo('cirurgia')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex flex-col items-center justify-center gap-3 cursor-pointer w-full text-center h-36 xs:h-44">
-                        <div class="bg-emerald-50 p-3 rounded-full"><i data-lucide="bone" class="w-6 h-6 xs:w-8 xs:h-8 text-emerald-600"></i></div>
-                        <span class="font-semibold text-sm xs:text-base text-gray-700">Cirurgia</span>
+
+                    <button onclick="navigateTo('cirurgia')" class="btn-card bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
+                        <img src="https://drive.google.com/thumbnail?id=1VpzxWpekVeSkpgG0zuls3z5X4e87c_P-&sz=w400" referrerpolicy="no-referrer" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Cirurgia">
+                        <div class="flex-grow flex items-center justify-center bg-white p-1">
+                            <span class="font-semibold text-sm xs:text-base text-gray-700 group-hover:text-primary transition-colors">Cirurgia</span>
+                        </div>
                     </button>
+
                 </div>
             </section>
 
