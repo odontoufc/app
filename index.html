@@ -19,6 +19,7 @@
 
     <script>
         tailwind.config = {
+            darkMode: 'class', // Habilita o modo escuro via classe CSS
             theme: {
                 extend: {
                     fontFamily: { sans: ['Inter', 'sans-serif'] },
@@ -35,7 +36,9 @@
     </script>
 
     <style>
-        html { scroll-behavior: smooth; background-color: #f3f4f6; } 
+        html { scroll-behavior: smooth; } 
+        /* Fundo padrão claro e escuro definidos via Tailwind no body */
+        
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
         
@@ -54,14 +57,29 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .tab-btn.active { border-bottom-width: 2px; background-color: rgba(0,0,0,0.03); }
+        
+        /* Ajuste para Dark Mode nas abas */
+        .dark .tab-btn.active { background-color: rgba(255,255,255,0.05); }
+
         /* Cores específicas de abas ativas por especialidade */
         .tab-active-dentistica { color: #0e7490; border-color: #0e7490; background-color: #ecfeff !important; }
+        .dark .tab-active-dentistica { background-color: #0e749030 !important; color: #22d3ee; border-color: #22d3ee; }
+
         .tab-active-periodontia { color: #be123c; border-color: #be123c; background-color: #fff1f2 !important; }
+        .dark .tab-active-periodontia { background-color: #be123c30 !important; color: #fb7185; border-color: #fb7185; }
+
         .tab-active-endodontia { color: #4338ca; border-color: #4338ca; background-color: #e0e7ff !important; }
+        .dark .tab-active-endodontia { background-color: #4338ca30 !important; color: #818cf8; border-color: #818cf8; }
+
         .tab-active-cirurgia { color: #059669; border-color: #059669; background-color: #ecfdf5 !important; }
+        .dark .tab-active-cirurgia { background-color: #05966930 !important; color: #34d399; border-color: #34d399; }
+
         .tab-active-prescricoes { color: #d97706; border-color: #d97706; background-color: #fffbeb !important; } /* Amber */
+        .dark .tab-active-prescricoes { background-color: #d9770630 !important; color: #fbbf24; border-color: #fbbf24; }
         
         .spinner { border: 3px solid rgba(0,0,0,0.1); border-left-color: #0e7490; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        .dark .spinner { border-color: rgba(255,255,255,0.1); border-left-color: #22d3ee; }
+
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
         .filter-btn {
@@ -75,11 +93,14 @@
             color: #374151;
             transition: all 0.2s;
         }
+        .dark .filter-btn { background-color: #1f2937; border-color: #374151; color: #d1d5db; }
+
         .filter-btn.active {
             background-color: #0e7490;
             color: white;
             border-color: #0e7490;
         }
+        .dark .filter-btn.active { background-color: #0891b2; border-color: #0891b2; }
 
         /* --- ESTILOS DO EDITOR E VISUALIZAÇÃO --- */
         .editor-paper {
@@ -89,18 +110,32 @@
             outline: none; color: #333; line-height: 1.6; font-size: 11pt;
             font-family: 'Inter', sans-serif !important; 
         }
+        .dark .editor-paper { background: #1f2937; color: #e5e7eb; }
+
         .editor-paper * { font-family: 'Inter', sans-serif !important; color: #374151 !important; background-color: transparent !important; font-size: inherit !important; }
+        .dark .editor-paper * { color: #d1d5db !important; }
+
         .editor-paper b, .editor-paper strong { font-weight: 700 !important; }
         .editor-paper i, .editor-paper em { font-style: italic !important; }
+        
         .editor-paper h1, .rich-text h1 { font-size: 1.8em !important; font-weight: 700 !important; margin-top: 1em; color: #111827 !important; }
+        .dark .editor-paper h1, .dark .rich-text h1 { color: #f9fafb !important; }
+
         .editor-paper h2, .rich-text h2 { font-size: 1.4em !important; font-weight: 700 !important; margin-top: 1em; color: #1f2937 !important; }
+        .dark .editor-paper h2, .dark .rich-text h2 { color: #f3f4f6 !important; }
+
         .editor-paper h3, .rich-text h3 { font-size: 1.1em !important; font-weight: 700 !important; margin-top: 1em; color: #374151 !important; }
+        .dark .editor-paper h3, .dark .rich-text h3 { color: #e5e7eb !important; }
         
         @media (max-width: 640px) { .editor-paper { padding: 1.5rem; min-height: 60vh; } }
 
         .editor-toolbar { position: sticky; top: 0; z-index: 40; background: #f3f4f6; border-bottom: 1px solid #e5e7eb; padding: 0.5rem; display: flex; gap: 0.25rem; flex-wrap: wrap; align-items: center; }
+        .dark .editor-toolbar { background: #111827; border-color: #374151; }
+
         .toolbar-btn { padding: 0.4rem; border-radius: 0.25rem; color: #4b5563; transition: background 0.2s; display: flex; align-items: center; justify-content: center; min-width: 32px; min-height: 32px; }
+        .dark .toolbar-btn { color: #9ca3af; }
         .toolbar-btn:hover { background-color: #e5e7eb; color: #111827; }
+        .dark .toolbar-btn:hover { background-color: #374151; color: #f9fafb; }
         
         /* CORREÇÃO DAS LISTAS E HIERARQUIA */
         .rich-text ul, .editor-paper ul { 
@@ -132,23 +167,28 @@
         [contenteditable]:empty:before { content: attr(placeholder); color: #9ca3af; cursor: text; display: block; }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 flex flex-col min-h-screen text-base antialiased">
+<body class="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 text-gray-800 flex flex-col min-h-screen text-base antialiased transition-colors duration-200">
 
-    <header class="bg-white shadow-sm sticky top-0 z-50 w-full">
+    <header class="bg-white dark:bg-gray-800 dark:border-gray-700 shadow-sm sticky top-0 z-50 w-full transition-colors duration-200">
         <div class="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3 cursor-pointer active:opacity-70 transition-opacity" onclick="navigateTo('home')">
-                <div class="bg-primary/10 p-2 rounded-lg text-primary">
+                <div class="bg-primary/10 dark:bg-cyan-900/30 p-2 rounded-lg text-primary dark:text-cyan-400">
                     <i data-lucide="book-open-check" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h1 class="text-lg font-bold text-gray-900 tracking-tight leading-tight">Guia Clínico</h1>
-                    <p class="text-[10px] text-gray-500 font-medium leading-none">Odontologia UFC</p>
+                    <h1 class="text-lg font-bold text-gray-900 dark:text-white tracking-tight leading-tight">Guia Clínico</h1>
+                    <p class="text-[10px] text-gray-500 dark:text-gray-400 font-medium leading-none">Odontologia UFC</p>
                 </div>
             </div>
             
             <div class="flex items-center gap-2">
-                <span id="admin-badge" class="hidden px-2 py-1 bg-red-100 text-red-700 text-[10px] font-bold uppercase rounded-full tracking-wider border border-red-200">Admin</span>
-                <button id="back-btn" onclick="navigateTo('home')" class="hidden bg-gray-100 hover:bg-gray-200 text-gray-700 py-1.5 px-3 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 active:scale-95">
+                <button onclick="toggleTheme()" class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors" title="Alternar tema">
+                    <i data-lucide="moon" class="w-5 h-5 block dark:hidden"></i>
+                    <i data-lucide="sun" class="w-5 h-5 hidden dark:block"></i>
+                </button>
+                
+                <span id="admin-badge" class="hidden px-2 py-1 bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300 dark:border-red-800 text-[10px] font-bold uppercase rounded-full tracking-wider border border-red-200">Admin</span>
+                <button id="back-btn" onclick="navigateTo('home')" class="hidden bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-200 text-gray-700 py-1.5 px-3 rounded-lg text-sm font-medium transition-colors flex items-center gap-1 active:scale-95">
                     <i data-lucide="arrow-left" class="w-4 h-4"></i>
                     <span class="hidden xs:inline">Voltar</span>
                 </button>
@@ -160,8 +200,8 @@
 
         <div id="view-home" class="view-section active space-y-8">
             <div class="text-center space-y-2 mb-2">
-                <h2 class="text-2xl xs:text-3xl font-bold text-gray-900">Bem-vindo</h2>
-                <p class="text-sm xs:text-base text-gray-600 max-w-2xl mx-auto">Selecione uma especialidade ou recurso abaixo.</p>
+                <h2 class="text-2xl xs:text-3xl font-bold text-gray-900 dark:text-white">Bem-vindo</h2>
+                <p class="text-sm xs:text-base text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Selecione uma especialidade ou recurso abaixo.</p>
             </div>
 
             <section>
@@ -181,37 +221,37 @@
             </section>
 
             <section>
-                <div class="flex items-center gap-2 mb-4 border-b border-gray-200 pb-2">
-                    <i data-lucide="layout-grid" class="w-5 h-5 text-primary"></i>
-                    <h3 class="text-lg font-semibold text-gray-800">Especialidades</h3>
+                <div class="flex items-center gap-2 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                    <i data-lucide="layout-grid" class="w-5 h-5 text-primary dark:text-cyan-400"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Especialidades</h3>
                 </div>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 xs:gap-4">
                     
-                    <button onclick="navigateTo('dentistica')" class="btn-card bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
+                    <button onclick="navigateTo('dentistica')" class="btn-card bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
                         <img src="https://drive.google.com/thumbnail?id=1IqbpU3Tc9JRrEtCTjUTq4yEzA81FgfLB&sz=w400" referrerpolicy="no-referrer" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Dentística">
-                        <div class="flex-grow flex items-center justify-center bg-white p-1">
-                            <span class="font-semibold text-sm xs:text-base text-gray-700 group-hover:text-primary transition-colors">Dentística</span>
+                        <div class="flex-grow flex items-center justify-center bg-white dark:bg-gray-800 p-1">
+                            <span class="font-semibold text-sm xs:text-base text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-cyan-400 transition-colors">Dentística</span>
                         </div>
                     </button>
 
-                    <button onclick="navigateTo('periodontia')" class="btn-card bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
+                    <button onclick="navigateTo('periodontia')" class="btn-card bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
                         <img src="https://drive.google.com/thumbnail?id=1-zdkn1rejChLDhu414lakE65wpIqaItJ&sz=w400" referrerpolicy="no-referrer" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Periodontia">
-                        <div class="flex-grow flex items-center justify-center bg-white p-1">
-                            <span class="font-semibold text-sm xs:text-base text-gray-700 group-hover:text-primary transition-colors">Periodontia</span>
+                        <div class="flex-grow flex items-center justify-center bg-white dark:bg-gray-800 p-1">
+                            <span class="font-semibold text-sm xs:text-base text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-cyan-400 transition-colors">Periodontia</span>
                         </div>
                     </button>
 
-                    <button onclick="navigateTo('endodontia')" class="btn-card bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
+                    <button onclick="navigateTo('endodontia')" class="btn-card bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
                         <img src="https://drive.google.com/thumbnail?id=1HXx0BQdMwo1exsz-yzlCISno-zLfnGaS&sz=w400" referrerpolicy="no-referrer" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Endodontia">
-                        <div class="flex-grow flex items-center justify-center bg-white p-1">
-                            <span class="font-semibold text-sm xs:text-base text-gray-700 group-hover:text-primary transition-colors">Endodontia</span>
+                        <div class="flex-grow flex items-center justify-center bg-white dark:bg-gray-800 p-1">
+                            <span class="font-semibold text-sm xs:text-base text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-cyan-400 transition-colors">Endodontia</span>
                         </div>
                     </button>
 
-                    <button onclick="navigateTo('cirurgia')" class="btn-card bg-white rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
+                    <button onclick="navigateTo('cirurgia')" class="btn-card bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
                         <img src="https://drive.google.com/thumbnail?id=1VpzxWpekVeSkpgG0zuls3z5X4e87c_P-&sz=w400" referrerpolicy="no-referrer" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Cirurgia">
-                        <div class="flex-grow flex items-center justify-center bg-white p-1">
-                            <span class="font-semibold text-sm xs:text-base text-gray-700 group-hover:text-primary transition-colors">Cirurgia</span>
+                        <div class="flex-grow flex items-center justify-center bg-white dark:bg-gray-800 p-1">
+                            <span class="font-semibold text-sm xs:text-base text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-cyan-400 transition-colors">Cirurgia</span>
                         </div>
                     </button>
 
@@ -219,23 +259,23 @@
             </section>
 
             <section>
-                <div class="flex items-center gap-2 mb-4 border-b border-gray-200 pb-2">
-                    <i data-lucide="package-plus" class="w-5 h-5 text-primary"></i>
-                    <h3 class="text-lg font-semibold text-gray-800">Recursos</h3>
+                <div class="flex items-center gap-2 mb-4 border-b border-gray-200 dark:border-gray-700 pb-2">
+                    <i data-lucide="package-plus" class="w-5 h-5 text-primary dark:text-cyan-400"></i>
+                    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Recursos</h3>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <button onclick="navigateTo('prescricoes')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
-                        <div class="bg-amber-50 p-3 rounded-lg shrink-0"><i data-lucide="scroll-text" class="w-6 h-6 text-amber-600"></i></div>
-                        <div><span class="block font-semibold text-gray-700">Prescrições</span><span class="text-xs text-gray-500">Modelos e posologias</span></div>
+                    <button onclick="navigateTo('prescricoes')" class="btn-card bg-white dark:bg-gray-800 dark:border-gray-700 p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50 dark:active:bg-gray-700">
+                        <div class="bg-amber-50 dark:bg-amber-900/30 p-3 rounded-lg shrink-0"><i data-lucide="scroll-text" class="w-6 h-6 text-amber-600 dark:text-amber-400"></i></div>
+                        <div><span class="block font-semibold text-gray-700 dark:text-gray-200">Prescrições</span><span class="text-xs text-gray-500 dark:text-gray-400">Modelos e posologias</span></div>
                     </button>
-                    <button onclick="openFixedContent('links-uteis', 'Links Úteis', 'Portais Importantes')" class="btn-card bg-white p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50">
-                        <div class="bg-gray-100 p-3 rounded-lg shrink-0"><i data-lucide="link" class="w-6 h-6 text-gray-600"></i></div>
-                        <div><span class="block font-semibold text-gray-700">Links Úteis</span><span class="text-xs text-gray-500">CRO, CFO e portais</span></div>
+                    <button onclick="openFixedContent('links-uteis', 'Links Úteis', 'Portais Importantes')" class="btn-card bg-white dark:bg-gray-800 dark:border-gray-700 p-4 rounded-xl border border-gray-200 shadow-sm flex items-center gap-4 w-full text-left active:bg-gray-50 dark:active:bg-gray-700">
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-lg shrink-0"><i data-lucide="link" class="w-6 h-6 text-gray-600 dark:text-gray-300"></i></div>
+                        <div><span class="block font-semibold text-gray-700 dark:text-gray-200">Links Úteis</span><span class="text-xs text-gray-500 dark:text-gray-400">CRO, CFO e portais</span></div>
                     </button>
                 </div>
             </section>
 
-            <section class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative mt-6">
+            <section class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative mt-6">
                 <div class="p-6 flex flex-col md:flex-row items-center gap-6">
                     <div class="w-44 shrink-0 md:w-56 rounded-lg overflow-hidden">
                         <img src="https://drive.google.com/thumbnail?id=1s8hHA8C7V7KOZ2O7Iito83EU0ECV-oNc&sz=w400" referrerpolicy="no-referrer" alt="Capa Manual" class="w-full h-auto object-cover">
@@ -243,12 +283,12 @@
                     
                     <div class="flex-grow text-center md:text-left">
                         <div class="flex flex-col md:flex-row items-center md:items-start gap-3 mb-3">
-                            <div class="bg-primary/10 p-2 rounded-lg text-primary hidden md:block">
+                            <div class="bg-primary/10 dark:bg-cyan-900/30 p-2 rounded-lg text-primary dark:text-cyan-400 hidden md:block">
                                 <i data-lucide="shield-check" class="w-6 h-6"></i>
                             </div>
                             <div>
-                                <h3 class="text-xl font-bold text-gray-900 leading-tight mb-1">Manual de Biossegurança</h3>
-                                <p class="text-sm text-gray-600">Normas, fluxogramas de esterilização e uso de EPIs.</p>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white leading-tight mb-1">Manual de Biossegurança</h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">Normas, fluxogramas de esterilização e uso de EPIs.</p>
                             </div>
                         </div>
                         
@@ -264,59 +304,59 @@
         </div>
 
         <div id="view-dentistica" class="view-section space-y-4">
-            <div class="flex items-center gap-3 mb-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                <div class="p-2 bg-blue-50 rounded-lg shrink-0"><i data-lucide="gem" class="w-6 h-6 text-primary"></i></div>
-                <div><h2 class="text-xl font-bold text-gray-900 leading-tight">Dentística</h2><p class="text-gray-500 text-xs">Prontuário, Materiais e Protocolos</p></div>
+            <div class="flex items-center gap-3 mb-2 bg-white dark:bg-gray-800 dark:border-gray-700 p-3 rounded-lg shadow-sm border border-gray-100">
+                <div class="p-2 bg-blue-50 dark:bg-blue-900/30 rounded-lg shrink-0"><i data-lucide="gem" class="w-6 h-6 text-primary dark:text-cyan-400"></i></div>
+                <div><h2 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">Dentística</h2><p class="text-gray-500 dark:text-gray-400 text-xs">Prontuário, Materiais e Protocolos</p></div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide">
-                <button onclick="switchTab('prontuario', 'dentistica')" id="tab-btn-dentistica-prontuario" class="tab-btn tab-active-dentistica flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+            <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide">
+                <button onclick="switchTab('prontuario', 'dentistica')" id="tab-btn-dentistica-prontuario" class="tab-btn tab-active-dentistica flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="clipboard-list" class="w-4 h-4"></i> Prontuário
                 </button>
-                <button onclick="switchTab('instrumentais', 'dentistica')" id="tab-btn-dentistica-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                <button onclick="switchTab('instrumentais', 'dentistica')" id="tab-btn-dentistica-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="hammer" class="w-4 h-4"></i> Materiais
                 </button>
-                <button onclick="switchTab('protocolos', 'dentistica')" id="tab-btn-dentistica-protocolos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                <button onclick="switchTab('protocolos', 'dentistica')" id="tab-btn-dentistica-protocolos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="book-open" class="w-4 h-4"></i> Protocolos
                 </button>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
+            <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
                 
                 <div id="tab-dentistica-prontuario" class="tab-content active">
                     <div id="prontuario-menu-dentistica" class="space-y-3">
-                        <button onclick="showProntuarioSection('dentistica-siglas', 'dentistica')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
-                            <div class="p-3 bg-blue-100 rounded-full text-primary shrink-0"><i data-lucide="type" class="w-5 h-5"></i></div>
-                            <div><span class="block font-semibold text-gray-800">Siglas</span><span class="text-xs text-gray-500">Abreviações comuns</span></div>
-                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
+                        <button onclick="showProntuarioSection('dentistica-siglas', 'dentistica')" class="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary hover:bg-blue-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-left">
+                            <div class="p-3 bg-blue-100 dark:bg-blue-900/40 rounded-full text-primary dark:text-cyan-400 shrink-0"><i data-lucide="type" class="w-5 h-5"></i></div>
+                            <div><span class="block font-semibold text-gray-800 dark:text-gray-200">Siglas</span><span class="text-xs text-gray-500 dark:text-gray-400">Abreviações comuns</span></div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300 dark:text-gray-600"></i>
                         </button>
-                        <button onclick="showProntuarioSection('dentistica-exemplos', 'dentistica')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
-                            <div class="p-3 bg-green-100 rounded-full text-green-700 shrink-0"><i data-lucide="file-check" class="w-5 h-5"></i></div>
-                            <div><span class="block font-semibold text-gray-800">Exemplos</span><span class="text-xs text-gray-500">Preenchimento</span></div>
-                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
+                        <button onclick="showProntuarioSection('dentistica-exemplos', 'dentistica')" class="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary hover:bg-blue-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-left">
+                            <div class="p-3 bg-green-100 dark:bg-green-900/40 rounded-full text-green-700 dark:text-green-400 shrink-0"><i data-lucide="file-check" class="w-5 h-5"></i></div>
+                            <div><span class="block font-semibold text-gray-800 dark:text-gray-200">Exemplos</span><span class="text-xs text-gray-500 dark:text-gray-400">Preenchimento</span></div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300 dark:text-gray-600"></i>
                         </button>
-                        <button onclick="showProntuarioSection('dentistica-odontograma', 'dentistica')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
-                            <div class="p-3 bg-purple-100 rounded-full text-purple-700 shrink-0"><i data-lucide="grid-3x3" class="w-5 h-5"></i></div>
-                            <div><span class="block font-semibold text-gray-800">Odontograma</span><span class="text-xs text-gray-500">Referência visual</span></div>
-                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
+                        <button onclick="showProntuarioSection('dentistica-odontograma', 'dentistica')" class="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary hover:bg-blue-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-left">
+                            <div class="p-3 bg-purple-100 dark:bg-purple-900/40 rounded-full text-purple-700 dark:text-purple-400 shrink-0"><i data-lucide="grid-3x3" class="w-5 h-5"></i></div>
+                            <div><span class="block font-semibold text-gray-800 dark:text-gray-200">Odontograma</span><span class="text-xs text-gray-500 dark:text-gray-400">Referência visual</span></div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300 dark:text-gray-600"></i>
                         </button>
                     </div>
                     <div id="dynamic-content-area-dentistica" class="hidden">
-                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                            <h3 id="dynamic-title-dentistica" class="font-bold text-lg text-gray-800">Título</h3>
-                            <button onclick="hideProntuarioSections('dentistica')" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 hover:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100 dark:border-gray-700">
+                            <h3 id="dynamic-title-dentistica" class="font-bold text-lg text-gray-800 dark:text-white">Título</h3>
+                            <button onclick="hideProntuarioSections('dentistica')" class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-xs text-gray-600 dark:text-gray-300 font-medium flex items-center gap-1 hover:bg-gray-200 dark:hover:bg-gray-600"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
                         </div>
-                        <div id="dynamic-body-dentistica" class="rich-text text-sm"></div>
+                        <div id="dynamic-body-dentistica" class="rich-text text-sm dark:text-gray-300"></div>
                     </div>
                 </div>
 
                 <div id="tab-dentistica-instrumentais" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4"><i data-lucide="hammer" class="w-5 h-5 text-primary"></i> Checklist Dentística</h3>
-                    <div id="instrumentais-list-dentistica" class="space-y-4 rich-text"></div>
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4"><i data-lucide="hammer" class="w-5 h-5 text-primary dark:text-cyan-400"></i> Checklist Dentística</h3>
+                    <div id="instrumentais-list-dentistica" class="space-y-4 rich-text dark:text-gray-300"></div>
                 </div>
 
                 <div id="tab-dentistica-protocolos" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4"><i data-lucide="book-open" class="w-5 h-5 text-primary"></i> Protocolos de Dentística</h3>
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4"><i data-lucide="book-open" class="w-5 h-5 text-primary dark:text-cyan-400"></i> Protocolos de Dentística</h3>
                     <div id="protocolos-list-dentistica" class="space-y-3">
-                        <p class="text-center text-gray-500 py-4 text-sm">Carregando protocolos...</p>
+                        <p class="text-center text-gray-500 dark:text-gray-400 py-4 text-sm">Carregando protocolos...</p>
                     </div>
                 </div>
 
@@ -324,198 +364,197 @@
         </div>
 
         <div id="view-periodontia" class="view-section space-y-4">
-            <div class="flex items-center gap-3 mb-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                <div class="p-2 bg-rose-50 rounded-lg shrink-0"><i data-lucide="ruler" class="w-6 h-6 text-rose-600"></i></div>
-                <div><h2 class="text-xl font-bold text-gray-900 leading-tight">Periodontia</h2><p class="text-gray-500 text-xs">Prontuário e Materiais</p></div>
+            <div class="flex items-center gap-3 mb-2 bg-white dark:bg-gray-800 dark:border-gray-700 p-3 rounded-lg shadow-sm border border-gray-100">
+                <div class="p-2 bg-rose-50 dark:bg-rose-900/30 rounded-lg shrink-0"><i data-lucide="ruler" class="w-6 h-6 text-rose-600 dark:text-rose-400"></i></div>
+                <div><h2 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">Periodontia</h2><p class="text-gray-500 dark:text-gray-400 text-xs">Prontuário e Materiais</p></div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex">
-                <button onclick="switchTab('prontuario', 'periodontia')" id="tab-btn-periodontia-prontuario" class="tab-btn tab-active-periodontia flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-rose-600 transition-all flex items-center justify-center gap-2">
+            <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 flex">
+                <button onclick="switchTab('prontuario', 'periodontia')" id="tab-btn-periodontia-prontuario" class="tab-btn tab-active-periodontia flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-rose-600 transition-all flex items-center justify-center gap-2">
                     <i data-lucide="clipboard-list" class="w-4 h-4"></i> Prontuário
                 </button>
-                <button onclick="switchTab('instrumentais', 'periodontia')" id="tab-btn-periodontia-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-rose-600 transition-all flex items-center justify-center gap-2">
+                <button onclick="switchTab('instrumentais', 'periodontia')" id="tab-btn-periodontia-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-rose-600 transition-all flex items-center justify-center gap-2">
                     <i data-lucide="hammer" class="w-4 h-4"></i> Materiais
                 </button>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
+            <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
                 <div id="tab-periodontia-prontuario" class="tab-content active">
                     <div id="prontuario-menu-periodontia" class="space-y-3">
-                        <button onclick="showProntuarioSection('periodontia-siglas', 'periodontia')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-rose-500 hover:bg-rose-50 transition flex items-center gap-4 text-left">
-                            <div class="p-3 bg-rose-100 rounded-full text-rose-600 shrink-0"><i data-lucide="type" class="w-5 h-5"></i></div>
-                            <div><span class="block font-semibold text-gray-800">Siglas</span><span class="text-xs text-gray-500">Periodontograma e anotações</span></div>
-                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
+                        <button onclick="showProntuarioSection('periodontia-siglas', 'periodontia')" class="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-rose-500 hover:bg-rose-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-left">
+                            <div class="p-3 bg-rose-100 dark:bg-rose-900/40 rounded-full text-rose-600 dark:text-rose-400 shrink-0"><i data-lucide="type" class="w-5 h-5"></i></div>
+                            <div><span class="block font-semibold text-gray-800 dark:text-gray-200">Siglas</span><span class="text-xs text-gray-500 dark:text-gray-400">Periodontograma e anotações</span></div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300 dark:text-gray-600"></i>
                         </button>
-                        <button onclick="showProntuarioSection('periodontia-exemplos', 'periodontia')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-rose-500 hover:bg-rose-50 transition flex items-center gap-4 text-left">
-                            <div class="p-3 bg-rose-100 rounded-full text-rose-600 shrink-0"><i data-lucide="file-check" class="w-5 h-5"></i></div>
-                            <div><span class="block font-semibold text-gray-800">Exemplos</span><span class="text-xs text-gray-500">Preenchimento clínico</span></div>
-                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
+                        <button onclick="showProntuarioSection('periodontia-exemplos', 'periodontia')" class="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-rose-500 hover:bg-rose-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-left">
+                            <div class="p-3 bg-rose-100 dark:bg-rose-900/40 rounded-full text-rose-600 dark:text-rose-400 shrink-0"><i data-lucide="file-check" class="w-5 h-5"></i></div>
+                            <div><span class="block font-semibold text-gray-800 dark:text-gray-200">Exemplos</span><span class="text-xs text-gray-500 dark:text-gray-400">Preenchimento clínico</span></div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300 dark:text-gray-600"></i>
                         </button>
                     </div>
                     <div id="dynamic-content-area-periodontia" class="hidden">
-                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                            <h3 id="dynamic-title-periodontia" class="font-bold text-lg text-gray-800">Título</h3>
-                            <button onclick="hideProntuarioSections('periodontia')" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 hover:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100 dark:border-gray-700">
+                            <h3 id="dynamic-title-periodontia" class="font-bold text-lg text-gray-800 dark:text-white">Título</h3>
+                            <button onclick="hideProntuarioSections('periodontia')" class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-xs text-gray-600 dark:text-gray-300 font-medium flex items-center gap-1 hover:bg-gray-200 dark:hover:bg-gray-600"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
                         </div>
-                        <div id="dynamic-body-periodontia" class="rich-text text-sm"></div>
+                        <div id="dynamic-body-periodontia" class="rich-text text-sm dark:text-gray-300"></div>
                     </div>
                 </div>
                 <div id="tab-periodontia-instrumentais" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4"><i data-lucide="hammer" class="w-5 h-5 text-rose-600"></i> Checklist Periodontia</h3>
-                    <div id="instrumentais-list-periodontia" class="space-y-4 rich-text"></div>
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4"><i data-lucide="hammer" class="w-5 h-5 text-rose-600 dark:text-rose-400"></i> Checklist Periodontia</h3>
+                    <div id="instrumentais-list-periodontia" class="space-y-4 rich-text dark:text-gray-300"></div>
                 </div>
             </div>
         </div>
 
         <div id="view-endodontia" class="view-section space-y-4">
-            <div class="flex items-center gap-3 mb-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                <div class="p-2 bg-indigo-50 rounded-lg shrink-0"><i data-lucide="zap" class="w-6 h-6 text-indigo-600"></i></div>
-                <div><h2 class="text-xl font-bold text-gray-900 leading-tight">Endodontia</h2><p class="text-gray-500 text-xs">Prontuário e Materiais</p></div>
+            <div class="flex items-center gap-3 mb-2 bg-white dark:bg-gray-800 dark:border-gray-700 p-3 rounded-lg shadow-sm border border-gray-100">
+                <div class="p-2 bg-indigo-50 dark:bg-indigo-900/30 rounded-lg shrink-0"><i data-lucide="zap" class="w-6 h-6 text-indigo-600 dark:text-indigo-400"></i></div>
+                <div><h2 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">Endodontia</h2><p class="text-gray-500 dark:text-gray-400 text-xs">Prontuário e Materiais</p></div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide">
-                <button onclick="switchTab('prontuario', 'endodontia')" id="tab-btn-endodontia-prontuario" class="tab-btn tab-active-endodontia flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-indigo-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+            <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide">
+                <button onclick="switchTab('prontuario', 'endodontia')" id="tab-btn-endodontia-prontuario" class="tab-btn tab-active-endodontia flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-indigo-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="clipboard-list" class="w-4 h-4"></i> Prontuário
                 </button>
-                <button onclick="switchTab('instrumentais', 'endodontia')" id="tab-btn-endodontia-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-indigo-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                <button onclick="switchTab('instrumentais', 'endodontia')" id="tab-btn-endodontia-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-indigo-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="hammer" class="w-4 h-4"></i> Materiais
                 </button>
-                <button onclick="switchTab('protocolos', 'endodontia')" id="tab-btn-endodontia-protocolos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-indigo-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                 <button onclick="switchTab('protocolos', 'endodontia')" id="tab-btn-endodontia-protocolos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-indigo-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="book-open" class="w-4 h-4"></i> Protocolos
                 </button>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
+            <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
                 <div id="tab-endodontia-prontuario" class="tab-content active">
                     <div id="prontuario-menu-endodontia" class="space-y-3">
-                        <button onclick="showProntuarioSection('endodontia-siglas', 'endodontia')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-indigo-500 hover:bg-indigo-50 transition flex items-center gap-4 text-left">
-                            <div class="p-3 bg-indigo-100 rounded-full text-indigo-600 shrink-0"><i data-lucide="type" class="w-5 h-5"></i></div>
-                            <div><span class="block font-semibold text-gray-800">Siglas</span><span class="text-xs text-gray-500">Abreviações de Endodontia</span></div>
-                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
+                        <button onclick="showProntuarioSection('endodontia-siglas', 'endodontia')" class="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-left">
+                            <div class="p-3 bg-indigo-100 dark:bg-indigo-900/40 rounded-full text-indigo-600 dark:text-indigo-400 shrink-0"><i data-lucide="type" class="w-5 h-5"></i></div>
+                            <div><span class="block font-semibold text-gray-800 dark:text-gray-200">Siglas</span><span class="text-xs text-gray-500 dark:text-gray-400">Abreviações de Endodontia</span></div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300 dark:text-gray-600"></i>
                         </button>
-                        <button onclick="showProntuarioSection('endodontia-exemplos', 'endodontia')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-indigo-500 hover:bg-indigo-50 transition flex items-center gap-4 text-left">
-                            <div class="p-3 bg-indigo-100 rounded-full text-indigo-600 shrink-0"><i data-lucide="file-check" class="w-5 h-5"></i></div>
-                            <div><span class="block font-semibold text-gray-800">Exemplos</span><span class="text-xs text-gray-500">Preenchimento de canal</span></div>
-                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
+                        <button onclick="showProntuarioSection('endodontia-exemplos', 'endodontia')" class="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-indigo-500 hover:bg-indigo-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-left">
+                            <div class="p-3 bg-indigo-100 dark:bg-indigo-900/40 rounded-full text-indigo-600 dark:text-indigo-400 shrink-0"><i data-lucide="file-check" class="w-5 h-5"></i></div>
+                            <div><span class="block font-semibold text-gray-800 dark:text-gray-200">Exemplos</span><span class="text-xs text-gray-500 dark:text-gray-400">Preenchimento de canal</span></div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300 dark:text-gray-600"></i>
                         </button>
                     </div>
                     <div id="dynamic-content-area-endodontia" class="hidden">
-                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                            <h3 id="dynamic-title-endodontia" class="font-bold text-lg text-gray-800">Título</h3>
-                            <button onclick="hideProntuarioSections('endodontia')" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 hover:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100 dark:border-gray-700">
+                            <h3 id="dynamic-title-endodontia" class="font-bold text-lg text-gray-800 dark:text-white">Título</h3>
+                            <button onclick="hideProntuarioSections('endodontia')" class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-xs text-gray-600 dark:text-gray-300 font-medium flex items-center gap-1 hover:bg-gray-200 dark:hover:bg-gray-600"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
                         </div>
-                        <div id="dynamic-body-endodontia" class="rich-text text-sm"></div>
+                        <div id="dynamic-body-endodontia" class="rich-text text-sm dark:text-gray-300"></div>
                     </div>
                 </div>
                 <div id="tab-endodontia-instrumentais" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4"><i data-lucide="hammer" class="w-5 h-5 text-indigo-600"></i> Checklist Endodontia</h3>
-                    <div id="instrumentais-list-endodontia" class="space-y-4 rich-text"></div>
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4"><i data-lucide="hammer" class="w-5 h-5 text-indigo-600 dark:text-indigo-400"></i> Checklist Endodontia</h3>
+                    <div id="instrumentais-list-endodontia" class="space-y-4 rich-text dark:text-gray-300"></div>
                 </div>
                 
                 <div id="tab-endodontia-protocolos" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4"><i data-lucide="book-open" class="w-5 h-5 text-indigo-600"></i> Protocolos de Endodontia</h3>
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4"><i data-lucide="book-open" class="w-5 h-5 text-indigo-600 dark:text-indigo-400"></i> Protocolos de Endodontia</h3>
                     <div id="protocolos-list-endodontia" class="space-y-3">
-                        <p class="text-center text-gray-500 py-4 text-sm">Carregando protocolos...</p>
+                        <p class="text-center text-gray-500 dark:text-gray-400 py-4 text-sm">Carregando protocolos...</p>
                     </div>
                 </div>
-
             </div>
         </div>
 
         <div id="view-cirurgia" class="view-section space-y-4">
-            <div class="flex items-center gap-3 mb-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                <div class="p-2 bg-emerald-50 rounded-lg shrink-0"><i data-lucide="bone" class="w-6 h-6 text-emerald-600"></i></div>
-                <div><h2 class="text-xl font-bold text-gray-900 leading-tight">Cirurgia</h2><p class="text-gray-500 text-xs">Prontuário e Materiais</p></div>
+            <div class="flex items-center gap-3 mb-2 bg-white dark:bg-gray-800 dark:border-gray-700 p-3 rounded-lg shadow-sm border border-gray-100">
+                <div class="p-2 bg-emerald-50 dark:bg-emerald-900/30 rounded-lg shrink-0"><i data-lucide="bone" class="w-6 h-6 text-emerald-600 dark:text-emerald-400"></i></div>
+                <div><h2 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">Cirurgia</h2><p class="text-gray-500 dark:text-gray-400 text-xs">Prontuário e Materiais</p></div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex">
-                <button onclick="switchTab('prontuario', 'cirurgia')" id="tab-btn-cirurgia-prontuario" class="tab-btn tab-active-cirurgia flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-emerald-600 transition-all flex items-center justify-center gap-2">
+            <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 flex">
+                <button onclick="switchTab('prontuario', 'cirurgia')" id="tab-btn-cirurgia-prontuario" class="tab-btn tab-active-cirurgia flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-emerald-600 transition-all flex items-center justify-center gap-2">
                     <i data-lucide="clipboard-list" class="w-4 h-4"></i> Prontuário
                 </button>
-                <button onclick="switchTab('instrumentais', 'cirurgia')" id="tab-btn-cirurgia-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-emerald-600 transition-all flex items-center justify-center gap-2">
+                <button onclick="switchTab('instrumentais', 'cirurgia')" id="tab-btn-cirurgia-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-emerald-600 transition-all flex items-center justify-center gap-2">
                     <i data-lucide="hammer" class="w-4 h-4"></i> Materiais
                 </button>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
+            <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
                 <div id="tab-cirurgia-prontuario" class="tab-content active">
                     <div id="prontuario-menu-cirurgia" class="space-y-3">
-                        <button onclick="showProntuarioSection('cirurgia-siglas', 'cirurgia')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition flex items-center gap-4 text-left">
-                            <div class="p-3 bg-emerald-100 rounded-full text-emerald-600 shrink-0"><i data-lucide="type" class="w-5 h-5"></i></div>
-                            <div><span class="block font-semibold text-gray-800">Siglas</span><span class="text-xs text-gray-500">Abreviações Cirúrgicas</span></div>
-                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
+                        <button onclick="showProntuarioSection('cirurgia-siglas', 'cirurgia')" class="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-left">
+                            <div class="p-3 bg-emerald-100 dark:bg-emerald-900/40 rounded-full text-emerald-600 dark:text-emerald-400 shrink-0"><i data-lucide="type" class="w-5 h-5"></i></div>
+                            <div><span class="block font-semibold text-gray-800 dark:text-gray-200">Siglas</span><span class="text-xs text-gray-500 dark:text-gray-400">Abreviações Cirúrgicas</span></div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300 dark:text-gray-600"></i>
                         </button>
-                        <button onclick="showProntuarioSection('cirurgia-exemplos', 'cirurgia')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition flex items-center gap-4 text-left">
-                            <div class="p-3 bg-emerald-100 rounded-full text-emerald-600 shrink-0"><i data-lucide="file-check" class="w-5 h-5"></i></div>
-                            <div><span class="block font-semibold text-gray-800">Exemplos</span><span class="text-xs text-gray-500">Descrição cirúrgica</span></div>
-                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300"></i>
+                        <button onclick="showProntuarioSection('cirurgia-exemplos', 'cirurgia')" class="w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-left">
+                            <div class="p-3 bg-emerald-100 dark:bg-emerald-900/40 rounded-full text-emerald-600 dark:text-emerald-400 shrink-0"><i data-lucide="file-check" class="w-5 h-5"></i></div>
+                            <div><span class="block font-semibold text-gray-800 dark:text-gray-200">Exemplos</span><span class="text-xs text-gray-500 dark:text-gray-400">Descrição cirúrgica</span></div>
+                            <i data-lucide="chevron-right" class="ml-auto w-5 h-5 text-gray-300 dark:text-gray-600"></i>
                         </button>
                     </div>
                     <div id="dynamic-content-area-cirurgia" class="hidden">
-                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
-                            <h3 id="dynamic-title-cirurgia" class="font-bold text-lg text-gray-800">Título</h3>
-                            <button onclick="hideProntuarioSections('cirurgia')" class="px-3 py-1 bg-gray-100 rounded-full text-xs text-gray-600 font-medium flex items-center gap-1 hover:bg-gray-200"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
+                        <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100 dark:border-gray-700">
+                            <h3 id="dynamic-title-cirurgia" class="font-bold text-lg text-gray-800 dark:text-white">Título</h3>
+                            <button onclick="hideProntuarioSections('cirurgia')" class="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-full text-xs text-gray-600 dark:text-gray-300 font-medium flex items-center gap-1 hover:bg-gray-200 dark:hover:bg-gray-600"><i data-lucide="arrow-left" class="w-3 h-3"></i> Voltar</button>
                         </div>
-                        <div id="dynamic-body-cirurgia" class="rich-text text-sm"></div>
+                        <div id="dynamic-body-cirurgia" class="rich-text text-sm dark:text-gray-300"></div>
                     </div>
                 </div>
                 <div id="tab-cirurgia-instrumentais" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4"><i data-lucide="hammer" class="w-5 h-5 text-emerald-600"></i> Checklist Cirurgia</h3>
-                    <div id="instrumentais-list-cirurgia" class="space-y-4 rich-text"></div>
+                    <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4"><i data-lucide="hammer" class="w-5 h-5 text-emerald-600 dark:text-emerald-400"></i> Checklist Cirurgia</h3>
+                    <div id="instrumentais-list-cirurgia" class="space-y-4 rich-text dark:text-gray-300"></div>
                 </div>
             </div>
         </div>
 
         <div id="view-prescricoes" class="view-section space-y-4">
-            <div class="flex items-center gap-3 mb-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
-                <div class="p-2 bg-amber-50 rounded-lg shrink-0"><i data-lucide="scroll-text" class="w-6 h-6 text-amber-600"></i></div>
-                <div><h2 class="text-xl font-bold text-gray-900 leading-tight">Prescrições</h2><p class="text-gray-500 text-xs">Modelos e Posologias</p></div>
+            <div class="flex items-center gap-3 mb-2 bg-white dark:bg-gray-800 dark:border-gray-700 p-3 rounded-lg shadow-sm border border-gray-100">
+                <div class="p-2 bg-amber-50 dark:bg-amber-900/30 rounded-lg shrink-0"><i data-lucide="scroll-text" class="w-6 h-6 text-amber-600 dark:text-amber-400"></i></div>
+                <div><h2 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">Prescrições</h2><p class="text-gray-500 dark:text-gray-400 text-xs">Modelos e Posologias</p></div>
             </div>
             
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide">
-                <button onclick="switchTab('dor', 'prescricoes')" id="tab-btn-prescricoes-dor" class="tab-btn tab-active-prescricoes flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-amber-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+            <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide">
+                <button onclick="switchTab('dor', 'prescricoes')" id="tab-btn-prescricoes-dor" class="tab-btn tab-active-prescricoes flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-amber-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="pill" class="w-4 h-4"></i> Controle da Dor
                 </button>
-                <button onclick="switchTab('antibioticos', 'prescricoes')" id="tab-btn-prescricoes-antibioticos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-amber-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                <button onclick="switchTab('antibioticos', 'prescricoes')" id="tab-btn-prescricoes-antibioticos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-amber-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="shield-plus" class="w-4 h-4"></i> Antibióticos
                 </button>
-                <button onclick="switchTab('outros', 'prescricoes')" id="tab-btn-prescricoes-outros" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-amber-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                <button onclick="switchTab('outros', 'prescricoes')" id="tab-btn-prescricoes-outros" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-amber-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="droplet" class="w-4 h-4"></i> Outros
                 </button>
             </div>
 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
+            <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
                 
                 <div id="tab-prescricoes-dor" class="tab-content active space-y-4">
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <h4 class="font-bold text-amber-700 mb-4 flex items-center gap-2 text-lg"><i data-lucide="frown" class="w-5 h-5"></i> Analgésicos</h4>
-                        <ul class="space-y-4 text-gray-700 text-sm">
-                            <li class="border-b border-gray-100 pb-2">
-                                <strong class="text-gray-900 block mb-1">Dipirona 500mg - 12 comprimidos</strong>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h4 class="font-bold text-amber-700 dark:text-amber-400 mb-4 flex items-center gap-2 text-lg"><i data-lucide="frown" class="w-5 h-5"></i> Analgésicos</h4>
+                        <ul class="space-y-4 text-gray-700 dark:text-gray-300 text-sm">
+                            <li class="border-b border-gray-100 dark:border-gray-600 pb-2">
+                                <strong class="text-gray-900 dark:text-white block mb-1">Dipirona 500mg - 12 comprimidos</strong>
                                 Tomar 01 (um) comprimido, a cada 06 (seis) horas, durante 03 (três) dias.
                             </li>
                             <li class="pb-2">
-                                <strong class="text-gray-900 block mb-1">Paracetamol 750mg - 12 comprimidos</strong>
+                                <strong class="text-gray-900 dark:text-white block mb-1">Paracetamol 750mg - 12 comprimidos</strong>
                                 Tomar 01 (um) comprimido, a cada 06 (seis) horas, durante 03 (três) dias.
                             </li>
                         </ul>
                     </div>
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <h4 class="font-bold text-amber-700 mb-4 flex items-center gap-2 text-lg"><i data-lucide="flame" class="w-5 h-5"></i> Anti-inflamatórios (AINES)</h4>
-                        <ul class="space-y-4 text-gray-700 text-sm">
-                            <li class="border-b border-gray-100 pb-2">
-                                <strong class="text-gray-900 block mb-1">Ibuprofeno 600mg - 09 comprimidos</strong>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h4 class="font-bold text-amber-700 dark:text-amber-400 mb-4 flex items-center gap-2 text-lg"><i data-lucide="flame" class="w-5 h-5"></i> Anti-inflamatórios (AINES)</h4>
+                        <ul class="space-y-4 text-gray-700 dark:text-gray-300 text-sm">
+                            <li class="border-b border-gray-100 dark:border-gray-600 pb-2">
+                                <strong class="text-gray-900 dark:text-white block mb-1">Ibuprofeno 600mg - 09 comprimidos</strong>
                                 Tomar 01 (um) comprimido, a cada 08 (oito) horas, durante 03 (três) dias.
                             </li>
                             <li class="pb-2">
-                                <strong class="text-gray-900 block mb-1">Nimesulida 100mg - 06 comprimidos</strong>
+                                <strong class="text-gray-900 dark:text-white block mb-1">Nimesulida 100mg - 06 comprimidos</strong>
                                 Tomar 01 (um) comprimido, a cada 12 (doze) horas, durante 03 (três) dias.
                             </li>
                         </ul>
                     </div>
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <h4 class="font-bold text-amber-700 mb-4 flex items-center gap-2 text-lg"><i data-lucide="clock" class="w-5 h-5"></i> Corticosteróides (Preemptiva)</h4>
-                        <ul class="space-y-4 text-gray-700 text-sm">
-                            <li class="border-b border-gray-100 pb-2">
-                                <strong class="text-gray-900 block mb-1">Dexametasona 4mg - 02 comprimidos</strong>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h4 class="font-bold text-amber-700 dark:text-amber-400 mb-4 flex items-center gap-2 text-lg"><i data-lucide="clock" class="w-5 h-5"></i> Corticosteróides (Preemptiva)</h4>
+                        <ul class="space-y-4 text-gray-700 dark:text-gray-300 text-sm">
+                            <li class="border-b border-gray-100 dark:border-gray-600 pb-2">
+                                <strong class="text-gray-900 dark:text-white block mb-1">Dexametasona 4mg - 02 comprimidos</strong>
                                 Tomar 02 (dois) comprimidos, 01 (uma) hora antes do procedimento.
                             </li>
                             <li class="pb-2">
-                                <strong class="text-gray-900 block mb-1">Betametasona 2mg - 02 comprimidos</strong>
+                                <strong class="text-gray-900 dark:text-white block mb-1">Betametasona 2mg - 02 comprimidos</strong>
                                 Tomar 02 (dois) comprimidos, 01 (uma) hora antes do procedimento.
                             </li>
                         </ul>
@@ -523,34 +562,34 @@
                 </div>
 
                 <div id="tab-prescricoes-antibioticos" class="tab-content space-y-4">
-                    <div class="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                        <h4 class="font-bold text-amber-700 mb-4 flex items-center gap-2 text-lg"><i data-lucide="shield-check" class="w-5 h-5"></i> Tratamento de Infecções</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700">
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h4 class="font-bold text-amber-700 dark:text-amber-400 mb-4 flex items-center gap-2 text-lg"><i data-lucide="shield-check" class="w-5 h-5"></i> Tratamento de Infecções</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700 dark:text-gray-300">
                             <ul class="space-y-4">
-                                <li class="border-b border-gray-100 pb-2 md:border-none">
-                                    <strong class="text-gray-900 block mb-1">Amoxicilina 500mg - 21 comprimidos</strong>
+                                <li class="border-b border-gray-100 dark:border-gray-600 pb-2 md:border-none">
+                                    <strong class="text-gray-900 dark:text-white block mb-1">Amoxicilina 500mg - 21 comprimidos</strong>
                                     Tomar 01 (um) comprimido, a cada 08 (oito) horas, durante 07 (sete) dias.
                                 </li>
-                                <li class="border-b border-gray-100 pb-2 md:border-none">
-                                    <strong class="text-gray-900 block mb-1">Ampicilina 500mg - 28 comprimidos</strong>
+                                <li class="border-b border-gray-100 dark:border-gray-600 pb-2 md:border-none">
+                                    <strong class="text-gray-900 dark:text-white block mb-1">Ampicilina 500mg - 28 comprimidos</strong>
                                     Tomar 01 (um) comprimido, a cada 06 (seis) horas, durante 07 (sete) dias.
                                 </li>
                                 <li>
-                                    <strong class="text-gray-900 block mb-1">Clavulin 500mg - 21 comprimidos</strong>
+                                    <strong class="text-gray-900 dark:text-white block mb-1">Clavulin 500mg - 21 comprimidos</strong>
                                     Tomar 01 (um) comprimido, a cada 08 (oito) horas, durante 07 (sete) dias.
                                 </li>
                             </ul>
                             <ul class="space-y-4">
-                                <li class="border-b border-gray-100 pb-2 md:border-none">
-                                    <strong class="text-gray-900 block mb-1">Dalacin C 300mg (Clindamicina) - 28 comprimidos</strong>
+                                <li class="border-b border-gray-100 dark:border-gray-600 pb-2 md:border-none">
+                                    <strong class="text-gray-900 dark:text-white block mb-1">Dalacin C 300mg (Clindamicina) - 28 comprimidos</strong>
                                     Tomar 01 (um) comprimido, a cada 06 (seis) horas, durante 07 (sete) dias.
                                 </li>
-                                <li class="border-b border-gray-100 pb-2 md:border-none">
-                                    <strong class="text-gray-900 block mb-1">Cefalexina 500mg - 28 comprimidos</strong>
+                                <li class="border-b border-gray-100 dark:border-gray-600 pb-2 md:border-none">
+                                    <strong class="text-gray-900 dark:text-white block mb-1">Cefalexina 500mg - 28 comprimidos</strong>
                                     Tomar 01 (um) comprimido, a cada 06 (seis) horas, durante 07 (sete) dias.
                                 </li>
                                 <li>
-                                    <strong class="text-gray-900 block mb-1">Flagyl 250mg (Metronidazol) - 21 comprimidos</strong>
+                                    <strong class="text-gray-900 dark:text-white block mb-1">Flagyl 250mg (Metronidazol) - 21 comprimidos</strong>
                                     Tomar 01 (um) comprimido, a cada 08 (oito) horas, durante 07 (sete) dias. <em>(Associar em infecções graves)</em>.
                                 </li>
                             </ul>
@@ -559,26 +598,26 @@
                 </div>
 
                 <div id="tab-prescricoes-outros" class="tab-content space-y-4">
-                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                        <h4 class="font-bold text-blue-800 mb-2 text-lg">Antifúngico</h4>
-                        <div class="text-gray-700 text-sm">
-                            <strong class="text-blue-900 block mb-1">Nistatina 100.000 UI/ml - 01 frasco</strong>
+                    <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
+                        <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-2 text-lg">Antifúngico</h4>
+                        <div class="text-gray-700 dark:text-gray-300 text-sm">
+                            <strong class="text-blue-900 dark:text-blue-200 block mb-1">Nistatina 100.000 UI/ml - 01 frasco</strong>
                             Bochechar 05ml, a cada 06 (seis) horas, durante 14 (quatorze) dias.
                         </div>
                     </div>
                     
-                    <div class="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
-                        <h4 class="font-bold text-emerald-800 mb-2 text-lg">Colutório</h4>
-                        <div class="text-gray-700 text-sm">
-                            <strong class="text-emerald-900 block mb-1">Digluconato de clorexidina 0,12% - 01 frasco</strong>
+                    <div class="bg-emerald-50 dark:bg-emerald-900/30 p-4 rounded-lg border border-emerald-100 dark:border-emerald-800">
+                        <h4 class="font-bold text-emerald-800 dark:text-emerald-300 mb-2 text-lg">Colutório</h4>
+                        <div class="text-gray-700 dark:text-gray-300 text-sm">
+                            <strong class="text-emerald-900 dark:text-emerald-200 block mb-1">Digluconato de clorexidina 0,12% - 01 frasco</strong>
                             Bochechar 15ml por 01 (um) minuto, a cada 12 (doze) horas (30 min após escovação), durante 07 (sete) dias.
                         </div>
                     </div>
 
-                    <div class="bg-purple-50 p-4 rounded-lg border border-purple-100">
-                        <h4 class="font-bold text-purple-800 mb-2 text-lg">Corticosteroide Tópico</h4>
-                        <div class="text-gray-700 text-sm">
-                            <strong class="text-purple-900 block mb-1">Omcilon-A em Orabase 10g - 01 tubo</strong>
+                    <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg border border-purple-100 dark:border-purple-800">
+                        <h4 class="font-bold text-purple-800 dark:text-purple-300 mb-2 text-lg">Corticosteroide Tópico</h4>
+                        <div class="text-gray-700 dark:text-gray-300 text-sm">
+                            <strong class="text-purple-900 dark:text-purple-200 block mb-1">Omcilon-A em Orabase 10g - 01 tubo</strong>
                             Aplicar pequena quantidade nas lesões, sem esfregar, até formar película, 03 (três) vezes ao dia (após refeições), durante 07 (sete) dias.
                         </div>
                     </div>
@@ -591,8 +630,8 @@
             <div class="flex flex-col gap-4">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h2 class="text-2xl font-bold text-gray-900">Protocolos Clínicos</h2>
-                        <p class="text-gray-500 text-sm">Base de conhecimento atualizada.</p>
+                        <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Protocolos Clínicos</h2>
+                        <p class="text-gray-500 dark:text-gray-400 text-sm">Base de conhecimento atualizada.</p>
                     </div>
                     <button id="btn-new-protocol" onclick="openEditor()" class="hidden bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 shadow-sm">
                         <i data-lucide="plus" class="w-4 h-4"></i> Novo
@@ -602,7 +641,7 @@
                 <div class="space-y-3">
                     <div class="relative">
                         <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"></i>
-                        <input type="text" id="search-input" oninput="renderBlog()" placeholder="Buscar protocolo..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
+                        <input type="text" id="search-input" oninput="renderBlog()" placeholder="Buscar protocolo..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 dark:bg-gray-800 dark:text-white focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all">
                     </div>
                     
                     <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide" id="filter-container">
@@ -617,7 +656,7 @@
 
                 <div id="blog-loader" class="flex justify-center py-10 hidden"><div class="spinner"></div></div>
                 <div id="blog-grid" class="space-y-6"></div> <div id="no-protocols-msg" class="text-center py-10 hidden">
-                    <p class="text-gray-500">Nenhum protocolo encontrado.</p>
+                    <p class="text-gray-500 dark:text-gray-400">Nenhum protocolo encontrado.</p>
                     <p class="text-xs text-gray-400 mt-2">Tente outro termo ou categoria.</p>
                 </div>
             </div>
@@ -625,14 +664,14 @@
 
         <div id="view-post" class="view-section">
             <div class="max-w-4xl mx-auto">
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[60vh]">
-                    <div class="bg-gray-50 border-b border-gray-100 p-6">
+                <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-2xl shadow-sm border border-gray-200 overflow-hidden min-h-[60vh]">
+                    <div class="bg-gray-50 dark:bg-gray-700/50 border-b border-gray-100 dark:border-gray-700 p-6">
                         <div class="flex justify-between items-start">
                             <div>
-                                <span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 text-blue-700 text-xs font-bold uppercase mb-2">Categoria</span>
-                                <h2 id="post-title" class="text-2xl font-bold text-gray-900 leading-tight">Título do Protocolo</h2>
+                                <span id="post-category" class="inline-block px-2 py-1 rounded-md bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 text-xs font-bold uppercase mb-2">Categoria</span>
+                                <h2 id="post-title" class="text-2xl font-bold text-gray-900 dark:text-white leading-tight">Título do Protocolo</h2>
                             </div>
-                            <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2 rounded hover:bg-gray-200 transition">
+                            <button id="btn-edit-post" class="hidden text-gray-500 hover:text-primary p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                                 <i data-lucide="edit-3" class="w-5 h-5"></i>
                             </button>
                         </div>
@@ -649,12 +688,12 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Título</label>
-                            <input type="text" id="edit-title" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Título</label>
+                            <input type="text" id="edit-title" required class="w-full p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:ring-2 focus:ring-primary outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-                            <select id="edit-category" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Categoria</label>
+                            <select id="edit-category" class="w-full p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:ring-2 focus:ring-primary outline-none">
                                 <option value="Dentística">Dentística</option>
                                 <option value="Periodontia">Periodontia</option>
                                 <option value="Endodontia">Endodontia</option>
@@ -664,32 +703,32 @@
                         </div>
                     </div>
                     <div id="summary-container">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Resumo (Para o Card)</label>
-                        <input type="text" id="edit-summary" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary outline-none">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Resumo (Para o Card)</label>
+                        <input type="text" id="edit-summary" required class="w-full p-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:ring-2 focus:ring-primary outline-none">
                     </div>
 
-                    <div class="editor-toolbar rounded-t-lg border border-gray-300 border-b-0 bg-gray-50">
+                    <div class="editor-toolbar rounded-t-lg border border-gray-300 dark:border-gray-600 border-b-0 bg-gray-50 dark:bg-gray-700">
                         <button type="button" onclick="execCmd('undo')" class="toolbar-btn" title="Desfazer"><i data-lucide="undo" class="w-4 h-4"></i></button>
                         <button type="button" onclick="execCmd('redo')" class="toolbar-btn" title="Refazer"><i data-lucide="redo" class="w-4 h-4"></i></button>
-                        <div class="w-px h-6 bg-gray-300 mx-2"></div>
+                        <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-2"></div>
                         <button type="button" onclick="execCmd('bold')" class="toolbar-btn font-bold" title="Negrito">B</button>
                         <button type="button" onclick="execCmd('italic')" class="toolbar-btn italic" title="Itálico">I</button>
                         <button type="button" onclick="execCmd('underline')" class="toolbar-btn underline" title="Sublinhado">U</button>
-                        <div class="w-px h-6 bg-gray-300 mx-2"></div>
+                        <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-2"></div>
                         <button type="button" onclick="execCmd('formatBlock', 'H3')" class="toolbar-btn font-bold text-sm" title="Título">H1</button>
                         <button type="button" onclick="execCmd('insertUnorderedList')" class="toolbar-btn" title="Lista com Marcadores"><i data-lucide="list" class="w-4 h-4"></i></button>
                         <button type="button" onclick="execCmd('insertOrderedList')" class="toolbar-btn" title="Lista Numerada"><i data-lucide="list-ordered" class="w-4 h-4"></i></button>
-                        <div class="w-px h-6 bg-gray-300 mx-2"></div>
+                        <div class="w-px h-6 bg-gray-300 dark:bg-gray-600 mx-2"></div>
                         <button type="button" onclick="execCmd('outdent')" class="toolbar-btn" title="Diminuir Recuo"><i data-lucide="outdent" class="w-4 h-4"></i></button>
                         <button type="button" onclick="execCmd('indent')" class="toolbar-btn" title="Aumentar Recuo"><i data-lucide="indent" class="w-4 h-4"></i></button>
                     </div>
 
-                    <div id="editor-content" class="editor-paper rich-text rounded-b-lg border border-gray-300" contenteditable="true" placeholder="Comece a digitar..."></div>
+                    <div id="editor-content" class="editor-paper rich-text rounded-b-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white" contenteditable="true" placeholder="Comece a digitar..."></div>
 
-                    <div class="flex gap-3 pt-4 sticky bottom-0 bg-gray-50 p-4 border-t border-gray-200 z-50">
+                    <div class="flex gap-3 pt-4 sticky bottom-0 bg-gray-50 dark:bg-gray-900 p-4 border-t border-gray-200 dark:border-gray-700 z-50">
                         <button type="button" onclick="deleteProtocol()" id="btn-delete" class="px-4 py-2 border border-red-200 text-red-600 rounded-lg hover:bg-red-50 hidden text-sm font-medium">Excluir</button>
                         <div class="flex-grow"></div>
-                        <button type="button" onclick="window.history.back()" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-white text-sm font-medium">Cancelar</button>
+                        <button type="button" onclick="window.history.back()" class="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700 text-sm font-medium">Cancelar</button>
                         <button type="submit" id="btn-save" class="px-6 py-2 bg-primary hover:bg-secondary text-white rounded-lg shadow-md flex items-center gap-2 text-sm font-medium">
                             <span>Salvar</span>
                             <div id="save-spinner" class="spinner border-white border-l-transparent w-4 h-4 hidden"></div>
@@ -702,14 +741,14 @@
         <div id="view-manual" class="view-section">
             <div class="max-w-5xl mx-auto h-[85vh] flex flex-col gap-2">
                 <div class="flex justify-end gap-2 px-2">
-                    <button onclick="toggleFullScreen()" class="bg-white border border-gray-200 text-gray-700 hover:text-primary px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 shadow-sm transition-colors">
+                    <button onclick="toggleFullScreen()" class="bg-white dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700 border border-gray-200 text-gray-700 hover:text-primary dark:hover:text-cyan-400 px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 shadow-sm transition-colors">
                         <i data-lucide="maximize" class="w-4 h-4"></i> Tela Cheia
                     </button>
                     <button onclick="window.open('https://drive.google.com/file/d/1FmRwMLXSVb58Ei122xRvVqlpMKYxJFnI/view?usp=drivesdk', '_blank')" class="bg-primary hover:bg-secondary text-white px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-1 shadow-sm transition-colors">
                         <i data-lucide="external-link" class="w-4 h-4"></i> Abrir / Zoom
                     </button>
                 </div>
-                <div id="pdf-container" class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex-grow relative">
+                <div id="pdf-container" class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-2xl shadow-sm border border-gray-200 overflow-hidden flex-grow relative">
                     <iframe src="https://drive.google.com/file/d/1FmRwMLXSVb58Ei122xRvVqlpMKYxJFnI/preview" width="100%" height="100%" style="border: none;"></iframe>
                 </div>
             </div>
@@ -717,24 +756,24 @@
 
     </main>
 
-    <footer class="bg-white border-t border-gray-200 mt-auto">
+    <footer class="bg-white dark:bg-gray-800 dark:border-gray-700 border-t border-gray-200 mt-auto">
         <div class="max-w-5xl mx-auto px-4 py-8">
             <div class="flex flex-col items-center gap-6">
                 
                 <div class="flex items-center gap-6">
-                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScIj8dEG93HimE5qp51dGqXfBSLvuWS2AiMuq5AOmxru75Keg/viewform?usp=header" target="_blank" class="text-xs text-gray-500 hover:text-primary flex items-center gap-1 transition-colors">
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLScIj8dEG93HimE5qp51dGqXfBSLvuWS2AiMuq5AOmxru75Keg/viewform?usp=header" target="_blank" class="text-xs text-gray-500 dark:text-gray-400 hover:text-primary dark:hover:text-cyan-400 flex items-center gap-1 transition-colors">
                         <i data-lucide="message-square" class="w-3 h-3"></i> Enviar Feedback
                     </a>
-                    <button onclick="toggleAdmin()" class="text-xs text-gray-400 hover:text-gray-600 flex items-center gap-1 transition-colors">
+                    <button onclick="toggleAdmin()" class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 flex items-center gap-1 transition-colors">
                         <i data-lucide="lock" class="w-3 h-3"></i> Área Administrativa
                     </button>
                 </div>
 
-                <div class="w-full h-px bg-gray-100"></div>
+                <div class="w-full h-px bg-gray-100 dark:bg-gray-700"></div>
                 <div class="flex items-center justify-center gap-8 opacity-70 hover:opacity-100 transition-opacity">
-                    <img src="https://website.cfo.org.br/wp-content/uploads/2021/10/simbolo-odontologia_png.png" alt="Odontologia" class="h-12 w-auto object-contain grayscale hover:grayscale-0 transition-all">
-                    <div class="w-px h-10 bg-gray-300"></div>
-                    <img src="https://www.ufc.br/images/_images/a_universidade/identidade_visual/brasao/brasao1_horizontal_monocromatico_300dpi.png" alt="UFC" class="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-all">
+                    <img src="https://website.cfo.org.br/wp-content/uploads/2021/10/simbolo-odontologia_png.png" alt="Odontologia" class="h-12 w-auto object-contain grayscale hover:grayscale-0 transition-all dark:invert">
+                    <div class="w-px h-10 bg-gray-300 dark:bg-gray-600"></div>
+                    <img src="https://www.ufc.br/images/_images/a_universidade/identidade_visual/brasao/brasao1_horizontal_monocromatico_300dpi.png" alt="UFC" class="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-all dark:invert">
                 </div>
             </div>
             <div class="text-center pt-6">
@@ -744,11 +783,11 @@
     </footer>
 
     <div id="admin-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm hidden p-4">
-        <div class="bg-white rounded-2xl shadow-2xl max-w-xs w-full p-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-4 text-center">Acesso Restrito</h3>
-            <input type="password" id="admin-pass" placeholder="Senha" class="w-full p-3 mb-4 border border-gray-300 rounded-lg outline-none focus:border-primary">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-xs w-full p-6">
+            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 text-center">Acesso Restrito</h3>
+            <input type="password" id="admin-pass" placeholder="Senha" class="w-full p-3 mb-4 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg outline-none focus:border-primary">
             <div class="flex gap-2">
-                <button onclick="document.getElementById('admin-modal').classList.add('hidden')" class="flex-1 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Cancelar</button>
+                <button onclick="document.getElementById('admin-modal').classList.add('hidden')" class="flex-1 py-2 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">Cancelar</button>
                 <button onclick="checkAdmin()" class="flex-1 py-2 bg-primary text-white rounded-lg hover:bg-secondary">Entrar</button>
             </div>
         </div>
@@ -783,6 +822,24 @@
         let contentCache = {};
         let currentFilter = 'all';
 
+        // --- MODO ESCURO ---
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Verifica preferência salva ou do sistema
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
         // --- DADOS COMPLETOS E ATUALIZADOS ---
         const defaultData = [
              {
@@ -792,8 +849,8 @@
                 summary: 'Lista de abreviações e siglas comuns na Dentística.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
-                        <p class="font-bold text-primary mb-2">Gerais / Diagnóstico</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-primary dark:text-cyan-400 mb-2">Gerais / Diagnóstico</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>DA:</strong> Solicitação de diário alimentar</li>
                             <li><strong>ODG:</strong> Odontograma</li>
                             <li><strong>RX Inter:</strong> Radiografia interproximal</li>
@@ -803,8 +860,8 @@
                         </ul>
                     </div>
                     <div>
-                        <p class="font-bold text-primary mb-2">Preparos Cavitários</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-primary dark:text-cyan-400 mb-2">Preparos Cavitários</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>PCCLI:</strong> Preparo cavitário classe I</li>
                             <li><strong>PCCLII:</strong> Preparo cavitário classe II</li>
                             <li><strong>PCCLIII:</strong> Preparo cavitário classe III</li>
@@ -814,8 +871,8 @@
                         </ul>
                     </div>
                     <div>
-                        <p class="font-bold text-primary mb-2">Proteção Pulpar</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-primary dark:text-cyan-400 mb-2">Proteção Pulpar</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>PHC:</strong> Proteção com hidróxido de cálcio</li>
                             <li><strong>PIV:</strong> Proteção com ionômero de vidro</li>
                             <li><strong>POZE:</strong> Prot. cim. óxido de zinco e eugenol</li>
@@ -825,8 +882,8 @@
                         </ul>
                     </div>
                     <div>
-                        <p class="font-bold text-primary mb-2">Restaurações e Estética</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-primary dark:text-cyan-400 mb-2">Restaurações e Estética</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>ROZE:</strong> Rest. cim. óxido de zinco e eugenol</li>
                             <li><strong>RRC:</strong> Restauração em resina composta</li>
                             <li><strong>RAG:</strong> Restauração em amálgama</li>
@@ -846,38 +903,38 @@
                 category: 'Dentística',
                 summary: 'Modelos de como preencher o prontuário em procedimentos restauradores.',
                 content: `<div class="space-y-6 text-sm">
-                    <div class="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                        <h4 class="font-bold text-primary mb-2 flex items-center gap-2">
+                    <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
+                        <h4 class="font-bold text-primary dark:text-cyan-400 mb-2 flex items-center gap-2">
                             <i data-lucide="info" class="w-4 h-4"></i> Como preencher?
                         </h4>
-                        <p class="text-gray-700 mb-2">A descrição no prontuário deve ser sucinta, utilizando as siglas padronizadas e a ordem lógica do procedimento clínico.</p>
+                        <p class="text-gray-700 dark:text-gray-300 mb-2">A descrição no prontuário deve ser sucinta, utilizando as siglas padronizadas e a ordem lógica do procedimento clínico.</p>
                     </div>
 
                     <div>
-                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Exemplo 1: Restauração Classe II Complexa</h4>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Exemplo 1: Restauração Classe II Complexa</h4>
                         <div class="mb-2">
-                            <span class="text-xs font-semibold text-gray-500 uppercase">Procedimento Realizado:</span>
-                            <p class="text-gray-700 italic">"Dente 16: Anestesia Infiltrativa, Isolamento Absoluto, Preparo Cavitário Classe II (Mesio-ocluso-distal), Proteção com Hidróxido de Cálcio e Ionômero, Restauração em Resina Composta (Cor A2), Acabamento, Polimento e Ajuste Oclusal."</p>
+                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Procedimento Realizado:</span>
+                            <p class="text-gray-700 dark:text-gray-300 italic">"Dente 16: Anestesia Infiltrativa, Isolamento Absoluto, Preparo Cavitário Classe II (Mesio-ocluso-distal), Proteção com Hidróxido de Cálcio e Ionômero, Restauração em Resina Composta (Cor A2), Acabamento, Polimento e Ajuste Oclusal."</p>
                         </div>
-                        <div class="bg-gray-100 p-3 rounded-md font-mono text-gray-800 border-l-4 border-primary">
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-md font-mono text-gray-800 dark:text-gray-200 border-l-4 border-primary dark:border-cyan-400">
                             16 - AI + IA + PCCL II (MOD) + PHC + PIV + RRC (OPALLIS A2) + ACAB + POL + AO
                         </div>
                     </div>
 
                     <div>
-                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Exemplo 2: Procedimentos Iniciais / Diagnóstico</h4>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Exemplo 2: Procedimentos Iniciais / Diagnóstico</h4>
                         <div class="mb-2">
-                            <span class="text-xs font-semibold text-gray-500 uppercase">Procedimento Realizado:</span>
-                            <p class="text-gray-700 italic">"Anamnese, Profilaxia, Radiografia Periapical (36, 37), Radiografia Interproximal (14, 15), Odontograma e Plano de Tratamento."</p>
+                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Procedimento Realizado:</span>
+                            <p class="text-gray-700 dark:text-gray-300 italic">"Anamnese, Profilaxia, Radiografia Periapical (36, 37), Radiografia Interproximal (14, 15), Odontograma e Plano de Tratamento."</p>
                         </div>
-                        <div class="bg-gray-100 p-3 rounded-md font-mono text-gray-800 border-l-4 border-primary">
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-md font-mono text-gray-800 dark:text-gray-200 border-l-4 border-primary dark:border-cyan-400">
                             ANM + PROF + Rx per (36, 37) + Rx inter (14, 15) + ODG + PT
                         </div>
                     </div>
                     
                      <div>
-                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Outras Siglas Comuns</h4>
-                         <p class="text-gray-600 font-mono text-xs bg-gray-50 p-2 rounded">POZE; ROZE; RIV; SEL; TEX</p>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Outras Siglas Comuns</h4>
+                         <p class="text-gray-600 dark:text-gray-400 font-mono text-xs bg-gray-50 dark:bg-gray-800 p-2 rounded">POZE; ROZE; RIV; SEL; TEX</p>
                     </div>
                 </div>`
             },
@@ -888,8 +945,8 @@
                 summary: 'Lista de instrumentais e materiais para clínica de Dentística.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
-                        <h4 class="font-bold text-primary mb-2 border-b border-gray-200 pb-1">Carrinho e Bancada</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-primary dark:text-cyan-400 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Carrinho e Bancada</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Anestésico</li>
                             <li>Agulha anestesia</li>
                             <li>Lençol de borracha</li>
@@ -909,8 +966,8 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-primary mb-2 border-b border-gray-200 pb-1">CME (Esterilização)</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-primary dark:text-cyan-400 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">CME (Esterilização)</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Kit de Dentística</li>
                             <li>Kit de Isolamento</li>
                             <li>Arco de Young</li>
@@ -923,8 +980,8 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-primary mb-2 border-b border-gray-200 pb-1">Janelinha (Solicitar)</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-primary dark:text-cyan-400 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Janelinha (Solicitar)</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Grampos</li>
                             <li>Brocas</li>
                             <li>Pontas</li>
@@ -934,8 +991,8 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-primary mb-2 border-b border-gray-200 pb-1">Material Pessoal</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-primary dark:text-cyan-400 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Material Pessoal</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Fio dental</li>
                             <li>Lubrificante</li>
                             <li>Caneta permanente</li>
@@ -951,8 +1008,8 @@
                 summary: 'Siglas para periodontograma e procedimentos básicos.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
-                        <p class="font-bold text-rose-600 mb-2">Diagnóstico e Exames</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-rose-600 dark:text-rose-400 mb-2">Diagnóstico e Exames</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>ANM:</strong> Anamnese</li>
                             <li><strong>PSR:</strong> PSR (Registro Periodontal Simplificado)</li>
                             <li><strong>IP:</strong> Índice de placa</li>
@@ -962,8 +1019,8 @@
                         </ul>
                     </div>
                     <div>
-                        <p class="font-bold text-rose-600 mb-2">Prevenção e Higiene</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-rose-600 dark:text-rose-400 mb-2">Prevenção e Higiene</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>IHO:</strong> Instrução de Higiene Oral</li>
                             <li><strong>CH:</strong> Controle de Higiene (Planejamento)</li>
                             <li><strong>PROF:</strong> Profilaxia</li>
@@ -972,8 +1029,8 @@
                         </ul>
                     </div>
                     <div>
-                        <p class="font-bold text-rose-600 mb-2">Tratamento Básico</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-rose-600 dark:text-rose-400 mb-2">Tratamento Básico</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>AN:</strong> Anestesia</li>
                             <li><strong>R-SUPRA:</strong> Raspagem Supragengival</li>
                             <li><strong>RAR:</strong> Raspagem e alisamento radicular (Subgengival)</li>
@@ -982,8 +1039,8 @@
                         </ul>
                     </div>
                     <div>
-                        <p class="font-bold text-rose-600 mb-2">Cirurgia Periodontal</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-rose-600 dark:text-rose-400 mb-2">Cirurgia Periodontal</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>GENG:</strong> Gengivectomia / Gengivoplastia</li>
                             <li><strong>ACC:</strong> Aumento de coroa clínica</li>
                             <li><strong>ACC+OST:</strong> Aumento de coroa clínica com osteotomia</li>
@@ -1000,27 +1057,27 @@
                 category: 'Periodontia',
                 summary: 'Modelos de evolução clínica para raspagem e cirurgias periodontais.',
                 content: `<div class="space-y-6 text-sm">
-                    <div class="bg-rose-50 p-4 rounded-lg border border-rose-100">
-                        <h4 class="font-bold text-rose-600 mb-2 flex items-center gap-2">
+                    <div class="bg-rose-50 dark:bg-rose-900/30 p-4 rounded-lg border border-rose-100 dark:border-rose-800">
+                        <h4 class="font-bold text-rose-600 dark:text-rose-400 mb-2 flex items-center gap-2">
                             <i data-lucide="info" class="w-4 h-4"></i> Como preencher?
                         </h4>
-                        <p class="text-gray-700 mb-2">Na Periodontia, descreva a sequência do tratamento básico ou cirúrgico utilizando as siglas padronizadas.</p>
+                        <p class="text-gray-700 dark:text-gray-300 mb-2">Na Periodontia, descreva a sequência do tratamento básico ou cirúrgico utilizando as siglas padronizadas.</p>
                     </div>
 
                     <div>
-                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Exemplo 1: Terapia Básica Periodontal</h4>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Exemplo 1: Terapia Básica Periodontal</h4>
                         <div class="mb-2">
-                            <span class="text-xs font-semibold text-gray-500 uppercase">Procedimento Realizado:</span>
-                            <p class="text-gray-700 italic">"Anamnese, Índice de Placa, Índice de Sangramento, PSR, Raspagem Supragengival (Sextantes I, II e III) e Instrução de Higiene Oral."</p>
+                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Procedimento Realizado:</span>
+                            <p class="text-gray-700 dark:text-gray-300 italic">"Anamnese, Índice de Placa, Índice de Sangramento, PSR, Raspagem Supragengival (Sextantes I, II e III) e Instrução de Higiene Oral."</p>
                         </div>
-                        <div class="bg-gray-100 p-3 rounded-md font-mono text-gray-800 border-l-4 border-rose-600">
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-md font-mono text-gray-800 dark:text-gray-200 border-l-4 border-rose-600 dark:border-rose-400">
                             ANM + IP + ISM + PSR + R-SUPRA (I, II, III) + IHO
                         </div>
                     </div>
                     
                      <div>
-                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Outras Siglas Comuns</h4>
-                         <p class="text-gray-600 font-mono text-xs bg-gray-50 p-2 rounded">PER; PROF; RAR; RER; ATF</p>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Outras Siglas Comuns</h4>
+                         <p class="text-gray-600 dark:text-gray-400 font-mono text-xs bg-gray-50 dark:bg-gray-800 p-2 rounded">PER; PROF; RAR; RER; ATF</p>
                     </div>
                 </div>`
             },
@@ -1031,8 +1088,8 @@
                 summary: 'Checklist de materiais para raspagem e cirurgias periodontais.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
-                        <h4 class="font-bold text-rose-600 mb-2 border-b border-rose-100 pb-1">CME (Esterilização)</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-rose-600 dark:text-rose-400 mb-2 border-b border-rose-100 dark:border-rose-800 pb-1">CME (Esterilização)</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Kit Clínico</li>
                             <li>Curetas supra</li>
                             <li>Curetas sub</li>
@@ -1040,16 +1097,16 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-rose-600 mb-2 border-b border-rose-100 pb-1">Carrinho e Bancada</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-rose-600 dark:text-rose-400 mb-2 border-b border-rose-100 dark:border-rose-800 pb-1">Carrinho e Bancada</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Gaze</li>
                             <li>Clorexidina</li>
                             <li>Ultrassom</li>
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-rose-600 mb-2 border-b border-rose-100 pb-1">Janelinha (Solicitar)</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-rose-600 dark:text-rose-400 mb-2 border-b border-rose-100 dark:border-rose-800 pb-1">Janelinha (Solicitar)</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Pontas do ultrassom</li>
                         </ul>
                     </div>
@@ -1063,8 +1120,8 @@
                 summary: 'Siglas para tratamentos endodônticos (canal).',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
-                        <p class="font-bold text-indigo-600 mb-2">Procedimentos Iniciais</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">Procedimentos Iniciais</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>RX I:</strong> Radiografia Inicial</li>
                             <li><strong>AC:</strong> Abertura Coronária</li>
                             <li><strong>IA:</strong> Isolamento Absoluto</li>
@@ -1072,8 +1129,8 @@
                         </ul>
                     </div>
                     <div>
-                        <p class="font-bold text-indigo-600 mb-2">Preparo Químico-Mecânico</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">Preparo Químico-Mecânico</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>ODM:</strong> Odontometria</li>
                             <li><strong>GG:</strong> Preparo c/ Gates Glidden (Informar II, III, IV, V)</li>
                             <li><strong>PA:</strong> Preparo apical (Informar # lima)</li>
@@ -1081,8 +1138,8 @@
                         </ul>
                     </div>
                     <div>
-                        <p class="font-bold text-indigo-600 mb-2">Obturação e Finalização</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-indigo-600 dark:text-indigo-400 mb-2">Obturação e Finalização</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>PC:</strong> Prova de Cone (Informar calibração)</li>
                             <li><strong>OBT:</strong> Obturação do Sistema de Canais</li>
                             <li><strong>SC:</strong> Selamento Coronário</li>
@@ -1098,34 +1155,34 @@
                 category: 'Endodontia',
                 summary: 'Modelos para evolução de Biopulpectomia e Necropulpectomia.',
                 content: `<div class="space-y-6 text-sm">
-                    <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
-                        <h4 class="font-bold text-indigo-600 mb-2 flex items-center gap-2">
+                    <div class="bg-indigo-50 dark:bg-indigo-900/30 p-4 rounded-lg border border-indigo-100 dark:border-indigo-800">
+                        <h4 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2 flex items-center gap-2">
                             <i data-lucide="info" class="w-4 h-4"></i> Como preencher?
                         </h4>
-                        <p class="text-gray-700 mb-2">Siga a ordem cronológica do tratamento, especificando as limas e medicações utilizadas.</p>
+                        <p class="text-gray-700 dark:text-gray-300 mb-2">Siga a ordem cronológica do tratamento, especificando as limas e medicações utilizadas.</p>
                     </div>
 
                     <div>
-                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Exemplo 1: Tratamento Completo (Biopulpectomia)</h4>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Exemplo 1: Tratamento Completo (Biopulpectomia)</h4>
                         <div class="mb-2">
-                            <span class="text-xs font-semibold text-gray-500 uppercase">Sequência:</span>
-                            <p class="text-gray-700 italic">Dente 12, Radiografia, Anestesia, Abertura, Isolamento, Odontometria, Gates, Preparo Apical, Recuo, Prova do cone, Obturação e Selamento.</p>
+                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Sequência:</span>
+                            <p class="text-gray-700 dark:text-gray-300 italic">Dente 12, Radiografia, Anestesia, Abertura, Isolamento, Odontometria, Gates, Preparo Apical, Recuo, Prova do cone, Obturação e Selamento.</p>
                         </div>
-                        <div class="bg-gray-100 p-3 rounded-md font-mono text-gray-800 border-l-4 border-indigo-600">
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-md font-mono text-gray-800 dark:text-gray-200 border-l-4 border-indigo-600 dark:border-indigo-400">
                             12 - Rx I + AI + AC + IA + ODM + GG (IV) + PA (#45) + Recuo escalonado + PC (fm 002) + OBT + SC + Rx F
                         </div>
                     </div>
 
                     <div>
-                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Exemplo 2: Medicação Intracanal (Necropulpectomia I)</h4>
-                        <div class="bg-gray-100 p-3 rounded-md font-mono text-gray-800 border-l-4 border-indigo-600">
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Exemplo 2: Medicação Intracanal (Necropulpectomia I)</h4>
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-md font-mono text-gray-800 dark:text-gray-200 border-l-4 border-indigo-600 dark:border-indigo-400">
                             22 - Rx I + AI + AC + IA + ODM + MI (Tricresol formalina) + SC + AO
                         </div>
                     </div>
                     
                      <div>
-                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Prescrições Comuns (MS)</h4>
-                         <p class="text-gray-600 font-mono text-xs bg-gray-50 p-2 rounded">MS: Dipirona sódica 500mg</p>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Prescrições Comuns (MS)</h4>
+                         <p class="text-gray-600 dark:text-gray-400 font-mono text-xs bg-gray-50 dark:bg-gray-800 p-2 rounded">MS: Dipirona sódica 500mg</p>
                     </div>
                 </div>`
             },
@@ -1136,8 +1193,8 @@
                 summary: 'Lista completa de materiais para isolamento e tratamento de canal.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
-                        <h4 class="font-bold text-indigo-600 mb-2 border-b border-indigo-100 pb-1">Carrinho e Bancada</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2 border-b border-indigo-100 dark:border-indigo-800 pb-1">Carrinho e Bancada</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Anestésico e Agulha</li>
                             <li>Seringa de irrigação</li>
                             <li>Lençol de borracha</li>
@@ -1150,8 +1207,8 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-indigo-600 mb-2 border-b border-indigo-100 pb-1">CME (Esterilização)</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2 border-b border-indigo-100 dark:border-indigo-800 pb-1">CME (Esterilização)</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Kit de Endodontia</li>
                             <li>Kit de Obturação e Pinça Miller</li>
                             <li>Kit de Isolamento e Arco de Ostby</li>
@@ -1161,8 +1218,8 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-indigo-600 mb-2 border-b border-indigo-100 pb-1">Janelinha (Solicitar)</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2 border-b border-indigo-100 dark:border-indigo-800 pb-1">Janelinha (Solicitar)</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Limas e Gates</li>
                             <li>Agulha de irrigação</li>
                             <li>Pontas de acesso e acabamento</li>
@@ -1183,8 +1240,8 @@
                 summary: 'Abreviações para procedimentos cirúrgicos e exodontias.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
-                        <p class="font-bold text-emerald-600 mb-2">Gerais / Diagnóstico</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-emerald-600 dark:text-emerald-400 mb-2">Gerais / Diagnóstico</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>ANM:</strong> Anamnese</li>
                             <li><strong>Rx per:</strong> Radiografia periapical</li>
                             <li><strong>AI:</strong> Anestesia Infiltrativa</li>
@@ -1192,8 +1249,8 @@
                         </ul>
                     </div>
                     <div>
-                        <p class="font-bold text-emerald-600 mb-2">Procedimentos</p>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <p class="font-bold text-emerald-600 dark:text-emerald-400 mb-2">Procedimentos</p>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li><strong>EXO:</strong> Exodontia</li>
                             <li><strong>SUTURA:</strong> Sutura simples</li>
                         </ul>
@@ -1206,20 +1263,20 @@
                 category: 'Cirurgia', 
                 summary: 'Modelo de descrição cirúrgica para exodontias simples.',
                 content: `<div class="space-y-6 text-sm">
-                    <div class="bg-emerald-50 p-4 rounded-lg border border-emerald-100">
-                        <h4 class="font-bold text-emerald-600 mb-2 flex items-center gap-2">
+                    <div class="bg-emerald-50 dark:bg-emerald-900/30 p-4 rounded-lg border border-emerald-100 dark:border-emerald-800">
+                        <h4 class="font-bold text-emerald-600 dark:text-emerald-400 mb-2 flex items-center gap-2">
                             <i data-lucide="info" class="w-4 h-4"></i> Como preencher?
                         </h4>
-                        <p class="text-gray-700 mb-2">Registre os sinais vitais, anestésico utilizado e o procedimento cirúrgico.</p>
+                        <p class="text-gray-700 dark:text-gray-300 mb-2">Registre os sinais vitais, anestésico utilizado e o procedimento cirúrgico.</p>
                     </div>
 
                     <div>
-                        <h4 class="font-bold text-gray-800 mb-2 border-b border-gray-200 pb-1">Exemplo 1: Exodontia Simples</h4>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Exemplo 1: Exodontia Simples</h4>
                         <div class="mb-2">
-                            <span class="text-xs font-semibold text-gray-500 uppercase">Procedimento Realizado:</span>
-                            <p class="text-gray-700 italic">"Anamnese, Radiografia dente 16, Aferição P.A (120x89), Anestesia (Mepivacaína 3%), Exodontia 16, Sutura e Prescrição."</p>
+                            <span class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Procedimento Realizado:</span>
+                            <p class="text-gray-700 dark:text-gray-300 italic">"Anamnese, Radiografia dente 16, Aferição P.A (120x89), Anestesia (Mepivacaína 3%), Exodontia 16, Sutura e Prescrição."</p>
                         </div>
-                        <div class="bg-gray-100 p-3 rounded-md font-mono text-gray-800 border-l-4 border-emerald-600">
+                        <div class="bg-gray-100 dark:bg-gray-700 p-3 rounded-md font-mono text-gray-800 dark:text-gray-200 border-l-4 border-emerald-600 dark:border-emerald-400">
                             ANM + Rx per 16 + Aferição sinais vitais (P.A 120 x 89 mmHg) + AI (Mepivacaína 3%) + EXO 16 + SUTURA + Prescrição medicamentosa: Dipirona 500mg 6 em 6 horas
                         </div>
                     </div>
@@ -1232,8 +1289,8 @@
                 summary: 'Checklist de materiais para cirurgias orais menores.',
                 content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
-                        <h4 class="font-bold text-emerald-600 mb-2 border-b border-emerald-100 pb-1">Carrinho e Bancada</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-emerald-600 dark:text-emerald-400 mb-2 border-b border-emerald-100 dark:border-emerald-800 pb-1">Carrinho e Bancada</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Seringa 20ml e Agulha irrigação</li>
                             <li>Agulha para carpule</li>
                             <li>Sugador cirúrgico</li>
@@ -1244,8 +1301,8 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-emerald-600 mb-2 border-b border-emerald-100 pb-1">CME (Esterilização)</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-emerald-600 dark:text-emerald-400 mb-2 border-b border-emerald-100 dark:border-emerald-800 pb-1">CME (Esterilização)</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Kit de Cirurgia</li>
                             <li>Kit de Alavancas</li>
                             <li>Cuba metálica</li>
@@ -1254,8 +1311,8 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-emerald-600 mb-2 border-b border-emerald-100 pb-1">Janelinha (Solicitar)</h4>
-                        <ul class="space-y-1 list-disc pl-4 text-gray-700">
+                        <h4 class="font-bold text-emerald-600 dark:text-emerald-400 mb-2 border-b border-emerald-100 dark:border-emerald-800 pb-1">Janelinha (Solicitar)</h4>
+                        <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Broca 702</li>
                         </ul>
                     </div>
@@ -1268,37 +1325,37 @@
                 summary: 'Canais do YouTube e Podcasts recomendados.',
                 content: `<div class="space-y-6 text-sm">
                     <div>
-                        <h4 class="font-bold text-gray-800 mt-6 mb-3 flex items-center gap-2"><i data-lucide="video" class="w-5 h-5 text-red-600"></i> Canais Recomendados</h4>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center gap-2"><i data-lucide="video" class="w-5 h-5 text-red-600 dark:text-red-400"></i> Canais Recomendados</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <a href="https://youtube.com/@deolhonaperiodontiaufc-cam693?si=VatiQZ6QlFN97cdf" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
-                                <i data-lucide="youtube" class="w-6 h-6 text-red-600"></i>
-                                <div><span class="block font-semibold text-gray-800 text-sm">De Olho na Periodontia</span><span class="text-xs text-gray-500">UFC Sobral</span></div>
+                            <a href="https://youtube.com/@deolhonaperiodontiaufc-cam693?si=VatiQZ6QlFN97cdf" target="_blank" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
+                                <i data-lucide="youtube" class="w-6 h-6 text-red-600 dark:text-red-400"></i>
+                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">De Olho na Periodontia</span><span class="text-xs text-gray-500 dark:text-gray-400">UFC Sobral</span></div>
                             </a>
-                            <a href="https://youtube.com/@dentisticaeesculturadental3098?si=GXLxIP-M6OBgPg-q" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
-                                <i data-lucide="youtube" class="w-6 h-6 text-red-600"></i>
-                                <div><span class="block font-semibold text-gray-800 text-sm">Dentística e Escultura Dental</span><span class="text-xs text-gray-500">Canal Educativo</span></div>
+                            <a href="https://youtube.com/@dentisticaeesculturadental3098?si=GXLxIP-M6OBgPg-q" target="_blank" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
+                                <i data-lucide="youtube" class="w-6 h-6 text-red-600 dark:text-red-400"></i>
+                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">Dentística e Escultura Dental</span><span class="text-xs text-gray-500 dark:text-gray-400">Canal Educativo</span></div>
                             </a>
-                            <a href="https://youtube.com/@equipededentisticaufcsobra6651?si=kfUdVhuAx5Qox4UT" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
-                                <i data-lucide="youtube" class="w-6 h-6 text-red-600"></i>
-                                <div><span class="block font-semibold text-gray-800 text-sm">Equipe de Dentística</span><span class="text-xs text-gray-500">UFC Sobral</span></div>
+                            <a href="https://youtube.com/@equipededentisticaufcsobra6651?si=kfUdVhuAx5Qox4UT" target="_blank" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
+                                <i data-lucide="youtube" class="w-6 h-6 text-red-600 dark:text-red-400"></i>
+                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">Equipe de Dentística</span><span class="text-xs text-gray-500 dark:text-gray-400">UFC Sobral</span></div>
                             </a>
-                            <a href="https://open.spotify.com/show/7nxXta4sQfycT6eU9NGMwC?si=Oyp7haWTS7qQN_cGLQqNVQ" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-green-500 transition shadow-sm">
-                                <i data-lucide="mic" class="w-6 h-6 text-green-600"></i>
-                                <div><span class="block font-semibold text-gray-800 text-sm">Podcast Odontologia</span><span class="text-xs text-gray-500">Spotify</span></div>
+                            <a href="https://open.spotify.com/show/7nxXta4sQfycT6eU9NGMwC?si=Oyp7haWTS7qQN_cGLQqNVQ" target="_blank" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-green-500 transition shadow-sm">
+                                <i data-lucide="mic" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
+                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">Podcast Odontologia</span><span class="text-xs text-gray-500 dark:text-gray-400">Spotify</span></div>
                             </a>
                         </div>
                     </div>
                     
                     <div>
-                        <h4 class="font-bold text-gray-800 mt-6 mb-3 flex items-center gap-2"><i data-lucide="link" class="w-5 h-5 text-gray-600"></i> Portais Importantes</h4>
+                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center gap-2"><i data-lucide="link" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i> Portais Importantes</h4>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <a href="https://website.cfo.org.br/" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-blue-500 transition shadow-sm">
-                                <i data-lucide="external-link" class="w-5 h-5 text-gray-600"></i>
-                                <div><span class="block font-semibold text-gray-800 text-sm">CFO</span><span class="text-xs text-gray-500">Conselho Federal</span></div>
+                            <a href="https://website.cfo.org.br/" target="_blank" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-blue-500 transition shadow-sm">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
+                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">CFO</span><span class="text-xs text-gray-500 dark:text-gray-400">Conselho Federal</span></div>
                             </a>
-                             <a href="https://www.cro-ce.org.br/" target="_blank" class="p-3 bg-white border border-gray-200 rounded-lg flex items-center gap-3 hover:border-blue-500 transition shadow-sm">
-                                <i data-lucide="external-link" class="w-5 h-5 text-gray-600"></i>
-                                <div><span class="block font-semibold text-gray-800 text-sm">CRO-CE</span><span class="text-xs text-gray-500">Conselho Regional</span></div>
+                             <a href="https://www.cro-ce.org.br/" target="_blank" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-blue-500 transition shadow-sm">
+                                <i data-lucide="external-link" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
+                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">CRO-CE</span><span class="text-xs text-gray-500 dark:text-gray-400">Conselho Regional</span></div>
                             </a>
                         </div>
                     </div>
@@ -1451,8 +1508,8 @@
                     if (grouped[cat] && grouped[cat].length > 0) {
                         // Título da Seção
                         const sectionTitle = document.createElement('div');
-                        sectionTitle.className = "flex items-center gap-2 pt-4 pb-2 border-b border-gray-200";
-                        sectionTitle.innerHTML = `<h3 class="text-lg font-bold text-gray-800">${cat}</h3>`;
+                        sectionTitle.className = "flex items-center gap-2 pt-4 pb-2 border-b border-gray-200 dark:border-gray-700";
+                        sectionTitle.innerHTML = `<h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">${cat}</h3>`;
                         grid.appendChild(sectionTitle);
 
                         // Grid da Seção
@@ -1470,8 +1527,8 @@
                 Object.keys(grouped).forEach(cat => {
                     if (!catOrder.includes(cat)) {
                          const sectionTitle = document.createElement('div');
-                        sectionTitle.className = "flex items-center gap-2 pt-4 pb-2 border-b border-gray-200";
-                        sectionTitle.innerHTML = `<h3 class="text-lg font-bold text-gray-800">${cat}</h3>`;
+                        sectionTitle.className = "flex items-center gap-2 pt-4 pb-2 border-b border-gray-200 dark:border-gray-700";
+                        sectionTitle.innerHTML = `<h3 class="text-lg font-bold text-gray-800 dark:text-gray-200">${cat}</h3>`;
                         grid.appendChild(sectionTitle);
 
                         const sectionGrid = document.createElement('div');
@@ -1497,14 +1554,14 @@
 
         function createProtocolCard(post) {
             const card = document.createElement('div');
-            card.className = "bg-white p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-full";
+            card.className = "bg-white dark:bg-gray-800 dark:border-gray-700 p-5 rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col h-full";
             card.onclick = () => openPost(post.id);
             card.innerHTML = `
-                <div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-primary bg-blue-50 px-2 py-1 rounded">${post.category}</span>
+                <div class="flex items-center justify-between mb-3"><span class="text-xs font-bold text-primary dark:text-cyan-400 bg-blue-50 dark:bg-blue-900/30 px-2 py-1 rounded">${post.category}</span>
                 ${isAdmin ? `<button onclick="event.stopPropagation(); openEditor('${post.id}')" class="text-gray-400 hover:text-blue-600"><i data-lucide="edit-2" class="w-4 h-4"></i></button>` : ''}</div>
-                <h3 class="text-lg font-bold text-gray-900 mb-2">${post.title}</h3>
-                <p class="text-sm text-gray-600 mb-4 line-clamp-3 flex-grow">${post.summary || ''}</p>
-                <div class="flex items-center text-primary text-sm font-medium mt-auto">Ler protocolo <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></div>
+                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">${post.title}</h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-3 flex-grow">${post.summary || ''}</p>
+                <div class="flex items-center text-primary dark:text-cyan-400 text-sm font-medium mt-auto">Ler protocolo <i data-lucide="arrow-right" class="w-4 h-4 ml-1"></i></div>
             `;
             return card;
         }
@@ -1535,7 +1592,7 @@
             );
             
             if (protocols.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-500 py-4 text-sm italic">Nenhum protocolo cadastrado.</p>';
+                container.innerHTML = '<p class="text-center text-gray-500 dark:text-gray-400 py-4 text-sm italic">Nenhum protocolo cadastrado.</p>';
                 return;
             }
 
@@ -1544,13 +1601,13 @@
             container.innerHTML = '';
             protocols.forEach(post => {
                 const btn = document.createElement('button');
-                btn.className = "w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left group bg-white shadow-sm";
+                btn.className = "w-full p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary hover:bg-blue-50 dark:hover:bg-gray-700 transition flex items-center gap-4 text-left group bg-white dark:bg-gray-800 shadow-sm";
                 // LÓGICA CORRIGIDA: Passa o ID da view da especialidade como returnViewId
                 btn.onclick = () => openPost(post.id, null, specialty);
                 btn.innerHTML = `
-                    <div class="p-3 bg-blue-100 rounded-full text-primary shrink-0 group-hover:bg-white group-hover:text-primary transition-colors"><i data-lucide="file-text" class="w-5 h-5"></i></div>
-                    <div><span class="block font-semibold text-gray-800">${post.title}</span><span class="text-xs text-gray-500 line-clamp-1">${post.summary}</span></div>
-                    <i data-lucide="arrow-right" class="ml-auto w-5 h-5 text-gray-300 group-hover:text-primary"></i>
+                    <div class="p-3 bg-blue-100 dark:bg-blue-900/40 rounded-full text-primary dark:text-cyan-400 shrink-0 group-hover:bg-white dark:group-hover:bg-gray-600 group-hover:text-primary transition-colors"><i data-lucide="file-text" class="w-5 h-5"></i></div>
+                    <div><span class="block font-semibold text-gray-800 dark:text-gray-200">${post.title}</span><span class="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">${post.summary}</span></div>
+                    <i data-lucide="arrow-right" class="ml-auto w-5 h-5 text-gray-300 dark:text-gray-600 group-hover:text-primary"></i>
                 `;
                 container.appendChild(btn);
             });
