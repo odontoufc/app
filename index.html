@@ -235,16 +235,29 @@
                 </div>
             </section>
 
-            <section class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative">
-                <div class="p-5 flex flex-col items-center gap-4 text-center">
-                    <div class="bg-primary/10 p-3 rounded-xl shrink-0"><i data-lucide="shield-check" class="w-8 h-8 text-primary"></i></div>
-                    <div class="w-full text-center">
-                        <h3 class="text-lg font-bold text-gray-900 mb-1">Manual de Biossegurança</h3>
-                        <p class="text-sm text-gray-600 mb-4">Normas, esterilização e EPIs.</p>
-                        <button onclick="window.open('https://drive.google.com/file/d/1FmRwMLXSVb58Ei122xRvVqlpMKYxJFnI/view?usp=drivesdk', '_blank')" class="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-primary hover:bg-secondary text-white font-medium py-3 px-6 rounded-lg transition-colors shadow-sm active:opacity-90">
-                            <span>Acessar Manual</span>
-                            <i data-lucide="external-link" class="w-4 h-4"></i>
-                        </button>
+            <section class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative mt-6">
+                <div class="p-6 flex flex-col md:flex-row items-center gap-6">
+                    <div class="w-44 shrink-0 md:w-56 rounded-lg overflow-hidden">
+                        <img src="https://drive.google.com/thumbnail?id=1s8hHA8C7V7KOZ2O7Iito83EU0ECV-oNc&sz=w400" referrerpolicy="no-referrer" alt="Capa Manual" class="w-full h-auto object-cover">
+                    </div>
+                    
+                    <div class="flex-grow text-center md:text-left">
+                        <div class="flex flex-col md:flex-row items-center md:items-start gap-3 mb-3">
+                            <div class="bg-primary/10 p-2 rounded-lg text-primary hidden md:block">
+                                <i data-lucide="shield-check" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 leading-tight mb-1">Manual de Biossegurança</h3>
+                                <p class="text-sm text-gray-600">Normas, fluxogramas de esterilização e uso de EPIs.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 md:pl-11">
+                             <button onclick="window.open('https://drive.google.com/file/d/1FmRwMLXSVb58Ei122xRvVqlpMKYxJFnI/view?usp=drivesdk', '_blank')" class="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-primary hover:bg-secondary text-white font-medium py-2.5 px-6 rounded-lg transition-colors shadow-sm active:opacity-90">
+                                <span>Acessar PDF</span>
+                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
