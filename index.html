@@ -1518,7 +1518,7 @@
             protocols.forEach(post => {
                 const btn = document.createElement('button');
                 btn.className = "w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left group bg-white shadow-sm";
-                btn.onclick = () => openPost(post.id);
+                btn.onclick = () => openPost(post.id, null, specialty);
                 btn.innerHTML = `
                     <div class="p-3 bg-blue-100 rounded-full text-primary shrink-0 group-hover:bg-white group-hover:text-primary transition-colors"><i data-lucide="file-text" class="w-5 h-5"></i></div>
                     <div><span class="block font-semibold text-gray-800">${post.title}</span><span class="text-xs text-gray-500 line-clamp-1">${post.summary}</span></div>
@@ -1552,7 +1552,7 @@
             openPost(null, data); 
         }
 
-        function openPost(id, dataObj = null) {
+        function openPost(id, dataObj = null, returnViewId = null) {
             const post = dataObj || contentCache[id];
             if (!post) return;
 
@@ -1569,8 +1569,13 @@
                 btnEdit.classList.add('hidden');
             }
 
-            // CORREÇÃO: Verificar o ID dentro do objeto 'post', pois 'id' pode vir nulo de openFixedContent
-            window.postBackTarget = (post.id === 'links-uteis') ? 'home' : 'blog';
+            // Lógica de retorno corrigida
+            if (returnViewId) {
+                window.postBackTarget = returnViewId;
+            } else {
+                // Se não foi especificado, usa a lógica padrão (Home para Links Úteis, Blog para o resto)
+                window.postBackTarget = (post.id === 'links-uteis') ? 'home' : 'blog';
+            }
 
             navigateTo('post');
              // Re-render icons for new content
