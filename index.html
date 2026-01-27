@@ -266,17 +266,21 @@
         <div id="view-dentistica" class="view-section space-y-4">
             <div class="flex items-center gap-3 mb-2 bg-white p-3 rounded-lg shadow-sm border border-gray-100">
                 <div class="p-2 bg-blue-50 rounded-lg shrink-0"><i data-lucide="gem" class="w-6 h-6 text-primary"></i></div>
-                <div><h2 class="text-xl font-bold text-gray-900 leading-tight">Dentística</h2><p class="text-gray-500 text-xs">Prontuário e Materiais</p></div>
+                <div><h2 class="text-xl font-bold text-gray-900 leading-tight">Dentística</h2><p class="text-gray-500 text-xs">Prontuário, Materiais e Protocolos</p></div>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex">
-                <button onclick="switchTab('prontuario', 'dentistica')" id="tab-btn-dentistica-prontuario" class="tab-btn tab-active-dentistica flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide">
+                <button onclick="switchTab('prontuario', 'dentistica')" id="tab-btn-dentistica-prontuario" class="tab-btn tab-active-dentistica flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="clipboard-list" class="w-4 h-4"></i> Prontuário
                 </button>
-                <button onclick="switchTab('instrumentais', 'dentistica')" id="tab-btn-dentistica-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2">
+                <button onclick="switchTab('instrumentais', 'dentistica')" id="tab-btn-dentistica-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="hammer" class="w-4 h-4"></i> Materiais
+                </button>
+                <button onclick="switchTab('protocolos', 'dentistica')" id="tab-btn-dentistica-protocolos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                    <i data-lucide="book-open" class="w-4 h-4"></i> Protocolos
                 </button>
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
+                
                 <div id="tab-dentistica-prontuario" class="tab-content active">
                     <div id="prontuario-menu-dentistica" class="space-y-3">
                         <button onclick="showProntuarioSection('dentistica-siglas', 'dentistica')" class="w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left">
@@ -303,10 +307,19 @@
                         <div id="dynamic-body-dentistica" class="rich-text text-sm"></div>
                     </div>
                 </div>
+
                 <div id="tab-dentistica-instrumentais" class="tab-content">
                     <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4"><i data-lucide="hammer" class="w-5 h-5 text-primary"></i> Checklist Dentística</h3>
                     <div id="instrumentais-list-dentistica" class="space-y-4 rich-text"></div>
                 </div>
+
+                <div id="tab-dentistica-protocolos" class="tab-content">
+                    <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2 mb-4"><i data-lucide="book-open" class="w-5 h-5 text-primary"></i> Protocolos de Dentística</h3>
+                    <div id="protocolos-list-dentistica" class="space-y-3">
+                        <p class="text-center text-gray-500 py-4 text-sm">Carregando protocolos...</p>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -1354,6 +1367,10 @@
                         hideProntuarioSections(spec); 
                      }
                      renderInstrumentais(spec);
+                     // Renderiza protocolos se a aba estiver ativa
+                     if(spec === 'dentistica' && document.getElementById('tab-dentistica-protocolos').classList.contains('active')) {
+                         renderSpecialtyProtocols(spec);
+                     }
                 }
             });
             
@@ -1470,6 +1487,46 @@
             const data = contentCache[id] || { content: '<p class="text-gray-400 italic">Conteúdo não cadastrado.</p>' };
             const container = document.getElementById(`instrumentais-list-${specialty}`);
             if(container) container.innerHTML = data.content;
+        }
+
+        function renderSpecialtyProtocols(specialty) {
+            // Normaliza o nome da categoria para bater com o cadastro
+            const categoryMap = {
+                'dentistica': 'Dentística',
+                'periodontia': 'Periodontia',
+                'endodontia': 'Endodontia',
+                'cirurgia': 'Cirurgia'
+            };
+            const categoryName = categoryMap[specialty];
+            const container = document.getElementById(`protocolos-list-${specialty}`);
+            if(!container) return;
+
+            let protocols = Object.values(contentCache).filter(p => 
+                p.category === categoryName && 
+                p.summary && 
+                !['siglas', 'materiais', 'exemplos', 'odontograma'].some(suffix => p.id.includes(suffix))
+            );
+            
+            if (protocols.length === 0) {
+                container.innerHTML = '<p class="text-center text-gray-500 py-4 text-sm italic">Nenhum protocolo cadastrado.</p>';
+                return;
+            }
+
+            protocols.sort((a, b) => a.title.localeCompare(b.title));
+            
+            container.innerHTML = '';
+            protocols.forEach(post => {
+                const btn = document.createElement('button');
+                btn.className = "w-full p-4 border border-gray-200 rounded-xl hover:border-primary hover:bg-blue-50 transition flex items-center gap-4 text-left group bg-white shadow-sm";
+                btn.onclick = () => openPost(post.id);
+                btn.innerHTML = `
+                    <div class="p-3 bg-blue-100 rounded-full text-primary shrink-0 group-hover:bg-white group-hover:text-primary transition-colors"><i data-lucide="file-text" class="w-5 h-5"></i></div>
+                    <div><span class="block font-semibold text-gray-800">${post.title}</span><span class="text-xs text-gray-500 line-clamp-1">${post.summary}</span></div>
+                    <i data-lucide="arrow-right" class="ml-auto w-5 h-5 text-gray-300 group-hover:text-primary"></i>
+                `;
+                container.appendChild(btn);
+            });
+            lucide.createIcons();
         }
 
         function showProntuarioSection(id, specialty) {
@@ -1657,6 +1714,11 @@
             // Switch content
             container.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
             document.getElementById(`tab-${specialty}-${tabName}`).classList.add('active');
+
+            // Renderiza conteúdo dinâmico se a aba for de protocolos
+            if(tabName === 'protocolos') {
+                renderSpecialtyProtocols(specialty);
+            }
         }
 
         loadSiteContent();
