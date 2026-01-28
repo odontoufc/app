@@ -275,27 +275,31 @@
                 </div>
             </section>
 
-            <section class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative mt-6">
-                <div class="p-6 flex flex-col md:flex-row items-center gap-6">
-                    <div class="w-44 shrink-0 md:w-56 rounded-lg overflow-hidden">
-                        <img src="https://drive.google.com/thumbnail?id=1-xRjFyBqcaR2RmBne9xJmtuKpRIgHlFn&sz=w400" referrerpolicy="no-referrer" alt="Capa Manual" class="w-full h-auto object-cover">
+            <section class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-2xl shadow-sm border border-gray-200 overflow-hidden relative mt-6 transition-colors duration-200 group hover:shadow-md">
+                <div class="absolute top-0 right-0 p-4 opacity-5 pointer-events-none">
+                    <i data-lucide="shield-check" class="w-32 h-32 text-primary dark:text-cyan-400 transform rotate-12"></i>
+                </div>
+
+                <div class="p-6 sm:p-8 flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 relative z-10">
+                    <div class="w-40 sm:w-48 shrink-0 rounded-lg overflow-hidden group-hover:scale-[1.02] transition-transform duration-300">
+                        <img src="https://drive.google.com/thumbnail?id=1r-iguMwH7R5gYocf-ZZC8bUFzlRPjiiR&sz=w400" referrerpolicy="no-referrer" alt="Capa Manual" class="w-full h-auto object-cover">
                     </div>
                     
-                    <div class="flex-grow text-center md:text-left">
-                        <div class="flex flex-col md:flex-row items-center md:items-start gap-3 mb-3">
-                            <div class="bg-primary/10 dark:bg-cyan-900/30 p-2 rounded-lg text-primary dark:text-cyan-400 hidden md:block">
-                                <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    <div class="flex-grow text-center md:text-left flex flex-col justify-center h-full py-2">
+                        <div class="mb-4">
+                            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 dark:bg-cyan-900/30 text-primary dark:text-cyan-400 text-xs font-bold uppercase tracking-wider mb-3 justify-center md:justify-start">
+                                <i data-lucide="shield" class="w-3 h-3"></i> Biossegurança
                             </div>
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-900 dark:text-white leading-tight mb-1">Manual de Biossegurança</h3>
-                                <p class="text-sm text-gray-600 dark:text-gray-400">Normas, fluxogramas de esterilização e uso de EPIs.</p>
-                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 dark:text-white leading-tight mb-2">Manual de Biossegurança</h3>
+                            <p class="text-gray-600 dark:text-gray-300 leading-relaxed max-w-xl mx-auto md:mx-0">
+                                Guia completo sobre protocolos de esterilização, fluxo de expurgo, uso correto de EPIs e condutas clínicas padronizadas.
+                            </p>
                         </div>
                         
-                        <div class="mt-4 md:pl-11">
-                             <button onclick="navigateTo('manual')" class="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-primary hover:bg-secondary text-white font-medium py-2.5 px-6 rounded-lg transition-colors shadow-sm active:opacity-90">
-                                <span>Acessar PDF</span>
-                                <i data-lucide="file-text" class="w-4 h-4"></i>
+                        <div class="mt-2">
+                             <button onclick="navigateTo('manual')" class="w-full md:w-auto inline-flex justify-center items-center gap-2 bg-primary hover:bg-secondary text-white font-medium py-3 px-8 rounded-xl transition-all shadow-sm hover:shadow-md active:scale-95 active:opacity-90">
+                                <span>Acessar Documento</span>
+                                <i data-lucide="arrow-right" class="w-4 h-4"></i>
                             </button>
                         </div>
                     </div>
