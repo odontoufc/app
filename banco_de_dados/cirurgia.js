@@ -74,7 +74,7 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-emerald-600 dark:text-emerald-400 mb-2 border-b border-emerald-100 dark:border-emerald-800 pb-1">CME (Esterilização)</h4>
+                        <h4 class="font-bold text-emerald-600 dark:text-emerald-400 mb-2 border-b border-emerald-100 dark:border-emerald-800 pb-1">CME</h4>
                         <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Kit de Cirurgia</li>
                             <li>Kit de Alavancas</li>
@@ -84,7 +84,7 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-emerald-600 dark:text-emerald-400 mb-2 border-b border-emerald-100 dark:border-emerald-800 pb-1">Janelinha (Solicitar)</h4>
+                        <h4 class="font-bold text-emerald-600 dark:text-emerald-400 mb-2 border-b border-emerald-100 dark:border-emerald-800 pb-1">Janelinha</h4>
                         <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Broca 702</li>
                         </ul>
