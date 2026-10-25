@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Guia Clínico de Odontologia: modelos de prescrições, posologias e medicamentos para consulta profissional.">
+    <title>Prescrições | Guia Clínico - Odontologia</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#0e7490',
+                        secondary: '#155e75',
+                        accent: '#ecfeff',
+                        paper: '#ffffff'
+                    },
+                    screens: { 'xs': '375px' }
+                }
+            }
+        };
+    </script>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body data-page="prescricoes" class="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 text-gray-800 flex flex-col min-h-screen text-base antialiased transition-colors duration-200">
+
+    <!-- Cabeçalho reutilizável, compartilhado entre as páginas. -->
+    <site-header></site-header>
+
+    <main class="flex-grow w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 pb-20">
+        <nav aria-label="Navegação estrutural" class="mb-5 text-sm text-gray-500 dark:text-gray-400 flex items-center gap-2">
+            <a href="./index.html" class="hover:text-primary dark:hover:text-cyan-400 transition-colors">Início</a>
+            <i data-lucide="chevron-right" aria-hidden="true" class="w-4 h-4"></i>
+            <span class="font-medium text-gray-700 dark:text-gray-200" aria-current="page">Prescrições</span>
+        </nav>
+
+        <section id="view-prescricoes" class="view-section active space-y-4" aria-labelledby="prescricoes-titulo">
+            <div class="flex items-center gap-3 mb-2 bg-white dark:bg-gray-800 dark:border-gray-700 p-3 rounded-lg shadow-sm border border-gray-100">
+                <div class="p-2 bg-amber-50 dark:bg-amber-900/30 rounded-lg shrink-0">
+                    <i data-lucide="scroll-text" class="w-6 h-6 text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <div>
+                    <h1 id="prescricoes-titulo" class="text-xl font-bold text-gray-900 dark:text-white leading-tight">Prescrições</h1>
+                    <p class="text-gray-500 dark:text-gray-400 text-xs">Modelos e Posologias</p>
+                </div>
+            </div>
+
+            <!-- Identificadores preservados para a função switchTab() de app.js. -->
+            <div role="tablist" aria-label="Categorias de prescrições" class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide">
+                <button type="button" role="tab" aria-selected="true" aria-controls="tab-prescricoes-dor" onclick="switchTab('dor', 'prescricoes')" id="tab-btn-prescricoes-dor" class="tab-btn tab-active-prescricoes flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-amber-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                    <i data-lucide="pill" class="w-4 h-4"></i> Controle da Dor
+                </button>
+                <button type="button" role="tab" aria-selected="false" aria-controls="tab-prescricoes-antibioticos" onclick="switchTab('antibioticos', 'prescricoes')" id="tab-btn-prescricoes-antibioticos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-amber-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                    <i data-lucide="shield-plus" class="w-4 h-4"></i> Antibióticos
+                </button>
+                <button type="button" role="tab" aria-selected="false" aria-controls="tab-prescricoes-outros" onclick="switchTab('outros', 'prescricoes')" id="tab-btn-prescricoes-outros" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-amber-600 transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                    <i data-lucide="droplet" class="w-4 h-4"></i> Outros
+                </button>
+            </div>
+
+            <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
+                <!-- Os modelos e as dosagens virão exclusivamente de
+                     banco_de_dados/prescricoes.js, sem duplicação no HTML. -->
+                <div id="tab-prescricoes-dor" role="tabpanel" aria-labelledby="tab-btn-prescricoes-dor" class="tab-content active space-y-4">
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h2 class="font-bold text-amber-700 dark:text-amber-400 mb-4 flex items-center gap-2 text-lg">
+                            <i data-lucide="frown" class="w-5 h-5"></i> Analgésicos
+                        </h2>
+                        <div id="prescricoes-list-analgesicos" class="space-y-4 text-gray-700 dark:text-gray-300 text-sm">
+                            <p class="text-gray-500 dark:text-gray-400">Nenhum modelo disponível no momento.</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h2 class="font-bold text-amber-700 dark:text-amber-400 mb-4 flex items-center gap-2 text-lg">
+                            <i data-lucide="flame" class="w-5 h-5"></i> Anti-inflamatórios (AINES)
+                        </h2>
+                        <div id="prescricoes-list-anti-inflamatorios" class="space-y-4 text-gray-700 dark:text-gray-300 text-sm">
+                            <p class="text-gray-500 dark:text-gray-400">Nenhum modelo disponível no momento.</p>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h2 class="font-bold text-amber-700 dark:text-amber-400 mb-4 flex items-center gap-2 text-lg">
+                            <i data-lucide="clock" class="w-5 h-5"></i> Corticosteroides (Preemptiva)
+                        </h2>
+                        <div id="prescricoes-list-corticosteroides" class="space-y-4 text-gray-700 dark:text-gray-300 text-sm">
+                            <p class="text-gray-500 dark:text-gray-400">Nenhum modelo disponível no momento.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-prescricoes-antibioticos" role="tabpanel" aria-labelledby="tab-btn-prescricoes-antibioticos" class="tab-content space-y-4">
+                    <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <h2 class="font-bold text-amber-700 dark:text-amber-400 mb-4 flex items-center gap-2 text-lg">
+                            <i data-lucide="shield-check" class="w-5 h-5"></i> Tratamento de Infecções
+                        </h2>
+                        <div id="prescricoes-list-antibioticos" class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-700 dark:text-gray-300">
+                            <p class="text-gray-500 dark:text-gray-400">Nenhum modelo disponível no momento.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-prescricoes-outros" role="tabpanel" aria-labelledby="tab-btn-prescricoes-outros" class="tab-content space-y-4">
+                    <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg border border-blue-100 dark:border-blue-800">
+                        <h2 class="font-bold text-blue-800 dark:text-blue-300 mb-2 text-lg">Antifúngico</h2>
+                        <div id="prescricoes-list-antifungicos" class="text-gray-700 dark:text-gray-300 text-sm">
+                            <p class="text-gray-500 dark:text-gray-400">Nenhum modelo disponível no momento.</p>
+                        </div>
+                    </div>
+                    <div class="bg-emerald-50 dark:bg-emerald-900/30 p-4 rounded-lg border border-emerald-100 dark:border-emerald-800">
+                        <h2 class="font-bold text-emerald-800 dark:text-emerald-300 mb-2 text-lg">Colutório</h2>
+                        <div id="prescricoes-list-colutorios" class="text-gray-700 dark:text-gray-300 text-sm">
+                            <p class="text-gray-500 dark:text-gray-400">Nenhum modelo disponível no momento.</p>
+                        </div>
+                    </div>
+                    <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg border border-purple-100 dark:border-purple-800">
+                        <h2 class="font-bold text-purple-800 dark:text-purple-300 mb-2 text-lg">Corticosteroide Tópico</h2>
+                        <div id="prescricoes-list-corticosteroides-topicos" class="text-gray-700 dark:text-gray-300 text-sm">
+                            <p class="text-gray-500 dark:text-gray-400">Nenhum modelo disponível no momento.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 px-1">Conteúdo de referência para profissionais e estudantes. A prescrição depende de avaliação clínica individualizada.</p>
+        </section>
+    </main>
+
+    <site-footer></site-footer>
+
+    <!-- Componentes, dados locais e lógica comum; não há Firebase ou autenticação. -->
+    <script src="./components/header-component.js" defer></script>
+    <script src="./components/footer-component.js" defer></script>
+    <script src="./banco_de_dados/prescricoes.js" defer></script>
+    <script src="./app.js" defer></script>
+</body>
+</html>
