@@ -133,7 +133,7 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-primary dark:text-cyan-400 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">CME (Esterilização)</h4>
+                        <h4 class="font-bold text-primary dark:text-cyan-400 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">CME</h4>
                         <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Kit de Dentística</li>
                             <li>Kit de Isolamento</li>
@@ -147,7 +147,7 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-primary dark:text-cyan-400 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Janelinha (Solicitar)</h4>
+                        <h4 class="font-bold text-primary dark:text-cyan-400 mb-2 border-b border-gray-200 dark:border-gray-700 pb-1">Janelinha</h4>
                         <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Grampos</li>
                             <li>Brocas</li>
