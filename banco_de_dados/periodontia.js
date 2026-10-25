@@ -93,7 +93,7 @@
             summary: "Checklist de materiais para raspagem e cirurgias periodontais.",
             content: `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
                     <div>
-                        <h4 class="font-bold text-rose-600 dark:text-rose-400 mb-2 border-b border-rose-100 dark:border-rose-800 pb-1">CME (Esterilização)</h4>
+                        <h4 class="font-bold text-rose-600 dark:text-rose-400 mb-2 border-b border-rose-100 dark:border-rose-800 pb-1">CME</h4>
                         <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Kit Clínico</li>
                             <li>Curetas supra</li>
@@ -110,7 +110,7 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-rose-600 dark:text-rose-400 mb-2 border-b border-rose-100 dark:border-rose-800 pb-1">Janelinha (Solicitar)</h4>
+                        <h4 class="font-bold text-rose-600 dark:text-rose-400 mb-2 border-b border-rose-100 dark:border-rose-800 pb-1">Janelinha</h4>
                         <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Pontas do ultrassom</li>
                         </ul>
