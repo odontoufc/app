@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0c1119">
+  <meta name="description" content="Ambiente interativo de estudos do Laboratório de Prótese Total e Parcial Removível, com capítulos, checklists, etapas ilustradas e recursos de aprendizagem.">
+  <title>Laboratório Interativo de Prótese | Guia de estudos</title>
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+  <a class="skip" href="#conteudo">Ir para o conteúdo</a>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegação do curso">
+      <div class="brand" role="button" tabindex="0" id="brandHome" aria-label="Ir para início">
+        <span class="brand-symbol" aria-hidden="true">P<span>+</span></span>
+        <span><b>PRÓTESE<span class="accent">LAB</span></b><small>ambiente de aprendizagem</small></span>
+      </div>
+      <div class="nav-label">ÁREA DE ESTUDO</div>
+      <button class="side-home" id="goHome" type="button"><span class="nav-ico">⌂</span> Painel do aluno</button>
+      <div id="navChapters"></div>
+      <div class="sidebar-bottom"><span class="small-dot"></span> Progresso armazenado neste dispositivo</div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar">
+        <button type="button" id="menuBtn" class="icon-button menu-btn" aria-label="Abrir menu" aria-expanded="false">☰</button>
+        <div class="breadcrumbs" id="breadcrumb">Início <span>/</span> Visão geral</div>
+        <div class="top-actions">
+          <span class="desktop-label">Material de apoio aos alunos</span>
+          <button type="button" class="icon-button" id="themeToggle" aria-label="Alternar tema" title="Alternar tema">☾</button>
+        </div>
+      </header>
+      <main id="conteudo" tabindex="-1" aria-live="polite"></main>
+      <footer class="site-footer">
+        <span>Baseado em <em>Laboratório de Prótese Total e Parcial Removível</em> (Bastos e colaboradores, 2024).</span>
+        <span>Material de estudo • Confira as páginas originais • Reprodução pública sujeita à autorização dos titulares</span>
+      </footer>
+    </div>
+  </div>
+  <div class="modal-backdrop" id="viewerModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-header"><strong id="modalTitle">Página do manual</strong><button type="button" id="closeModal" class="icon-button" aria-label="Fechar visualização">✕</button></div>
+      <div class="modal-content"><img id="modalImg" alt="Página do livro ampliada"></div>
+      <div class="modal-footer"><button class="btn ghost" id="modalPrev" type="button">← Anterior</button><span id="modalCounter"></span><button class="btn ghost" id="modalNext" type="button">Próxima →</button></div>
+    </div>
+  </div>
+  <script src="dados.js"></script>
+  <script src="aplicativo.js"></script>
+</body>
+</html>
