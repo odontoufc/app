@@ -1,0 +1,40 @@
+LABORATÓRIO DE PRÓTESE — SITE INTERATIVO (PROTÓTIPO)
+====================================================
+
+COMO ABRIR
+1. Extraia o arquivo ZIP inteiro para uma pasta.
+2. Abra index.html em um navegador moderno (Chrome, Firefox, Edge ou Safari).
+3. Não é necessário instalar servidor, Node ou conexão para visualizar o conteúdo local.
+4. Aulas no YouTube e formulários externos exigem conexão à internet.
+
+O QUE ESTÁ INCLUÍDO
+- 13 capítulos organizados por área.
+- Objetivos, instrumentos e materiais em checklists interativos.
+- Etapas práticas digitalizadas, com acesso à página original para conferência.
+- Leitor ilustrado com todas as 107 páginas do manual, incluídas como imagens WebP.
+- Links existentes no PDF para videoaulas e quizzes originais.
+- Revisão introdutória interativa, caderno de anotações e progresso local.
+- Layout responsivo e tema claro/escuro.
+
+ARQUIVOS
+index.html: entrada do site
+estilos.css: apresentação visual
+aplicativo.js: navegação e recursos interativos
+dados.js: conteúdos de estudo, links e capítulos
+assets/paginas/: 107 imagens do livro para consulta visual
+
+IMPORTANTE PARA PUBLICAÇÃO
+1. O PDF fornecido contém aviso de direitos reservados © 2024 Poliana Lima Bastos e colaboradores.
+   Obtenha autorização dos titulares para reprodução e publicação do conteúdo, imagens e páginas na web.
+2. CONFIRA E REVISE as etapas transcritas automaticamente e os checklists antes de usar este site em aulas.
+   Algumas quebras de linha do PDF podem produzir termos mal separados. A imagem original aparece para conferência.
+3. Os exercícios locais são revisões introdutórias, não reproduções dos formulários externos.
+4. Os dados do aluno são salvos apenas no navegador atual; não existe login ou sincronização.
+5. Não use este protótipo como fonte única de orientação clínica.
+
+AUTORIA DA OBRA BASE
+Laboratório de Prótese Total e Parcial Removível.
+Poliana Lima Bastos e colaboradores. B&O Editora, 2024.
+ISBN: 978-85-52922-21-6
+
+Este site é um protótipo de interface didática elaborado a partir do exemplar compartilhado pelo usuário.
