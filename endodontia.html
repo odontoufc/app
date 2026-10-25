@@ -3,6 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+<!-- Inicialização imediata do tema -->
+<style>
+    html, body {
+        background-color: #f9fafb;
+    }
+
+    html.dark,
+    html.dark body {
+        background-color: #111827;
+    }
+
+    html.dark {
+        color-scheme: dark;
+    }
+</style>
+
+<script>
+(function () {
+    let tema = null;
+
+    try {
+        tema = localStorage.getItem('theme');
+    } catch (e) {}
+
+    const prefereEscuro = window.matchMedia &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+    const modoEscuro = tema === 'dark' ||
+        (tema !== 'light' && prefereEscuro);
+
+    if (modoEscuro) {
+        document.documentElement.classList.add('dark');
+    }
+})();
+</script>
+
     <title>Endodontia | Guia Clínico - Odontologia</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
