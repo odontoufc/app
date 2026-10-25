@@ -1,0 +1,388 @@
+/* ============================================================================
+   GUIA CLÍNICO — ODONTOLOGIA UFC SOBRAL
+   Folha de estilos compartilhada entre todas as páginas do GitHub Pages.
+
+   Usado por: index.html, dentistica.html, periodontia.html,
+   endodontia.html, cirurgia.html e prescricoes.html.
+
+   Dependências carregadas pelos arquivos HTML:
+   - Tailwind CSS via CDN (cores e classes utilitárias)
+   - Fonte Inter via Google Fonts
+
+   Este CSS NÃO inclui editor de texto, Firebase ou painel administrativo.
+   Local no repositório: /style.css
+   ============================================================================ */
+
+/* 1. Base e navegação ------------------------------------------------------ */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+}
+
+/* Elementos personalizados de cabeçalho e rodapé, quando definidos em JS. */
+site-header,
+site-footer {
+    display: block;
+}
+
+/* Oculta as barras dos carrosséis de abas, preservando a rolagem por toque. */
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+
+/* 2. Cartões da página inicial -------------------------------------------- */
+.btn-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease,
+                border-color 0.2s ease;
+}
+
+.btn-card:active {
+    transform: scale(0.98);
+}
+
+@media (hover: hover) {
+    .btn-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-color: #0e7490;
+    }
+}
+
+/* 3. Telas e abas ---------------------------------------------------------- */
+/* Aplicável às páginas individuais e às visualizações de protocolos. */
+.view-section {
+    display: none;
+}
+
+.view-section.active {
+    display: block;
+    animation: fadeInView 0.3s ease;
+}
+
+@keyframes fadeInView {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.tab-btn {
+    border-bottom: 2px solid transparent;
+    transition: background-color 0.2s ease, color 0.2s ease,
+                border-color 0.2s ease;
+}
+
+.tab-btn.active {
+    border-bottom-width: 2px;
+    background-color: rgba(0, 0, 0, 0.03);
+}
+
+.dark .tab-btn.active {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Cada especialidade mantém as cores originais de suas abas ativas. */
+.tab-active-dentistica {
+    color: #0e7490;
+    border-color: #0e7490;
+    background-color: #ecfeff !important;
+}
+
+.dark .tab-active-dentistica {
+    color: #22d3ee;
+    border-color: #22d3ee;
+    background-color: rgba(14, 116, 144, 0.19) !important;
+}
+
+.tab-active-periodontia {
+    color: #be123c;
+    border-color: #be123c;
+    background-color: #fff1f2 !important;
+}
+
+.dark .tab-active-periodontia {
+    color: #fb7185;
+    border-color: #fb7185;
+    background-color: rgba(190, 18, 60, 0.19) !important;
+}
+
+.tab-active-endodontia {
+    color: #4338ca;
+    border-color: #4338ca;
+    background-color: #e0e7ff !important;
+}
+
+.dark .tab-active-endodontia {
+    color: #818cf8;
+    border-color: #818cf8;
+    background-color: rgba(67, 56, 202, 0.19) !important;
+}
+
+.tab-active-cirurgia {
+    color: #059669;
+    border-color: #059669;
+    background-color: #ecfdf5 !important;
+}
+
+.dark .tab-active-cirurgia {
+    color: #34d399;
+    border-color: #34d399;
+    background-color: rgba(5, 150, 105, 0.19) !important;
+}
+
+.tab-active-prescricoes {
+    color: #d97706;
+    border-color: #d97706;
+    background-color: #fffbeb !important;
+}
+
+.dark .tab-active-prescricoes {
+    color: #fbbf24;
+    border-color: #fbbf24;
+    background-color: rgba(217, 119, 6, 0.19) !important;
+}
+
+/* 4. Busca e filtro dos protocolos clínicos ------------------------------- */
+.filter-btn {
+    white-space: nowrap;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    border: 1px solid #e5e7eb;
+    background-color: #fff;
+    color: #374151;
+    transition: background-color 0.2s ease, border-color 0.2s ease,
+                color 0.2s ease;
+}
+
+.filter-btn:hover {
+    border-color: #0e7490;
+}
+
+.dark .filter-btn {
+    background-color: #1f2937;
+    border-color: #374151;
+    color: #d1d5db;
+}
+
+.filter-btn.active {
+    background-color: #0e7490;
+    border-color: #0e7490;
+    color: #fff;
+}
+
+.dark .filter-btn.active {
+    background-color: #0891b2;
+    border-color: #0891b2;
+    color: #fff;
+}
+
+/* Indicador de carregamento, se usado pelos scripts de consulta local. */
+.spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #0e7490;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.dark .spinner {
+    border-color: rgba(255, 255, 255, 0.1);
+    border-left-color: #22d3ee;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 5. Textos de prontuários, checklists e protocolos ----------------------- */
+/* O Tailwind zera o estilo HTML das listas: restauramos suas marcações. */
+.rich-text {
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.rich-text h1,
+.rich-text h2,
+.rich-text h3 {
+    font-weight: 700 !important;
+    line-height: 1.35;
+    margin-top: 1em;
+    margin-bottom: 0.45em;
+}
+
+.rich-text h1 {
+    font-size: 1.8em !important;
+    color: #111827 !important;
+}
+
+.rich-text h2 {
+    font-size: 1.4em !important;
+    color: #1f2937 !important;
+}
+
+.rich-text h3 {
+    font-size: 1.1em !important;
+    color: #374151 !important;
+}
+
+.dark .rich-text h1 { color: #f9fafb !important; }
+.dark .rich-text h2 { color: #f3f4f6 !important; }
+.dark .rich-text h3 { color: #e5e7eb !important; }
+
+.rich-text p {
+    margin-bottom: 0.75em;
+}
+
+.rich-text ul,
+.rich-text ol {
+    padding-left: 1.2rem;
+    margin-bottom: 1em;
+}
+
+.rich-text ul { list-style-type: disc; }
+.rich-text ol { list-style-type: decimal; }
+
+.rich-text ul ul {
+    list-style-type: circle;
+    padding-left: 1rem;
+    margin-top: 0.25em;
+    margin-bottom: 0.5em;
+}
+
+.rich-text ol ol {
+    list-style-type: lower-alpha;
+    padding-left: 1rem;
+}
+
+.rich-text ul ul ul {
+    list-style-type: square;
+}
+
+.rich-text li {
+    margin-bottom: 0.25em;
+}
+
+.rich-text li > p:last-child {
+    margin-bottom: 0;
+}
+
+.rich-text strong,
+.rich-text b {
+    font-weight: 700;
+}
+
+.rich-text em,
+.rich-text i {
+    font-style: italic;
+}
+
+.rich-text a {
+    color: #0e7490;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.dark .rich-text a {
+    color: #67e8f9;
+}
+
+.rich-text blockquote {
+    border-left: 3px solid #0e7490;
+    padding: 0.5rem 0 0.5rem 1rem;
+    margin: 1rem 0;
+    color: #4b5563;
+}
+
+.dark .rich-text blockquote {
+    color: #d1d5db;
+    border-left-color: #22d3ee;
+}
+
+.rich-text img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1rem auto;
+}
+
+/* Evita cortes em tabelas de conteúdos clínicos no celular. */
+.rich-text table {
+    width: 100%;
+    border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
+    margin: 1rem 0;
+}
+
+.rich-text th,
+.rich-text td {
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+.dark .rich-text th,
+.dark .rich-text td {
+    border-color: #4b5563;
+}
+
+/* 6. Acessibilidade e dispositivos móveis -------------------------------- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[role='button']:focus-visible {
+    outline: 2px solid #0891b2;
+    outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+
+    .btn-card,
+    .tab-btn,
+    .filter-btn {
+        transition: none;
+    }
+
+    .btn-card:active,
+    .btn-card:hover {
+        transform: none;
+    }
+
+    .view-section.active,
+    .tab-content,
+    .spinner {
+        animation: none;
+    }
+}
