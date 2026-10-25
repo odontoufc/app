@@ -100,7 +100,7 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2 border-b border-indigo-100 dark:border-indigo-800 pb-1">CME (Esterilização)</h4>
+                        <h4 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2 border-b border-indigo-100 dark:border-indigo-800 pb-1">CME</h4>
                         <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Kit de Endodontia</li>
                             <li>Kit de Obturação e Pinça Miller</li>
@@ -111,7 +111,7 @@
                         </ul>
                     </div>
                     <div>
-                        <h4 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2 border-b border-indigo-100 dark:border-indigo-800 pb-1">Janelinha (Solicitar)</h4>
+                        <h4 class="font-bold text-indigo-600 dark:text-indigo-400 mb-2 border-b border-indigo-100 dark:border-indigo-800 pb-1">Janelinha</h4>
                         <ul class="space-y-1 list-disc pl-4 text-gray-700 dark:text-gray-300">
                             <li>Limas e Gates</li>
                             <li>Agulha de irrigação</li>
