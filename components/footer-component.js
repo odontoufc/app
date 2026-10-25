@@ -37,7 +37,7 @@
                                     referrerpolicy="no-referrer">
                                 <div class="w-px h-10 bg-gray-300 dark:bg-gray-600" aria-hidden="true"></div>
                                 <img
-                                    src="https://www.ufc.br/images/_images/a_universidade/identidade_visual/brasao/brasao1_horizontal_monocromatico_300dpi.png"
+                                    src="./logoufc.png"
                                     alt="Universidade Federal do Ceará (UFC)"
                                     class="h-10 w-auto object-contain opacity-80 hover:opacity-100 transition-all dark:invert"
                                     loading="lazy"
