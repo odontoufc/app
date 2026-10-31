@@ -61,6 +61,36 @@
     .drive-mode .page-bottom{flex-wrap:wrap}
     @media(max-width:760px){.drive-mode .reader{height:calc(100dvh - 158px)}.drive-toolbar-tip{font-size:11px}}
     .mobile-drawer{position:fixed;z-index:80;inset:0;background:rgba(3,11,20,.6);display:none}.mobile-drawer.active{display:block}.drawer-content{width:min(330px,86vw);height:100%;background:var(--surface);overflow-y:auto;box-shadow:12px 0 35px rgba(0,0,0,.2)}.drawer-heading{display:flex;justify-content:space-between;align-items:center;padding:17px 18px;border-bottom:1px solid var(--stroke)}.drawer-items{padding:15px}.drawer-items .toc-item{font-size:14px}
+
+    /* Leitura acessível com o polegar: controles persistentes para PDF.js */
+    .mobile-reading-nav{display:none;position:fixed;z-index:46;bottom:calc(12px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);width:min(420px,calc(100vw - 22px));padding:9px 13px 11px;border:1px solid var(--stroke);border-radius:19px;background:var(--surface);color:var(--ink);box-shadow:0 8px 36px rgba(0,0,0,.30);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+    .mobile-nav-line{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .mobile-nav-button{display:grid;place-items:center;flex:none;width:50px;height:48px;border:1px solid var(--stroke);border-radius:13px;background:var(--glow);color:var(--primary);touch-action:manipulation}
+    .mobile-nav-button:disabled{opacity:.32}
+    .mobile-nav-button svg{width:26px;height:26px}
+    .mobile-nav-page{flex:1;text-align:center;font-variant-numeric:tabular-nums}
+    .mobile-nav-page strong{display:block;font-size:16px;line-height:1.25}
+    .mobile-nav-page small{font-size:11px;color:var(--muted);font-weight:500}
+    .mobile-nav-slider{display:flex;align-items:center;gap:8px;margin:5px 2px 0}
+    .mobile-nav-slider label{font-size:11px;color:var(--muted);white-space:nowrap}
+    .mobile-nav-slider input{min-width:0;flex:1;width:100%;height:20px;accent-color:var(--primary);cursor:pointer;touch-action:pan-x}
+    .mobile-nav-slider output{font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;min-width:32px;text-align:right}
+    @media (max-width:760px),(pointer:coarse){
+      .mobile-reading-nav.active{display:block}
+      .pdf-ready .viewer-area{padding-bottom:125px;overscroll-behavior-x:contain}
+      .pdf-ready.fit-swipe .viewer-area{touch-action:pan-y pinch-zoom}
+      .pdf-ready #hint{display:none}
+    }
+    /* Tablets em modo paisagem também ganham um leitor mais amplo. */
+    @media (pointer:coarse) and (max-width:1100px){
+      .workspace{display:block}
+      .sidebar{display:none}
+      .mobile-toc{display:grid}
+      .reader{min-height:460px}
+      .viewer-area{padding-left:12px;padding-right:12px}
+      .reader-head{padding:13px 16px 10px}
+    }
+    @media (max-width:480px){.mobile-reading-nav{bottom:calc(9px + env(safe-area-inset-bottom,0px));border-radius:17px}}
   </style>
 </head>
 <body data-page="leitor" class="bg-gray-50 dark:bg-gray-900 dark:text-gray-100 text-gray-800 antialiased">
@@ -80,6 +110,23 @@
         <form class="search-panel" id="searchPanel"><input id="searchInput" type="search" placeholder="Buscar palavra ou expressão no livro" autocomplete="off" aria-label="Buscar no PDF"><button type="submit" class="btn primary">Pesquisar</button><button id="closeSearch" type="button" class="btn">Fechar</button><div class="search-result" id="searchResult" aria-live="polite">A busca percorre as páginas com texto pesquisável.</div></form>
         <div class="viewer-area" id="viewerArea" tabindex="0"><div class="empty-state" id="status" role="status"><svg viewBox="0 0 24 24"><path d="M4 5.5c2.8-.9 5.5-.6 8 1.1 2.5-1.7 5.2-2 8-1.1v13c-2.8-.9-5.5-.6-8 1.1-2.5-1.7-5.2-2-8-1.1z"/><path d="M12 6.6v13"/></svg><h2>Preparando seu livro...</h2><p>Aguarde a abertura do arquivo.</p></div><div class="page-frame" id="pageFrame"><canvas id="pdfCanvas" aria-label="Página do PDF"></canvas><div class="textLayer" id="textLayer"></div></div><iframe class="drive-frame" id="driveFrame" title="Leitura do livro no Google Drive" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div>
         <div class="page-bottom"><span id="hint">Dica: use as setas do teclado para trocar de página</span><span id="readStatus">Leitor de PDF • UFC Sobral</span></div>
+    <!-- A barra acompanha a leitura apenas em celulares/tablets, quando o livro e PDF direto. -->
+    <nav class="mobile-reading-nav" id="mobileReadingNav" aria-label="Navegação por páginas no celular">
+      <div class="mobile-nav-line">
+        <button type="button" class="mobile-nav-button" id="mobilePrevBtn" aria-label="Página anterior" title="Página anterior">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+        <div class="mobile-nav-page" aria-live="off"><strong id="mobilePageLabel">Página 1 de —</strong><small>Deslize para trocar de página</small></div>
+        <button type="button" class="mobile-nav-button" id="mobileNextBtn" aria-label="Próxima página" title="Próxima página">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+        </button>
+      </div>
+      <div class="mobile-nav-slider">
+        <label for="mobilePageSlider">Ir para</label>
+        <input id="mobilePageSlider" type="range" min="1" max="1" step="1" value="1" aria-label="Escolher página do livro">
+        <output for="mobilePageSlider" id="mobileSliderValue">1</output>
+      </div>
+    </nav>
       </section>
     </main>
   </div>
@@ -164,13 +211,65 @@
   function savePage(){if(!openedLocal&&sourceUrl)try{localStorage.setItem('reader-page:'+sourceUrl,String(current))}catch{}}
   function setProgress(x){$('progress').style.width=`${Math.min(100,Math.max(0,x))}%`}
   function setStatus(t){$('readStatus').textContent=t}
-  function updateControls(){const disabled=!pdf;$('prevBtn').disabled=disabled||current<=1;$('nextBtn').disabled=disabled||current>=pdf.numPages;$('pageInput').disabled=disabled;$('pageInput').value=current;$('pageInput').max=pdf?.numPages||1;$('pageCount').textContent='de '+(pdf?.numPages||'—');$('zoomText').textContent=autoFit?'Ajustar':Math.round(scale*100)+'%';$('minusBtn').disabled=disabled;$('plusBtn').disabled=disabled;$('fitBtn').disabled=disabled;$('searchBtn').disabled=disabled;$('openBtn').disabled=(!sourceUrl&&!driveViewUrl)||openedLocal;$('downloadBtn').disabled=!sourceUrl||openedLocal;document.querySelectorAll('[data-page]').forEach(btn=>btn.classList.toggle('current',Number(btn.dataset.page)===current));}
+  let readerVisible=true;
+  function updateMobileNavVisibility(){
+    $('mobileReadingNav').classList.toggle('active',Boolean(pdf)&&readerVisible&&!document.body.classList.contains('drive-mode'));
+  }
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(entries=>{readerVisible=entries[0]?.isIntersecting||false;updateMobileNavVisibility()},
+      {threshold:0.05}).observe(elements.reader);
+  }
+  function updateControls(){const disabled=!pdf;$('prevBtn').disabled=disabled||current<=1;$('nextBtn').disabled=disabled||current>=pdf.numPages;$('pageInput').disabled=disabled;$('pageInput').value=current;$('pageInput').max=pdf?.numPages||1;$('pageCount').textContent='de '+(pdf?.numPages||'—');$('zoomText').textContent=autoFit?'Ajustar':Math.round(scale*100)+'%';$('minusBtn').disabled=disabled;$('plusBtn').disabled=disabled;$('fitBtn').disabled=disabled;$('searchBtn').disabled=disabled;$('openBtn').disabled=(!sourceUrl&&!driveViewUrl)||openedLocal;$('downloadBtn').disabled=!sourceUrl||openedLocal;document.querySelectorAll('[data-page]').forEach(btn=>btn.classList.toggle('current',Number(btn.dataset.page)===current));
+    document.body.classList.toggle('pdf-ready',Boolean(pdf)&&!document.body.classList.contains('drive-mode'));
+    $('mobilePrevBtn').disabled=disabled||current<=1;
+    $('mobileNextBtn').disabled=disabled||current>=pdf.numPages;
+    $('mobilePageLabel').textContent=`Página ${current} de ${pdf?.numPages||'—'}`;
+    $('mobilePageSlider').disabled=disabled;
+    $('mobilePageSlider').max=pdf?.numPages||1;
+    $('mobilePageSlider').value=current;
+    $('mobileSliderValue').textContent=current;
+    // Evita que deslizar um PDF ampliado troque de página ao tentar movê-lo lateralmente.
+    document.body.classList.toggle('fit-swipe',Boolean(pdf)&&autoFit&&elements.pageFrame.clientWidth<=elements.viewer.clientWidth+2);
+    updateMobileNavVisibility();
+  }
   function chapterMenu(entries){tocEntries=entries;for(const target of [elements.toc,$('drawerToc')]){target.replaceChildren();if(!entries.length){const p=document.createElement('p');p.className='side-desc';p.textContent='Este PDF não possui sumário navegável.';target.append(p);continue;}entries.forEach(([text,num],i)=>{if(num<1||num>pdf.numPages)return;const b=document.createElement('button');b.type='button';b.className='toc-item';b.dataset.page=num;const span=document.createElement('span');span.className='number';span.textContent=String(i+1).padStart(2,'0');const label=document.createElement('span');label.textContent=text;b.append(span,label);b.addEventListener('click',()=>{goTo(num);elements.drawer.classList.remove('active')});target.append(b)})}updateControls()}
   async function loadOutline(){let out=[];try{const nodes=await pdf.getOutline();async function walk(items,depth=0){for(const item of (items||[])){if(out.length>90)return;let dest=item.dest;if(typeof dest==='string')dest=await pdf.getDestination(dest);let idx=null;try{if(dest?.[0]!=null)idx=await pdf.getPageIndex(dest[0])}catch{}if(idx!==null)out.push([`${depth?'· '.repeat(Math.min(depth,2)):''}${item.title||'Seção'}`,idx+1]);if(item.items?.length)await walk(item.items,depth+1)}}await walk(nodes)}catch(e){console.warn('Não foi possível ler sumário:',e)}if(!out.length&&(/odontograma/i.test(title)||/odontograma/i.test(rawFile)))out=dentistChapters;chapterMenu(out)}
   async function prepareLibrary(){if(workerReady)return;setStatus('Carregando visualizador...'); try{pdfjs=await import('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs');pdfjs.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs';workerReady=true}catch(error){displayMessage('Leitor indisponível','Não foi possível carregar a biblioteca de leitura. Verifique a conexão com a internet e tente atualizar a página.',false);throw error}}
   async function openPDF(source,local=false){resetForPDF();displayMessage('Abrindo livro...','Carregando as páginas para leitura.');setProgress(10);pdf=null;openedLocal=local;try{await prepareLibrary();const task=pdfjs.getDocument(typeof source==='string'?{url:source,withCredentials:false}: {data:source});task.onProgress=({loaded,total})=>{if(total)setProgress(12+Math.round(75*loaded/total))};pdf=await task.promise;current=1;try{const old=local?null:localStorage.getItem('reader-page:'+sourceUrl);if(old)current=Math.max(1,Math.min(pdf.numPages,Number(old)||1))}catch{} $('subtitle').textContent=`${pdf.numPages} páginas • ${local?'Arquivo local':'Leitura online'}`;setProgress(100);await loadOutline();await renderPage();setStatus('Pronto para leitura');setTimeout(()=>setProgress(0),700)}catch(error){console.error(error);pdf=null;setProgress(0);let notFound=/Missing PDF|Unexpected server response|404|Invalid PDF|Failed to fetch|NetworkError/i.test(String(error));displayMessage(notFound?'PDF não encontrado':'Não foi possível abrir o PDF',notFound?'Confira se o arquivo foi publicado em /livros/odontograma.pdf (ou informe o caminho com ?pdf=livros/arquivo.pdf).':'Verifique o arquivo e sua conexão. Você também pode abrir um PDF do seu computador.',true);setStatus('Arquivo indisponível')}updateControls()}
   async function renderPage(){if(!pdf)return;const token=++renderSeq;if(renderTask){try{renderTask.cancel();await renderTask.promise.catch(()=>{})}catch{}renderTask=null}const page=await pdf.getPage(current);if(token!==renderSeq)return;let base=page.getViewport({scale:1});if(autoFit){let available=elements.viewer.clientWidth-62;if(innerWidth<=760)available=elements.viewer.clientWidth-24;scale=Math.max(.24,Math.min(2.2,available/base.width))}const viewport=page.getViewport({scale});const maxPixels=15000000;const pixelRatio=Math.max(1,Math.min(devicePixelRatio||1,2,Math.sqrt(maxPixels/(viewport.width*viewport.height))));const canvas=elements.canvas;const ctx=canvas.getContext('2d',{alpha:false});canvas.width=Math.floor(viewport.width*pixelRatio);canvas.height=Math.floor(viewport.height*pixelRatio);canvas.style.width=viewport.width+'px';canvas.style.height=viewport.height+'px';elements.pageFrame.style.width=viewport.width+'px';elements.pageFrame.style.height=viewport.height+'px';elements.textLayer.replaceChildren();elements.textLayer.style.width=viewport.width+'px';elements.textLayer.style.height=viewport.height+'px';elements.status.style.display='none';elements.pageFrame.classList.add('visible');elements.viewer.scrollTo({top:0,left:0,behavior:'instant'});renderTask=page.render({canvasContext:ctx,viewport,transform:pixelRatio!==1?[pixelRatio,0,0,pixelRatio,0,0]:undefined});try{await renderTask.promise;if(token!==renderSeq)return; if(typeof pdfjs.TextLayer==='function'){try{const tl=new pdfjs.TextLayer({textContentSource:page.streamTextContent(),container:elements.textLayer,viewport});await tl.render()}catch(e){console.warn('Camada de texto indisponível',e)}}savePage();setStatus(`Página ${current} de ${pdf.numPages}`)}catch(e){if(e.name!=='RenderingCancelledException')console.error('Erro na renderização:',e)}finally{updateControls()}}
   const goTo=(p)=>{if(!pdf)return;let n=Math.min(pdf.numPages,Math.max(1,Math.round(Number(p)||1)));if(n!==current){current=n;renderPage()}};
+
+  // Controles ao alcance do polegar: botões grandes e régua para saltos rápidos.
+  $('mobilePrevBtn').addEventListener('click',()=>goTo(current-1));
+  $('mobileNextBtn').addEventListener('click',()=>goTo(current+1));
+  $('mobilePageSlider').addEventListener('input',event=>{
+    const page=Number(event.target.value);
+    $('mobileSliderValue').textContent=page;
+    $('mobilePageLabel').textContent=`Ir para página ${page} de ${pdf?.numPages||'—'}`;
+  });
+  $('mobilePageSlider').addEventListener('change',event=>goTo(event.target.value));
+
+  // Gestos horizontais trocam páginas apenas quando o PDF está ajustado à largura.
+  // Gestos verticais continuam servindo para rolar a página; dois dedos não trocam páginas.
+  let touchStart=null;
+  elements.viewer.addEventListener('touchstart',event=>{
+    if(!pdf||!autoFit||event.touches.length!==1||
+       elements.pageFrame.clientWidth>elements.viewer.clientWidth+2){touchStart=null;return;}
+    const t=event.touches[0];
+    touchStart={x:t.clientX,y:t.clientY,at:performance.now()};
+  },{passive:true});
+  elements.viewer.addEventListener('touchmove',event=>{
+    if(event.touches.length!==1)touchStart=null;
+  },{passive:true});
+  elements.viewer.addEventListener('touchcancel',()=>{touchStart=null;},{passive:true});
+  elements.viewer.addEventListener('touchend',event=>{
+    if(!touchStart||event.touches.length!==0||event.changedTouches.length!==1)return;
+    const start=touchStart;touchStart=null;
+    const t=event.changedTouches[0],dx=t.clientX-start.x,dy=t.clientY-start.y;
+    if(Math.abs(dx)>=65&&Math.abs(dx)>Math.abs(dy)*1.6&&performance.now()-start.at<1500){
+      goTo(current+(dx<0?1:-1));
+    }
+  },{passive:true});
   $('prevBtn').addEventListener('click',()=>goTo(current-1));$('nextBtn').addEventListener('click',()=>goTo(current+1));$('pageInput').addEventListener('change',e=>goTo(e.target.value));$('pageInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();goTo(e.target.value);e.target.blur()}});
   function setZoom(next){if(!pdf)return;autoFit=false;scale=Math.max(.25,Math.min(3.5,next));renderPage()}
   $('minusBtn').addEventListener('click',()=>setZoom(scale/1.2));$('plusBtn').addEventListener('click',()=>setZoom(scale*1.2));$('fitBtn').addEventListener('click',()=>{autoFit=true;renderPage()});
