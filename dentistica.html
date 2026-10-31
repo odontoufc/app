@@ -104,17 +104,14 @@
   <path d="m12 5.5 3 1.5"/>
 </svg>
 </div>
-                <div><h2 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">Dentística</h2><p class="text-gray-500 dark:text-gray-400 text-xs">Prontuário, Materiais e Protocolos</p></div>
+                <div><h2 class="text-xl font-bold text-gray-900 dark:text-white leading-tight">Dentística</h2><p class="text-gray-500 dark:text-gray-400 text-xs">Prontuário e planejador de restaurações</p></div>
             </div>
             <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 flex overflow-x-auto scrollbar-hide">
                 <button type="button" onclick="switchTab('prontuario', 'dentistica')" id="tab-btn-dentistica-prontuario" class="tab-btn tab-active-dentistica flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
                     <i data-lucide="clipboard-list" class="w-4 h-4"></i> Prontuário
                 </button>
-                <button type="button" onclick="switchTab('instrumentais', 'dentistica')" id="tab-btn-dentistica-instrumentais" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
-                    <i data-lucide="briefcase-medical" class="w-4 h-4"></i> Materiais
-                </button>
-                <button type="button" onclick="switchTab('protocolos', 'dentistica')" id="tab-btn-dentistica-protocolos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
-                    <i data-lucide="book-open" class="w-4 h-4"></i> Protocolos
+                <button type="button" onclick="navigateTo('restauracoes')" id="tab-btn-dentistica-protocolos" class="tab-btn flex-1 py-3 px-4 text-sm font-semibold text-gray-600 dark:text-gray-300 hover:text-primary transition-all flex items-center justify-center gap-2 whitespace-nowrap">
+                    <i data-lucide="list-tree" class="w-4 h-4"></i> Restaurações
                 </button>
             </div>
             <div class="bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 min-h-[400px] mt-2">
@@ -146,17 +143,6 @@
                     </div>
                 </div>
 
-                <div id="tab-dentistica-instrumentais" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4"><i data-lucide="clipboard-check" class="w-5 h-5 text-primary dark:text-cyan-400"></i> Checklist Dentística</h3>
-                    <div id="instrumentais-list-dentistica" class="space-y-4 rich-text dark:text-gray-300"></div>
-                </div>
-
-                <div id="tab-dentistica-protocolos" class="tab-content">
-                    <h3 class="text-lg font-bold text-gray-800 dark:text-white flex items-center gap-2 mb-4"><i data-lucide="book-open" class="w-5 h-5 text-primary dark:text-cyan-400"></i> Protocolos de Dentística</h3>
-                    <div id="protocolos-list-dentistica" class="space-y-3">
-                        <p class="text-center text-gray-500 dark:text-gray-400 py-4 text-sm">Nenhum protocolo de Dentística cadastrado.</p>
-                    </div>
-                </div>
 
             </div>
         </div>
