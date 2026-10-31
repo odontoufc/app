@@ -41,7 +41,7 @@
         cirurgia: 'Cirurgia'
     });
     const CATEGORIES_ORDER = ['Dentística', 'Periodontia', 'Endodontia', 'Cirurgia', 'Geral'];
-    const HOME_VIEWS = new Set(['home', 'blog', 'links', 'manual', 'feedback']);
+    const HOME_VIEWS = new Set(['home', 'blog', 'links', 'manual', 'feedback', 'restauracoes']);
     const PRESCRIPTION_GROUPS = [
         'analgesicos', 'anti-inflamatorios', 'corticosteroides',
         'antibioticos', 'antifungicos', 'colutorios', 'corticosteroides-topicos'
@@ -201,6 +201,7 @@
 
             // Não remonta o cabeçalho/rodapé e não recarrega bibliotecas pesadas.
             previousMain.replaceWith(document.importNode(nextMain, true));
+            installRestorationFlow();
             if (target.page === 'prescricoes') renderPrescricoes();
             const fragment = decodeURIComponent(target.url.hash.replace(/^#/, ''));
             const chosenView = fragment && byId(`view-${fragment}`) ? fragment : target.page;
@@ -245,6 +246,258 @@
         })();
     }
 
+
+    // ─────────────────────────────────────────────────────────────────
+    // PLANEJADOR DE DENTÍSTICA: classe → técnica → material → protocolo.
+    // Interface criada dinamicamente para não exigir alterações em index.html
+    // ou dentistica.html. Os dados vêm de protocolos_dentistica.js.
+    // ─────────────────────────────────────────────────────────────────
+    const FLOW_ID = 'restauracoes';
+    const FLOW_STEP_LABELS = ['Classe', 'Tipo', 'Material', 'Resultado'];
+    let flowReturnView = 'blog';
+    let restorationState = { step: 0, classe: null, variacao: null, material: null, apoio: null };
+
+    const dentalFlow = () => database().fluxoDentistica;
+
+    function dentalElement(tag, className, text) {
+        const el = document.createElement(tag);
+        if (className) el.className = className;
+        if (text !== undefined) el.textContent = text;
+        return el;
+    }
+
+    function dentalButton(label, onClick, extra = '') {
+        const button = dentalElement('button',
+            'w-full text-left flex items-center justify-between gap-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 px-4 py-4 hover:border-primary dark:hover:border-cyan-400 hover:bg-cyan-50 dark:hover:bg-gray-700 focus-visible:outline-2 focus-visible:outline-primary transition-colors active:scale-[0.99] ' + extra);
+        button.type = 'button';
+        const name = dentalElement('span', 'font-semibold text-gray-800 dark:text-gray-100', label);
+        const arrow = dentalElement('span', 'text-primary dark:text-cyan-400 font-bold', '›');
+        arrow.setAttribute('aria-hidden', 'true');
+        button.append(name, arrow);
+        button.addEventListener('click', onClick);
+        return button;
+    }
+
+    function installRestorationFlow() {
+        const main = document.querySelector('main');
+        if (!main) return;
+
+        if (!byId(`view-${FLOW_ID}`)) {
+            const section = dentalElement('section', 'view-section space-y-5');
+            section.id = `view-${FLOW_ID}`;
+            section.setAttribute('aria-label', 'Fluxograma de Dentística');
+            section.innerHTML = `
+                <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm p-4 sm:p-7">
+                    <div class="mb-4"><span class="inline-flex rounded-full px-3 py-1 text-xs font-bold text-primary dark:text-cyan-400 bg-cyan-50 dark:bg-cyan-900/30">DENTÍSTICA · GUIA INTERATIVO</span></div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white">Planejador de restaurações</h1>
+                    <p class="text-sm sm:text-base text-gray-600 dark:text-gray-300 mt-2 mb-5">Escolha a classe, a variação e o material para consultar os materiais necessários e o passo a passo.</p>
+                    <div id="restauracoes-progress" class="grid grid-cols-4 gap-1 sm:gap-3 mb-5" aria-label="Etapas de seleção"></div>
+                    <div id="restauracoes-selections" class="flex flex-wrap gap-2 mb-4"></div>
+                    <div id="restauracoes-panel" aria-live="polite"></div>
+                    <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700 flex gap-3 flex-wrap items-center justify-between">
+                        <button type="button" id="restauracoes-previous" class="px-4 py-2.5 border border-gray-200 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-200 font-semibold text-sm">Etapa anterior</button>
+                        <button type="button" id="restauracoes-restart" class="px-4 py-2.5 bg-primary hover:bg-secondary text-white rounded-lg font-semibold text-sm">Reiniciar seleção</button>
+                    </div>
+                </div>`;
+            main.appendChild(section);
+            byId('restauracoes-previous').addEventListener('click', () => {
+                if (restorationState.apoio) {
+                    restorationState = { step: 0, classe: null, variacao: null, material: null, apoio: null };
+                } else if (restorationState.step > 0) {
+                    restorationState.step--;
+                } else {
+                    navigateTo(flowReturnView || 'blog');
+                    return;
+                }
+                renderRestorationStep();
+            });
+            byId('restauracoes-restart').addEventListener('click', () => {
+                restorationState = { step: 0, classe: null, variacao: null, material: null, apoio: null };
+                renderRestorationStep();
+            });
+        }
+
+        // Em Dentística, uma aba de seleção substitui as duas abas antigas.
+        if (pageName() === 'dentistica') {
+            const materials = byId('tab-btn-dentistica-instrumentais');
+            const protocols = byId('tab-btn-dentistica-protocolos');
+            if (materials) materials.style.display = 'none';
+            if (protocols && protocols.dataset.guidedFlow !== 'true') {
+                protocols.dataset.guidedFlow = 'true';
+                protocols.innerHTML = '<i data-lucide="list-tree" class="w-5 h-5" aria-hidden="true"></i> Restaurações';
+                protocols.setAttribute('aria-label', 'Abrir planejador de restaurações');
+                protocols.onclick = () => openRestorationFlow();
+            }
+        }
+
+        // O protocolo guiado também aparece em "Protocolos" da página inicial.
+        if (pageName() === 'home' && byId('view-blog') && !byId('restauracoes-entry')) {
+            const entry = dentalElement('div', 'bg-white dark:bg-gray-800 border border-cyan-200 dark:border-cyan-800 rounded-2xl p-5 sm:p-6 shadow-sm');
+            entry.id = 'restauracoes-entry';
+            entry.innerHTML = '<div class="text-xs font-bold text-primary dark:text-cyan-400 mb-1">DENTÍSTICA</div><h3 class="text-xl font-bold text-gray-900 dark:text-white">Escolher restauração passo a passo</h3><p class="text-sm text-gray-600 dark:text-gray-300 mt-2">Informe a classe, o tipo de restauração e o material para visualizar o procedimento e os materiais necessários.</p>';
+            const go = dentalElement('button', 'mt-4 w-full sm:w-auto rounded-xl bg-primary hover:bg-secondary px-5 py-3 text-white font-bold text-sm', 'Iniciar fluxograma de Dentística');
+            go.type = 'button';
+            go.addEventListener('click', () => openRestorationFlow());
+            entry.appendChild(go);
+            byId('view-blog').prepend(entry);
+        }
+        refreshIcons();
+    }
+
+    function openRestorationFlow() {
+        flowReturnView = byId('view-blog')?.classList.contains('active') ? 'blog' :
+            (pageName() === 'dentistica' ? 'dentistica' : 'home');
+        restorationState = { step: 0, classe: null, variacao: null, material: null, apoio: null };
+        navigateTo(FLOW_ID);
+    }
+
+    function renderRestorationStep() {
+        const panel = byId('restauracoes-panel');
+        const progress = byId('restauracoes-progress');
+        const choices = byId('restauracoes-selections');
+        if (!panel || !progress || !choices) return;
+        const flow = dentalFlow();
+        progress.replaceChildren();
+        choices.replaceChildren();
+        panel.replaceChildren();
+        const step = restorationState.step;
+        FLOW_STEP_LABELS.forEach((label, index) => {
+            const active = index === step;
+            const finished = index < step;
+            const element = dentalElement('div',
+                'rounded-lg p-2 text-center text-xs sm:text-sm font-semibold border ' +
+                (active ? 'border-primary bg-cyan-50 text-primary dark:bg-cyan-900/30 dark:text-cyan-300' :
+                finished ? 'border-green-200 bg-green-50 text-green-700 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300' :
+                'border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500'),
+                `${index + 1}. ${label}`);
+            if (active) element.setAttribute('aria-current', 'step');
+            progress.appendChild(element);
+        });
+
+        const previous = byId('restauracoes-previous');
+        if (previous) previous.textContent = step === 0 && !restorationState.apoio ? 'Voltar à página' : 'Etapa anterior';
+
+        if (!flow || !Array.isArray(flow.classes) || typeof flow.selecionar !== 'function') {
+            const error = dentalElement('div', 'rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-900/20 dark:border-amber-700 p-5 text-sm text-amber-900 dark:text-amber-200');
+            error.textContent = 'Para ativar o fluxograma, publique primeiro a versão atualizada de banco_de_dados/protocolos_dentistica.js. O restante do site continua disponível.';
+            panel.appendChild(error);
+            return;
+        }
+
+        const c = flow.classes.find(item => item.id === restorationState.classe);
+        const variacao = c?.variacoes?.find(item => item.id === restorationState.variacao);
+        const material = flow.materiais?.find(item => item.id === restorationState.material);
+        const selectedItems = [
+            [c?.rotulo, 0], [variacao?.rotulo, 1], [material?.rotulo, 2]
+        ];
+        for (const [label, destination] of selectedItems) {
+            if (!label) continue;
+            const btn = dentalElement('button', 'text-xs px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 bg-gray-50 dark:bg-gray-700', label + ' ✎');
+            btn.type = 'button';
+            btn.title = 'Alterar seleção';
+            btn.onclick = () => { restorationState.apoio = null; restorationState.step = destination; renderRestorationStep(); };
+            choices.appendChild(btn);
+        }
+        const heading = (label, detail) => {
+            panel.append(dentalElement('h2', 'text-xl font-bold text-gray-900 dark:text-white mb-1', label));
+            if (detail) panel.append(dentalElement('p', 'text-sm text-gray-500 dark:text-gray-400 mb-4', detail));
+        };
+        const grid = () => {
+            const element = dentalElement('div', 'grid grid-cols-1 sm:grid-cols-2 gap-3');
+            panel.appendChild(element);
+            return element;
+        };
+
+        if (restorationState.apoio) {
+            heading(restorationState.apoio.title || 'Procedimento de apoio', 'Materiais e sequência do documento original');
+            showRestorationResult(panel, restorationState.apoio);
+            return;
+        }
+        if (step === 0) {
+            heading('Qual é a classe da restauração?', 'Selecione a classificação da cavidade.');
+            const area = grid();
+            for (const option of flow.classes) {
+                area.appendChild(dentalButton(option.rotulo, () => {
+                    restorationState = { step: 1, classe: option.id, variacao: null, material: null, apoio: null };
+                    renderRestorationStep();
+                }));
+            }
+            const apoio = dentalElement('div', 'border-t border-gray-100 dark:border-gray-700 pt-5 mt-6');
+            apoio.append(dentalElement('h3', 'font-bold text-gray-800 dark:text-gray-100 mb-2', 'Procedimentos de apoio'));
+            const apoioGrid = dentalElement('div', 'grid grid-cols-1 sm:grid-cols-2 gap-3');
+            for (const id of ['dentistica-aplicacao-selante', 'dentistica-isolamento-absoluto']) {
+                const entry = (flow.protocolosOriginais || []).find(item => item.id === id);
+                if (entry) apoioGrid.append(dentalButton(entry.title, () => {
+                    restorationState.apoio = entry;
+                    restorationState.step = 3;
+                    renderRestorationStep();
+                }));
+            }
+            apoio.append(apoioGrid);
+            panel.append(apoio);
+            return;
+        }
+        if (step === 1) {
+            heading('Qual é o tipo de restauração?', c?.rotulo || 'Selecione a técnica disponível.');
+            const area = grid();
+            for (const option of c?.variacoes || []) {
+                area.append(dentalButton(option.rotulo, () => {
+                    restorationState.variacao = option.id;
+                    restorationState.material = null;
+                    restorationState.step = 2;
+                    renderRestorationStep();
+                }));
+            }
+            return;
+        }
+        if (step === 2) {
+            heading('Qual material será utilizado?', 'As opções sem protocolo aprovado são identificadas antes de mostrar qualquer orientação.');
+            const area = grid();
+            for (const option of flow.materiais || []) {
+                area.append(dentalButton(option.rotulo, () => {
+                    restorationState.material = option.id;
+                    restorationState.step = 3;
+                    renderRestorationStep();
+                }));
+            }
+            return;
+        }
+        heading('Materiais e passo a passo', 'Seleção realizada para consulta do protocolo.');
+        const record = flow.selecionar({
+            classe: restorationState.classe,
+            variacao: restorationState.variacao,
+            material: restorationState.material
+        });
+        if (!record) {
+            panel.append(dentalElement('p', 'p-4 rounded-xl bg-amber-50 text-amber-900 dark:bg-amber-900/20 dark:text-amber-200',
+                'Não há protocolo cadastrado para essa combinação. Escolha outro material ou técnica.'));
+            return;
+        }
+        showRestorationResult(panel, record);
+    }
+
+    function showRestorationResult(panel, record) {
+        const status = record.status || 'transcrito_documento';
+        if (status === 'nao_padronizado' || status === 'sem_fonte') {
+            panel.append(dentalElement('div', 'rounded-xl border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-4 text-amber-900 dark:text-amber-200 text-sm',
+                record.observacao || 'Essa possibilidade não possui protocolo no material fornecido.'));
+            return;
+        }
+        if (status === 'revisao_docente') {
+            panel.append(dentalElement('div', 'mb-5 rounded-xl border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-4 text-amber-900 dark:text-amber-200 text-sm',
+                'CONTEÚDO PRELIMINAR — NÃO VALIDADO. Esta combinação com ionômero não consta no documento original. Os materiais e as etapas são propostas didáticas para revisão docente, e não devem ser utilizados como protocolo clínico aprovado.'));
+        } else {
+            panel.append(dentalElement('div', 'mb-5 rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-3 text-green-800 dark:text-green-200 text-xs sm:text-sm',
+                'Passo a passo transcrito do material fornecido. Checklist de materiais organizado com base no conteúdo da especialidade; confirmar a seleção com o professor.'));
+        }
+        panel.append(dentalElement('h3', 'font-bold text-lg text-gray-900 dark:text-white mb-3', record.title || 'Protocolo'));
+        if (record.summary) panel.append(dentalElement('p', 'text-sm text-gray-500 dark:text-gray-400 mb-3', record.summary));
+        const text = dentalElement('article', 'rich-text text-sm sm:text-base text-gray-800 dark:text-gray-200 leading-relaxed');
+        // Conteúdo HTML é mantido no repositório pelo responsável do projeto.
+        text.innerHTML = String(record.content || '<p>Conteúdo não disponível.</p>');
+        panel.appendChild(text);
+    }
+
     // 2. Navegação entre arquivos .html e seções da página inicial.
     function updateBackButton(viewId) {
         const button = byId('back-btn');
@@ -256,7 +509,9 @@
 
         button.onclick = (event) => {
             event.preventDefault();
-            if (viewId === 'post') {
+            if (viewId === 'restauracoes') {
+                navigateTo(flowReturnView || (pageName() === 'dentistica' ? 'dentistica' : 'blog'));
+            } else if (viewId === 'post') {
                 navigateTo(postBackTarget);
             } else if (pageName() !== 'home') {
                 navigateTo('home');
@@ -298,6 +553,7 @@
 
         updateBackButton(target);
         if (target === 'blog') renderBlog();
+        if (target === 'restauracoes') renderRestorationStep();
         if (Object.hasOwn(SPECIALTIES, target)) {
             renderInstrumentais(target);
             if (byId(`tab-${target}-protocolos`)?.classList.contains('active')) {
@@ -653,6 +909,7 @@
         } else {
             renderBlog();
         }
+        installRestorationFlow();
         syncRouteFromHash();
         const visible = document.querySelector('.view-section.active');
         updateBackButton(visible?.id?.replace(/^view-/, '') || page);
