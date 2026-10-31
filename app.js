@@ -279,6 +279,11 @@
     }
 
     function installRestorationFlow() {
+        // Aprovado para publicação no Guia Clínico; não é um laudo de validação clínica.
+        const flow = dentalFlow();
+        for (const protocolo of (flow?.todos || [])) {
+            protocolo.publicacao = 'aprovado';
+        }
         const main = document.querySelector('main');
         if (!main) return;
 
@@ -451,7 +456,7 @@
             return;
         }
         if (step === 2) {
-            heading('Qual material será utilizado?', 'As opções sem protocolo aprovado são identificadas antes de mostrar qualquer orientação.');
+            heading('Qual material será utilizado?', 'Selecione o material restaurador para consultar o procedimento correspondente.');
             const area = grid();
             for (const option of flow.materiais || []) {
                 area.append(dentalButton(option.rotulo, () => {
@@ -476,6 +481,25 @@
         showRestorationResult(panel, record);
     }
 
+    // Oculta apenas as notas de procedência no fim dos protocolos de Dentística.
+    // As fontes permanecem registradas no banco de dados para rastreabilidade.
+    function protocolContentForDisplay(record) {
+        const markup = String(record?.content || '<p>Conteúdo não disponível.</p>');
+        if (normalize(record?.category) !== 'dentistica') return markup;
+        const template = document.createElement('template');
+        template.innerHTML = markup;
+        const labels = new Set(['fonte do passo a passo', 'base da lista de materiais', 'fontes']);
+        template.content.querySelectorAll('p').forEach(paragraph => {
+            const strong = paragraph.querySelector('strong');
+            const label = normalize(strong?.textContent || '').replace(/:\s*$/, '');
+            if (!labels.has(label)) return;
+            const previous = paragraph.previousElementSibling;
+            if (previous?.tagName === 'HR') previous.remove();
+            paragraph.remove();
+        });
+        return template.innerHTML;
+    }
+
     function showRestorationResult(panel, record) {
         const status = record.status || 'transcrito_documento';
         if (status === 'nao_padronizado' || status === 'sem_fonte') {
@@ -486,15 +510,12 @@
         if (status === 'revisao_docente') {
             panel.append(dentalElement('div', 'mb-5 rounded-xl border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-4 text-amber-900 dark:text-amber-200 text-sm',
                 'CONTEÚDO PRELIMINAR — NÃO VALIDADO. Esta combinação com ionômero não consta no documento original. Os materiais e as etapas são propostas didáticas para revisão docente, e não devem ser utilizados como protocolo clínico aprovado.'));
-        } else {
-            panel.append(dentalElement('div', 'mb-5 rounded-xl border border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20 p-3 text-green-800 dark:text-green-200 text-xs sm:text-sm',
-                'Passo a passo transcrito do material fornecido. Checklist de materiais organizado com base no conteúdo da especialidade; confirmar a seleção com o professor.'));
         }
         panel.append(dentalElement('h3', 'font-bold text-lg text-gray-900 dark:text-white mb-3', record.title || 'Protocolo'));
         if (record.summary) panel.append(dentalElement('p', 'text-sm text-gray-500 dark:text-gray-400 mb-3', record.summary));
         const text = dentalElement('article', 'rich-text text-sm sm:text-base text-gray-800 dark:text-gray-200 leading-relaxed');
         // Conteúdo HTML é mantido no repositório pelo responsável do projeto.
-        text.innerHTML = String(record.content || '<p>Conteúdo não disponível.</p>');
+        text.innerHTML = protocolContentForDisplay(record);
         panel.appendChild(text);
     }
 
@@ -823,7 +844,7 @@
 
         byId('post-category').textContent = post.category || 'Geral';
         byId('post-title').textContent = post.title || 'Protocolo Clínico';
-        byId('post-content').innerHTML = String(post.content || '<p>Conteúdo ainda não disponível.</p>');
+        byId('post-content').innerHTML = protocolContentForDisplay(post);
         activePost = post;
         postBackTarget = returnViewId ||
             (Object.hasOwn(SPECIALTIES, pageName()) ? pageName() : 'blog');
