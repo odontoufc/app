@@ -370,11 +370,14 @@
             const active = index === step;
             const finished = index < step;
             const element = dentalElement('div',
-                'rounded-lg p-2 text-center text-xs sm:text-sm font-semibold border ' +
+                'min-w-0 min-h-[78px] rounded-lg px-1 py-3 border flex flex-col items-center justify-center gap-1 text-center ' +
                 (active ? 'border-primary bg-cyan-50 text-primary dark:bg-cyan-900/30 dark:text-cyan-300' :
                 finished ? 'border-green-200 bg-green-50 text-green-700 dark:bg-green-900/20 dark:border-green-800 dark:text-green-300' :
-                'border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500'),
-                `${index + 1}. ${label}`);
+                'border-gray-200 dark:border-gray-700 text-gray-400 dark:text-gray-500'));
+            const number = dentalElement('span', 'block text-base sm:text-lg font-bold leading-none', `${index + 1}.`);
+            const name = dentalElement('span', 'block w-full text-[11px] sm:text-sm font-semibold leading-tight break-words', label);
+            element.append(number, name);
+            element.setAttribute('aria-label', `Etapa ${index + 1}: ${label}`);
             if (active) element.setAttribute('aria-current', 'step');
             progress.appendChild(element);
         });
