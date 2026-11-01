@@ -6,7 +6,7 @@
  */
 'use strict';
 
-const VERSION = '2026-10-31-02';
+const VERSION = '2026-11-01-01';
 const PREFIX = 'guia-clinico-offline-';
 const SHELL_CACHE = `${PREFIX}shell-${VERSION}`;
 
@@ -39,10 +39,18 @@ const SHELL_FILES = [
 ];
 
 // Materiais grandes: baixados quando o aluno toca em "Baixar conteúdos".
+// O cabeçalho ainda conta os nomes antigos .png. Mantemos esses caminhos
+// como chaves de compatibilidade, mas buscamos as imagens reais .webp.
+const COVER_ALIASES = new Map([
+  ['capas/dentistica.png', 'capas/dentistica.webp'],
+  ['capas/periodontia.png', 'capas/periodontia.webp'],
+  ['capas/endodontia.png', 'capas/endodontia.webp'],
+  ['capas/cirurgia.png', 'capas/cirurgia.webp'],
+  ['capas/manual.png', 'capas/manual.webp']
+]);
 const CONTENT_FILES = [
   'banco_de_dados/livros/manual.pdf',
-  'capas/dentistica.png', 'capas/periodontia.png',
-  'capas/endodontia.png', 'capas/cirurgia.png', 'capas/manual.png',
+  ...COVER_ALIASES.keys(),
   ...Array.from({ length: 107 }, (_, i) =>
     `reabilitacao-oral/assets/paginas/pagina-${String(i + 1).padStart(3, '0')}.webp`)
 ];
@@ -81,10 +89,20 @@ async function queue(items, fn, concurrent = 3) {
 
 async function saveLocal(cache, path) {
   const url = absolute(path);
+  const actualUrl = absolute(COVER_ALIASES.get(path) || path);
   try {
+    // Reaproveita a capa real caso ela já esteja armazenada.
+    if (actualUrl !== url) {
+      const existing = await cache.match(actualUrl);
+      if (existing) {
+        await cache.put(url, existing.clone());
+        return true;
+      }
+    }
     // Chamadas feitas pelo próprio SW não são interceptadas por este mesmo SW.
-    const response = await fetch(url, { cache: 'reload' });
+    const response = await fetch(actualUrl, { cache: 'reload' });
     if (!response.ok || response.status === 206) return false;
+    if (actualUrl !== url) await cache.put(actualUrl, response.clone());
     await cache.put(url, response);
     return true;
   } catch (error) {
@@ -274,7 +292,11 @@ async function downloadAll() {
   const externalCache = await caches.open(EXTERNAL_CACHE);
   const external = await queue(EXTERNAL_FILES, item => saveExternal(externalCache, item), 3);
   const contentCache = await caches.open(CONTENT_CACHE);
-  const content = await queue(CONTENT_FILES, path => saveLocal(contentCache, path), 3);
+  // Download incremental: evita repetir os arquivos grandes já armazenados.
+  const content = await queue(CONTENT_FILES, async path => {
+    if (await contentCache.match(absolute(path))) return true;
+    return saveLocal(contentCache, path);
+  }, 3);
   await notify({ phase: 'ready', shell: core, external, content });
 }
 
