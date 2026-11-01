@@ -854,52 +854,182 @@
         refreshIcons();
     }
 
-    // 6. Modelos de prescrições; nenhum medicamento é definido no app.js.
+    // 6. Prescrições: apresentação consultável, sem modificar o banco de dados.
     function renderPrescricoes() {
+        const view = byId('view-prescricoes');
+        if (!view) return;
         const source = database().prescricoes || {};
-        PRESCRIPTION_GROUPS.forEach((group) => {
-            const container = byId(`prescricoes-list-${group}`);
+        const labels = {
+            analgesicos: 'Analgésicos',
+            'anti-inflamatorios': 'Anti-inflamatórios (AINES)',
+            corticosteroides: 'Corticosteroides (Preemptiva)',
+            antibioticos: 'Tratamento de Infecções',
+            antifungicos: 'Antifúngico',
+            colutorios: 'Colutório',
+            'corticosteroides-topicos': 'Corticosteroide Tópico'
+        };
+        function getItems(group) {
+            const entry = source[group] ?? source[group.replace(/-/g, '_')];
+            return Array.isArray(entry) ? entry : (Array.isArray(entry?.items) ? entry.items : []);
+        }
+        function cardFor(item, group, withCategory = false) {
+            const card = document.createElement('article');
+            card.className = 'min-w-0 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50/70 dark:bg-gray-900/30 p-4 flex flex-col gap-3';
+            if (typeof item === 'string') {
+                card.textContent = item;
+                card.className += ' text-sm text-gray-700 dark:text-gray-300';
+                return card;
+            }
+            if (!item || typeof item !== 'object') return card;
+            if (withCategory) {
+                const category = document.createElement('p');
+                category.className = 'text-[11px] font-semibold uppercase tracking-wide text-amber-700 dark:text-amber-400';
+                category.textContent = labels[group] || group;
+                card.appendChild(category);
+            }
+            const header = document.createElement('div');
+            header.className = 'flex flex-wrap justify-between items-start gap-x-3 gap-y-2';
+            const name = document.createElement('h3');
+            name.className = 'min-w-[145px] flex-1 font-bold text-[15px] sm:text-base leading-snug text-gray-900 dark:text-white break-words';
+            name.textContent = item.nome || item.title || item.medicamento || 'Medicamento';
+            header.appendChild(name);
+            if (item.quantidade) {
+                const quantity = document.createElement('span');
+                quantity.className = 'rounded-lg px-2.5 py-1 border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-xs font-semibold text-gray-600 dark:text-gray-300';
+                quantity.textContent = item.quantidade;
+                header.appendChild(quantity);
+            }
+            card.appendChild(header);
+            const dosage = item.posologia || item.orientacao || item.descricao || '';
+            if (dosage) {
+                const block = document.createElement('div');
+                block.className = 'pl-3 py-0.5 border-l-[3px] border-amber-500 dark:border-amber-400';
+                const caption = document.createElement('p');
+                caption.className = 'text-[10px] sm:text-[11px] uppercase tracking-wide font-bold text-amber-700 dark:text-amber-400 mb-1';
+                caption.textContent = 'Posologia do modelo';
+                const details = document.createElement('p');
+                details.className = 'text-sm sm:text-[15px] leading-relaxed text-gray-700 dark:text-gray-200';
+                details.textContent = dosage;
+                block.append(caption, details);
+                card.appendChild(block);
+            }
+            if (item.observacoes) {
+                const note = document.createElement('p');
+                note.className = 'rounded-lg p-2.5 border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 text-xs leading-relaxed text-amber-900 dark:text-amber-200';
+                note.textContent = item.observacoes;
+                card.appendChild(note);
+            }
+            return card;
+        }
+
+        const tablist = view.querySelector('[role="tablist"]');
+        const surface = byId('tab-prescricoes-dor')?.parentElement;
+        if (surface) surface.className = 'mt-4';
+        if (tablist) {
+            tablist.className = 'flex gap-1 p-1.5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 overflow-x-auto scrollbar-hide';
+            tablist.querySelectorAll('.tab-btn').forEach(button => {
+                const active = button.classList.contains('tab-active-prescricoes');
+                button.className = 'tab-btn flex-1 rounded-xl min-w-max px-3 sm:px-4 py-3 text-xs sm:text-sm font-semibold flex items-center justify-center gap-2 text-gray-600 dark:text-gray-300 hover:text-amber-700 dark:hover:text-amber-300 transition-colors' +
+                    (active ? ' active tab-active-prescricoes' : '');
+            });
+            const disclaimer = Array.from(view.children).find(element =>
+                element.tagName === 'P' && element.textContent.includes('A prescrição depende'));
+            if (disclaimer) {
+                disclaimer.className = 'text-xs leading-relaxed text-amber-900 dark:text-amber-200 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-3';
+                if (!disclaimer.dataset.prescricoesMoved) {
+                    tablist.before(disclaimer);
+                    disclaimer.dataset.prescricoesMoved = 'true';
+                }
+            }
+        }
+
+        PRESCRIPTION_GROUPS.forEach(group => {
+            const container = byId('prescricoes-list-' + group);
             if (!container) return;
             const entry = source[group] ?? source[group.replace(/-/g, '_')];
-            const items = Array.isArray(entry) ? entry :
-                (Array.isArray(entry?.items) ? entry.items : []);
+            const items = getItems(group);
+            const wrapper = container.parentElement;
+            if (wrapper) {
+                wrapper.className = 'rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 sm:p-5 shadow-sm';
+                const heading = wrapper.querySelector('h2');
+                if (heading) {
+                    heading.className = 'flex items-center flex-wrap gap-2 pb-3 mb-3 border-b border-gray-100 dark:border-gray-700 text-base sm:text-lg font-bold text-gray-900 dark:text-white';
+                    let counter = heading.querySelector('.prescricoes-count');
+                    if (!counter) {
+                        counter = document.createElement('span');
+                        counter.className = 'prescricoes-count ml-auto text-[11px] font-semibold text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 rounded-full px-2.5 py-1 whitespace-nowrap';
+                        heading.appendChild(counter);
+                    }
+                    counter.textContent = items.length + (items.length === 1 ? ' modelo' : ' modelos');
+                }
+            }
+            container.className = 'grid grid-cols-1 lg:grid-cols-2 gap-3';
             container.replaceChildren();
             if (typeof entry === 'string' || typeof entry?.content === 'string') {
                 container.innerHTML = typeof entry === 'string' ? entry : entry.content;
                 return;
             }
             if (!items.length) {
-                const message = document.createElement('p');
-                message.className = 'text-gray-500 dark:text-gray-400 text-sm';
-                message.textContent = 'Nenhum modelo disponível no momento.';
-                container.appendChild(message);
+                const empty = document.createElement('p');
+                empty.className = 'text-sm text-gray-500 dark:text-gray-400';
+                empty.textContent = 'Nenhum modelo disponível no momento.';
+                container.appendChild(empty);
                 return;
             }
-
-            items.forEach((item) => {
-                const card = document.createElement('div');
-                card.className = 'pb-3 border-b border-gray-200 dark:border-gray-600 last:border-b-0';
-                if (typeof item === 'string') {
-                    card.textContent = item;
-                } else if (item && typeof item === 'object') {
-                    const name = document.createElement('strong');
-                    name.className = 'block font-semibold text-gray-900 dark:text-white mb-1';
-                    const nameText = item.nome || item.title || item.medicamento || '';
-                    name.textContent = [nameText, item.quantidade].filter(Boolean).join(' - ');
-                    const dosing = document.createElement('p');
-                    dosing.className = 'text-sm text-gray-700 dark:text-gray-300';
-                    dosing.textContent = item.posologia || item.orientacao || item.descricao || '';
-                    card.append(name, dosing);
-                    if (item.observacoes) {
-                        const note = document.createElement('p');
-                        note.className = 'text-xs text-gray-500 dark:text-gray-400 mt-1 italic';
-                        note.textContent = item.observacoes;
-                        card.appendChild(note);
-                    }
-                }
-                container.appendChild(card);
-            });
+            items.forEach(item => container.appendChild(cardFor(item, group)));
         });
+
+        // Pesquisa por nome em todas as categorias, com exibição dos resultados juntos.
+        if (tablist && !byId('prescricoes-busca')) {
+            const search = document.createElement('div');
+            search.className = 'mt-3 mb-3';
+            search.innerHTML = '<label for="prescricoes-busca" class="block text-xs font-semibold text-gray-600 dark:text-gray-300 mb-2">Buscar medicamento em todas as categorias</label>' +
+                '<div class="flex items-center gap-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-3 py-2.5 focus-within:ring-2 focus-within:ring-amber-400">' +
+                '<i data-lucide="search" class="w-4 h-4 text-gray-400 shrink-0" aria-hidden="true"></i>' +
+                '<input id="prescricoes-busca" type="search" autocomplete="off" placeholder="Ex.: amoxicilina, dipirona..." aria-label="Pesquisar medicamento" class="w-full min-w-0 bg-transparent text-sm text-gray-900 dark:text-white outline-none placeholder:text-gray-400"></div>';
+            const results = document.createElement('div');
+            results.id = 'prescricoes-resultados';
+            results.className = 'hidden mt-3';
+            tablist.before(search, results);
+            search.querySelector('input').addEventListener('input', updateSearch);
+        }
+
+        function updateSearch() {
+            const input = byId('prescricoes-busca');
+            const results = byId('prescricoes-resultados');
+            if (!input || !results || !tablist) return;
+            const q = normalize(input.value);
+            const active = q.length > 0;
+            tablist.classList.toggle('hidden', active);
+            surface?.classList.toggle('hidden', active);
+            results.classList.toggle('hidden', !active);
+            if (!active) return;
+            const matches = [];
+            PRESCRIPTION_GROUPS.forEach(group => {
+                getItems(group).forEach(item => {
+                    const name = typeof item === 'string' ? item : (item.nome || item.title || item.medicamento || '');
+                    if (normalize(name + ' ' + (labels[group] || '')).includes(q)) matches.push({ item, group });
+                });
+            });
+            results.replaceChildren();
+            const count = document.createElement('p');
+            count.className = 'mb-3 text-sm font-semibold text-gray-700 dark:text-gray-300';
+            count.textContent = matches.length + (matches.length === 1 ? ' resultado encontrado' : ' resultados encontrados');
+            results.appendChild(count);
+            if (!matches.length) {
+                const empty = document.createElement('p');
+                empty.className = 'rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-5 text-sm text-gray-500 dark:text-gray-400';
+                empty.textContent = 'Nenhum medicamento encontrado. Verifique o termo pesquisado.';
+                results.appendChild(empty);
+                return;
+            }
+            const grid = document.createElement('div');
+            grid.className = 'grid grid-cols-1 lg:grid-cols-2 gap-3';
+            matches.forEach(entry => grid.appendChild(cardFor(entry.item, entry.group, true)));
+            results.appendChild(grid);
+        }
+        updateSearch();
+        refreshIcons();
     }
 
     // 7. Manual de biossegurança.
