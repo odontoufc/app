@@ -295,52 +295,85 @@ if ('serviceWorker' in navigator) {
         </div>
 
         <!-- Conteúdo fixo, independente dos cadastros de protocolos. -->
-        <div id="view-links" class="view-section space-y-5">
-            <div class="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 p-5 sm:p-8 shadow-sm">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">Links Úteis</h2>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Canais educacionais, podcasts e portais da Odontologia.</p>
-                <div class="mt-5"><div class="space-y-6 text-sm">
-                    <div>
-                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center gap-2"><i data-lucide="video" class="w-5 h-5 text-red-600 dark:text-red-400"></i> Canais Recomendados</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <a href="https://youtube.com/@deolhonaperiodontiaufc-cam693?si=VatiQZ6QlFN97cdf" target="_blank" rel="noopener noreferrer" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
-                                <svg viewBox="0 0 24 24" class="w-6 h-6 shrink-0" aria-hidden="true" focusable="false"><rect x="1" y="4.5" width="22" height="15" rx="5" fill="#dc2626"></rect><path d="M10 8.5L16 12L10 15.5Z" fill="#ffffff"></path></svg>
-                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">De Olho na Periodontia</span><span class="text-xs text-gray-500 dark:text-gray-400">UFC Sobral</span></div>
-                            </a>
-                            <a href="https://youtube.com/@dentisticaeesculturadental3098?si=GXLxIP-M6OBgPg-q" target="_blank" rel="noopener noreferrer" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
-                                <svg viewBox="0 0 24 24" class="w-6 h-6 shrink-0" aria-hidden="true" focusable="false"><rect x="1" y="4.5" width="22" height="15" rx="5" fill="#dc2626"></rect><path d="M10 8.5L16 12L10 15.5Z" fill="#ffffff"></path></svg>
-                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">Dentística e Escultura Dental</span><span class="text-xs text-gray-500 dark:text-gray-400">Canal Educativo</span></div>
-                            </a>
-                            <a href="https://youtube.com/@equipededentisticaufcsobra6651?si=kfUdVhuAx5Qox4UT" target="_blank" rel="noopener noreferrer" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-red-500 transition shadow-sm">
-                                <svg viewBox="0 0 24 24" class="w-6 h-6 shrink-0" aria-hidden="true" focusable="false"><rect x="1" y="4.5" width="22" height="15" rx="5" fill="#dc2626"></rect><path d="M10 8.5L16 12L10 15.5Z" fill="#ffffff"></path></svg>
-                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">Equipe de Dentística</span><span class="text-xs text-gray-500 dark:text-gray-400">UFC Sobral</span></div>
-                            </a>
-                            <a href="https://open.spotify.com/show/7nxXta4sQfycT6eU9NGMwC?si=Oyp7haWTS7qQN_cGLQqNVQ" target="_blank" rel="noopener noreferrer" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-green-500 transition shadow-sm">
-                                <i data-lucide="mic" class="w-6 h-6 text-green-600 dark:text-green-400"></i>
-                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">Podontocast</span><span class="text-xs text-gray-500 dark:text-gray-400">Spotify</span></div>
-                            </a>
-                            <a href="https://open.spotify.com/show/2ggj2RmSg7Mss8QYETRujI?si=zEnW5jauQ-eRE9KC1hmNJA" target="_blank" rel="noopener noreferrer" aria-label="Abrir Pod Reabilitar no Spotify" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-green-500 transition shadow-sm">
-                                <i data-lucide="mic" class="w-6 h-6 shrink-0 text-green-600 dark:text-green-400" aria-hidden="true"></i>
-                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">Pod Reabilitar</span><span class="text-xs text-gray-500 dark:text-gray-400">Ouvir episódios no Spotify</span></div>
-                            </a>
-                        </div>
+        <div id="view-links" class="view-section space-y-7">
+            <header class="relative overflow-hidden rounded-2xl border border-cyan-100 dark:border-gray-700 bg-gradient-to-br from-cyan-50 via-white to-sky-50 dark:from-gray-800 dark:via-gray-800 dark:to-cyan-950/30 p-5 sm:p-8 shadow-sm">
+                <div class="pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-cyan-200/30 dark:bg-cyan-600/10" aria-hidden="true"></div>
+                <div class="relative">
+                    <span class="mb-3 inline-flex items-center gap-2 rounded-full bg-white/80 dark:bg-gray-700/70 px-3 py-1.5 text-xs font-semibold text-primary dark:text-cyan-300 ring-1 ring-cyan-100 dark:ring-gray-600">
+                        <i data-lucide="bookmark" class="h-3.5 w-3.5" aria-hidden="true"></i> Recursos complementares
+                    </span>
+                    <h2 class="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Links Úteis</h2>
+                    <p class="mt-2 max-w-2xl text-sm sm:text-base leading-relaxed text-gray-600 dark:text-gray-300">Canais educacionais, podcasts e portais da Odontologia.</p>
+                    <div class="mt-5 flex flex-wrap items-center gap-2 text-xs font-medium">
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-gray-200 dark:border-gray-600 bg-white/70 dark:bg-gray-700/60 px-3 py-1.5 text-gray-600 dark:text-gray-300"><i data-lucide="play-circle" class="h-3.5 w-3.5 text-red-500" aria-hidden="true"></i> Vídeos</span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-gray-200 dark:border-gray-600 bg-white/70 dark:bg-gray-700/60 px-3 py-1.5 text-gray-600 dark:text-gray-300"><i data-lucide="headphones" class="h-3.5 w-3.5 text-emerald-500" aria-hidden="true"></i> Podcasts</span>
+                        <span class="inline-flex items-center gap-1.5 rounded-full border border-gray-200 dark:border-gray-600 bg-white/70 dark:bg-gray-700/60 px-3 py-1.5 text-gray-600 dark:text-gray-300"><i data-lucide="landmark" class="h-3.5 w-3.5 text-primary dark:text-cyan-400" aria-hidden="true"></i> Portais</span>
                     </div>
-                    
-                    <div>
-                        <h4 class="font-bold text-gray-800 dark:text-gray-200 mt-6 mb-3 flex items-center gap-2"><i data-lucide="link" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i> Portais Importantes</h4>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                            <a href="https://website.cfo.org.br/" target="_blank" rel="noopener noreferrer" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-blue-500 transition shadow-sm">
-                                <i data-lucide="external-link" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
-                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">CFO</span><span class="text-xs text-gray-500 dark:text-gray-400">Conselho Federal</span></div>
-                            </a>
-                             <a href="https://www.cro-ce.org.br/" target="_blank" rel="noopener noreferrer" class="p-3 bg-white dark:bg-gray-800 dark:border-gray-700 border border-gray-200 rounded-lg flex items-center gap-3 hover:border-blue-500 transition shadow-sm">
-                                <i data-lucide="external-link" class="w-5 h-5 text-gray-600 dark:text-gray-400"></i>
-                                <div><span class="block font-semibold text-gray-800 dark:text-gray-200 text-sm">CRO-CE</span><span class="text-xs text-gray-500 dark:text-gray-400">Conselho Regional</span></div>
-                            </a>
-                        </div>
-                    </div>
-                </div></div>
-            </div>
+                </div>
+            </header>
+            <section aria-labelledby="links-canais-titulo" class="space-y-3">
+                <div class="flex items-start gap-3">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-50 dark:bg-red-950/40"><i data-lucide="video" class="h-5 w-5 text-red-600 dark:text-red-400" aria-hidden="true"></i></span>
+                    <div class="min-w-0"><h3 id="links-canais-titulo" class="text-lg font-bold text-gray-900 dark:text-white">Canais Recomendados</h3><p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Conteúdos em vídeo para complementar seus estudos.</p></div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <a href="https://youtube.com/@deolhonaperiodontiaufc-cam693?si=VatiQZ6QlFN97cdf" target="_blank" rel="noopener noreferrer" class="group flex min-w-0 min-h-[88px] items-center gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-red-300 dark:hover:border-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900">
+                        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 dark:bg-red-950/40"><svg viewBox="0 0 24 24" class="h-7 w-7" aria-hidden="true" focusable="false"><rect x="1" y="4.5" width="22" height="15" rx="5" fill="#dc2626"/><path d="M10 8.5L16 12L10 15.5Z" fill="#fff"/></svg></span>
+                        <span class="min-w-0 flex-1"><span class="block text-sm sm:text-base font-semibold leading-snug text-gray-800 dark:text-gray-100">De Olho na Periodontia</span><span class="mt-1 block text-xs leading-relaxed text-gray-500 dark:text-gray-400">UFC Sobral</span></span>
+                        <i data-lucide="arrow-up-right" class="h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://youtube.com/@dentisticaeesculturadental3098?si=GXLxIP-M6OBgPg-q" target="_blank" rel="noopener noreferrer" class="group flex min-w-0 min-h-[88px] items-center gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-red-300 dark:hover:border-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900">
+                        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 dark:bg-red-950/40"><svg viewBox="0 0 24 24" class="h-7 w-7" aria-hidden="true" focusable="false"><rect x="1" y="4.5" width="22" height="15" rx="5" fill="#dc2626"/><path d="M10 8.5L16 12L10 15.5Z" fill="#fff"/></svg></span>
+                        <span class="min-w-0 flex-1"><span class="block text-sm sm:text-base font-semibold leading-snug text-gray-800 dark:text-gray-100">Dentística e Escultura Dental</span><span class="mt-1 block text-xs leading-relaxed text-gray-500 dark:text-gray-400">Canal Educativo</span></span>
+                        <i data-lucide="arrow-up-right" class="h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://youtube.com/@equipededentisticaufcsobra6651?si=kfUdVhuAx5Qox4UT" target="_blank" rel="noopener noreferrer" class="group flex min-w-0 min-h-[88px] items-center gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-red-300 dark:hover:border-red-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900">
+                        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 dark:bg-red-950/40"><svg viewBox="0 0 24 24" class="h-7 w-7" aria-hidden="true" focusable="false"><rect x="1" y="4.5" width="22" height="15" rx="5" fill="#dc2626"/><path d="M10 8.5L16 12L10 15.5Z" fill="#fff"/></svg></span>
+                        <span class="min-w-0 flex-1"><span class="block text-sm sm:text-base font-semibold leading-snug text-gray-800 dark:text-gray-100">Equipe de Dentística</span><span class="mt-1 block text-xs leading-relaxed text-gray-500 dark:text-gray-400">UFC Sobral</span></span>
+                        <i data-lucide="arrow-up-right" class="h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </section>
+            <section aria-labelledby="links-podcasts-titulo" class="space-y-3">
+                <div class="flex items-start gap-3">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/40"><i data-lucide="headphones" class="h-5 w-5 text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i></span>
+                    <div class="min-w-0"><h3 id="links-podcasts-titulo" class="text-lg font-bold text-gray-900 dark:text-white">Podcasts</h3><p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Ouça conteúdos de Odontologia no Spotify.</p></div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <a href="https://open.spotify.com/show/7nxXta4sQfycT6eU9NGMwC?si=Oyp7haWTS7qQN_cGLQqNVQ" target="_blank" rel="noopener noreferrer" class="group flex min-w-0 min-h-[88px] items-center gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-emerald-300 dark:hover:border-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900">
+                        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/40"><i data-lucide="mic" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i></span>
+                        <span class="min-w-0 flex-1"><span class="block text-sm sm:text-base font-semibold leading-snug text-gray-800 dark:text-gray-100">Podontocast</span><span class="mt-1 block text-xs leading-relaxed text-gray-500 dark:text-gray-400">Spotify</span></span>
+                        <i data-lucide="arrow-up-right" class="h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://open.spotify.com/show/2ggj2RmSg7Mss8QYETRujI?si=zEnW5jauQ-eRE9KC1hmNJA" target="_blank" rel="noopener noreferrer" aria-label="Abrir Pod Reabilitar no Spotify" class="group flex min-w-0 min-h-[88px] items-center gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-emerald-300 dark:hover:border-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900">
+                        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-950/40"><i data-lucide="mic" class="h-6 w-6 text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i></span>
+                        <span class="min-w-0 flex-1"><span class="block text-sm sm:text-base font-semibold leading-snug text-gray-800 dark:text-gray-100">Pod Reabilitar</span><span class="mt-1 block text-xs leading-relaxed text-gray-500 dark:text-gray-400">Ouvir episódios no Spotify</span></span>
+                        <i data-lucide="arrow-up-right" class="h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </section>
+            <section aria-labelledby="links-portais-titulo" class="space-y-3">
+                <div class="flex items-start gap-3">
+                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-cyan-50 dark:bg-cyan-950/40"><i data-lucide="landmark" class="h-5 w-5 text-primary dark:text-cyan-400" aria-hidden="true"></i></span>
+                    <div class="min-w-0"><h3 id="links-portais-titulo" class="text-lg font-bold text-gray-900 dark:text-white">Portais Importantes</h3><p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Acesso aos conselhos de Odontologia.</p></div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <a href="https://website.cfo.org.br/" target="_blank" rel="noopener noreferrer" class="group flex min-w-0 min-h-[88px] items-center gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-cyan-300 dark:hover:border-cyan-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900">
+                        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 dark:bg-cyan-950/40"><i data-lucide="landmark" class="h-6 w-6 text-primary dark:text-cyan-400" aria-hidden="true"></i></span>
+                        <span class="min-w-0 flex-1"><span class="block text-sm sm:text-base font-semibold leading-snug text-gray-800 dark:text-gray-100">CFO</span><span class="mt-1 block text-xs leading-relaxed text-gray-500 dark:text-gray-400">Conselho Federal</span></span>
+                        <i data-lucide="arrow-up-right" class="h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true"></i>
+                    </a>
+                    <a href="https://www.cro-ce.org.br/" target="_blank" rel="noopener noreferrer" class="group flex min-w-0 min-h-[88px] items-center gap-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:border-cyan-300 dark:hover:border-cyan-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-600 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-900">
+                        <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-cyan-50 dark:bg-cyan-950/40"><i data-lucide="landmark" class="h-6 w-6 text-primary dark:text-cyan-400" aria-hidden="true"></i></span>
+                        <span class="min-w-0 flex-1"><span class="block text-sm sm:text-base font-semibold leading-snug text-gray-800 dark:text-gray-100">CRO-CE</span><span class="mt-1 block text-xs leading-relaxed text-gray-500 dark:text-gray-400">Conselho Regional</span></span>
+                        <i data-lucide="arrow-up-right" class="h-4 w-4 shrink-0 text-gray-400 dark:text-gray-500 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </section>
+            <p class="flex items-start gap-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-100/70 dark:bg-gray-800/60 px-4 py-3 text-xs leading-relaxed text-gray-500 dark:text-gray-400">
+                <i data-lucide="wifi" class="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true"></i>
+                Esses recursos são externos e precisam de conexão com a internet para serem acessados.
+            </p>
         </div>
 
         <div id="view-feedback" class="view-section">
