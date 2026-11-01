@@ -400,20 +400,51 @@
   });
   $('mobilePageSlider').addEventListener('change',event=>goTo(event.target.value));
 
-  // Gestos horizontais trocam páginas apenas quando o PDF está ajustado à largura.
-  // Gestos verticais continuam servindo para rolar a página; dois dedos não trocam páginas.
+  // Pinça com dois dedos amplia o PDF; um dedo rola as páginas verticalmente.
+  // A navegação horizontal original continua disponível no desktop.
   let touchStart=null;
+  function touchDistance(a,b){return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)}
+  function finishPinch(){
+    if(!pinch)return;
+    const data=pinch;pinch=null;
+    continuousRoot.style.transform='';
+    continuousRoot.style.transformOrigin='';
+    if(Math.abs(data.target-scale)>scale*.015){
+      autoFit=false;
+      zoomContinuous(data.target,data.x,data.y);
+    }
+  }
   elements.viewer.addEventListener('touchstart',event=>{
+    if(isContinuous){
+      touchStart=null;
+      if(event.touches.length===2&&pdf){
+        const rect=elements.viewer.getBoundingClientRect();
+        const a=event.touches[0],b=event.touches[1];
+        pinch={distance:Math.max(1,touchDistance(a,b)),original:scale,target:scale,
+          x:(a.clientX+b.clientX)/2-rect.left,y:(a.clientY+b.clientY)/2-rect.top};
+      }
+      return;
+    }
     if(!pdf||!autoFit||event.touches.length!==1||
        elements.pageFrame.clientWidth>elements.viewer.clientWidth+2){touchStart=null;return;}
     const t=event.touches[0];
     touchStart={x:t.clientX,y:t.clientY,at:performance.now()};
   },{passive:true});
   elements.viewer.addEventListener('touchmove',event=>{
+    if(isContinuous&&pinch&&event.touches.length>=2){
+      if(event.cancelable)event.preventDefault();
+      const ratio=touchDistance(event.touches[0],event.touches[1])/pinch.distance;
+      pinch.target=Math.max(.25,Math.min(3.5,pinch.original*ratio));
+      const factor=pinch.target/pinch.original;
+      continuousRoot.style.transformOrigin=(elements.viewer.scrollLeft+pinch.x)+'px '+(elements.viewer.scrollTop+pinch.y)+'px';
+      continuousRoot.style.transform='scale('+factor+')';
+      return;
+    }
     if(event.touches.length!==1)touchStart=null;
-  },{passive:true});
-  elements.viewer.addEventListener('touchcancel',()=>{touchStart=null;},{passive:true});
+  },{passive:false});
+  elements.viewer.addEventListener('touchcancel',()=>{touchStart=null;finishPinch()},{passive:true});
   elements.viewer.addEventListener('touchend',event=>{
+    if(isContinuous){if(pinch&&event.touches.length<2)finishPinch();return;}
     if(!touchStart||event.touches.length!==0||event.changedTouches.length!==1)return;
     const start=touchStart;touchStart=null;
     const t=event.changedTouches[0],dx=t.clientX-start.x,dy=t.clientY-start.y;
@@ -422,10 +453,10 @@
     }
   },{passive:true});
   $('prevBtn').addEventListener('click',()=>goTo(current-1));$('nextBtn').addEventListener('click',()=>goTo(current+1));$('pageInput').addEventListener('change',e=>goTo(e.target.value));$('pageInput').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();goTo(e.target.value);e.target.blur()}});
-  function setZoom(next){if(!pdf)return;autoFit=false;scale=Math.max(.25,Math.min(3.5,next));renderPage()}
-  $('minusBtn').addEventListener('click',()=>setZoom(scale/1.2));$('plusBtn').addEventListener('click',()=>setZoom(scale*1.2));$('fitBtn').addEventListener('click',()=>{autoFit=true;renderPage()});
-  let resizeId;window.addEventListener('resize',()=>{if(autoFit&&pdf){clearTimeout(resizeId);resizeId=setTimeout(renderPage,180)}});
-  $('fullscreenBtn').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if(elements.reader.requestFullscreen)await elements.reader.requestFullscreen();else setStatus('Tela cheia não disponível neste navegador')}catch{setStatus('Não foi possível abrir em tela cheia')}});document.addEventListener('fullscreenchange',()=>{if(pdf&&autoFit)setTimeout(renderPage,90)});
+  function setZoom(next){if(!pdf)return;autoFit=false;if(isContinuous){zoomContinuous(next);return;}scale=Math.max(.25,Math.min(3.5,next));renderPage()}
+  $('minusBtn').addEventListener('click',()=>setZoom(scale/1.2));$('plusBtn').addEventListener('click',()=>setZoom(scale*1.2));$('fitBtn').addEventListener('click',()=>{autoFit=true;if(isContinuous&&continuousFrames.length)zoomContinuous(Math.max(.25,Math.min(2.2,(elements.viewer.clientWidth-24)/Number(continuousFrames[0].dataset.width))));else renderPage()});
+  let resizeId;window.addEventListener('resize',()=>{if(autoFit&&pdf){clearTimeout(resizeId);resizeId=setTimeout(()=>{if(isContinuous&&continuousFrames.length)zoomContinuous(Math.max(.25,Math.min(2.2,(elements.viewer.clientWidth-24)/Number(continuousFrames[0].dataset.width))));else renderPage()},180)}});
+  $('fullscreenBtn').addEventListener('click',async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else if(elements.reader.requestFullscreen)await elements.reader.requestFullscreen();else setStatus('Tela cheia não disponível neste navegador')}catch{setStatus('Não foi possível abrir em tela cheia')}});document.addEventListener('fullscreenchange',()=>{if(pdf&&autoFit)setTimeout(()=>{if(isContinuous&&continuousFrames.length)zoomContinuous(Math.max(.25,Math.min(2.2,(elements.viewer.clientWidth-24)/Number(continuousFrames[0].dataset.width))));else renderPage()},90)});
   $('searchBtn').addEventListener('click',()=>{elements.searchPanel.classList.toggle('open');if(elements.searchPanel.classList.contains('open'))$('searchInput').focus()});$('closeSearch').addEventListener('click',()=>{elements.searchPanel.classList.remove('open');searchSeq++});
   $('searchPanel').addEventListener('submit',async e=>{e.preventDefault();if(!pdf)return;const term=$('searchInput').value.trim().toLocaleLowerCase('pt-BR');if(!term)return;const tok=++searchSeq;elements.searchResult.replaceChildren();elements.searchResult.textContent='Procurando em '+pdf.numPages+' páginas...';let matches=[],firstMatch=null;for(let i=1;i<=pdf.numPages;i++){if(tok!==searchSeq)return;try{let p=await pdf.getPage(i),content=await p.getTextContent();let text=content.items.map(x=>x.str||'').join(' ').toLocaleLowerCase('pt-BR');if(text.includes(term)){matches.push(i);if(firstMatch===null)firstMatch=i}}catch{}if(i%15===0)elements.searchResult.textContent=`Pesquisando... ${i} de ${pdf.numPages} páginas`;}if(tok!==searchSeq)return;elements.searchResult.replaceChildren();if(matches.length){let label=document.createElement('span');label.textContent=`${matches.length} página(s) com a expressão: `;elements.searchResult.append(label);matches.slice(0,12).forEach(n=>{const b=document.createElement('button');b.type='button';b.textContent='p. '+n;b.addEventListener('click',()=>goTo(n));elements.searchResult.append(b)});if(matches.length>12)elements.searchResult.append(document.createTextNode(` e mais ${matches.length-12}.`));goTo(firstMatch)}else elements.searchResult.textContent='Não foram encontradas correspondências no texto pesquisável deste PDF.'});
   $('openBtn').addEventListener('click',()=>{if(driveViewUrl)window.open(driveViewUrl,'_blank','noopener,noreferrer');else if(sourceUrl&&!openedLocal)window.open(sourceUrl,'_blank','noopener,noreferrer')});$('downloadBtn').addEventListener('click',()=>{if(!sourceUrl||openedLocal)return;const a=document.createElement('a');a.href=sourceUrl;a.download=decodeURIComponent(new URL(sourceUrl).pathname.split('/').pop())||'livro.pdf';document.body.append(a);a.click();a.remove()});
