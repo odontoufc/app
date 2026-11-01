@@ -1,5 +1,5 @@
 /**
- * GUIA CLÍNICO — JavaScript compartilhado
+ * GUIA CLÍNICO - JavaScript compartilhado
  * Projeto estático compatível com GitHub Pages.
  * NÃO utiliza Firebase, login, editor ou armazenamento de protocolos no navegador.
  *
@@ -230,7 +230,7 @@
         void navigateDocument(target.url.href);
     }, true);
 
-    // Prerrecuperação leve: HTMLs de aproximadamente 10–25 KB e seus bancos
+    // Prerrecuperação leve: HTMLs de aproximadamente 10-25 KB e seus bancos
     // JS pequenos. As capas e os livros não são baixados por esta rotina.
     function warmPages() {
         if (didWarm) return;
@@ -688,7 +688,7 @@
         refreshIcons();
     }
 
-    // 5. Protocolos clínicos — EXCLUSIVAMENTE do arquivo protocolos.js.
+    // 5. Protocolos clínicos - EXCLUSIVAMENTE do arquivo protocolos.js.
     function getProtocols() {
         const source = database().protocolos;
         const records = Array.isArray(source) ? source :
@@ -885,7 +885,7 @@
                     const name = document.createElement('strong');
                     name.className = 'block font-semibold text-gray-900 dark:text-white mb-1';
                     const nameText = item.nome || item.title || item.medicamento || '';
-                    name.textContent = [nameText, item.quantidade].filter(Boolean).join(' — ');
+                    name.textContent = [nameText, item.quantidade].filter(Boolean).join(' - ');
                     const dosing = document.createElement('p');
                     dosing.className = 'text-sm text-gray-700 dark:text-gray-300';
                     dosing.textContent = item.posologia || item.orientacao || item.descricao || '';
