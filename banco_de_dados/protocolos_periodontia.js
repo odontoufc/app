@@ -1,6 +1,6 @@
 /**
- * Guia Clínico — Protocolos de Periodontia
- * Fonte: Guia Prático em Periodontia — Equipe de Periodontia,
+ * Guia Clínico - Protocolos de Periodontia
+ * Fonte: Guia Prático em Periodontia - Equipe de Periodontia,
  * Universidade Federal do Ceará (UFC), 2025.
  *
  * Arquivo independente: banco_de_dados/protocolos_periodontia.js
@@ -16,7 +16,7 @@
   const fonte = `
     <hr class="my-6 border-gray-200 dark:border-gray-700">
     <p class="text-sm text-gray-600 dark:text-gray-400">
-      <strong>Fonte:</strong> Guia Prático em Periodontia — Equipe de Periodontia,
+      <strong>Fonte:</strong> Guia Prático em Periodontia - Equipe de Periodontia,
       Universidade Federal do Ceará (UFC), 2025.
     </p>
   `;
@@ -167,19 +167,19 @@
       content: `
         <p>Nos casos de urgência endodôntica em pacientes com periodontite, poderá ser adotada a seguinte sequência de atendimento:</p>
 
-        <h2>Etapa 1 — Raspagem supragengival e atendimento da urgência</h2>
+        <h2>Etapa 1 - Raspagem supragengival e atendimento da urgência</h2>
         <ol>
           <li>Realizar a raspagem supragengival (R-SUPRA) com ultrassom.</li>
           <li>Em seguida, realizar o atendimento da urgência endodôntica.</li>
         </ol>
 
-        <h2>Etapa 2 — Periograma e tratamento periodontal do sextante</h2>
+        <h2>Etapa 2 - Periograma e tratamento periodontal do sextante</h2>
         <ol>
           <li>Realizar o periograma.</li>
           <li>Realizar a raspagem e o alisamento radicular (RAR) do sextante correspondente.</li>
         </ol>
 
-        <h2>Etapa 3 — Conclusão do tratamento endodôntico</h2>
+        <h2>Etapa 3 - Conclusão do tratamento endodôntico</h2>
         <p>Prosseguir com a conclusão do tratamento endodôntico.</p>
 
         <h2>Sequência resumida</h2>
