@@ -495,9 +495,12 @@
         template.content.querySelectorAll('p').forEach(paragraph => {
             const strong = paragraph.querySelector('strong');
             const label = normalize(strong?.textContent || '').replace(/:\s*$/, '');
-            if (!labels.has(label)) return;
+            const isCiv = record?.material === 'ionomero_vidro';
+            const isProvenanceNote = labels.has(label);
+            const isReviewIntro = isCiv && label === 'proposta didatica para revisao docente';
+            if (!isProvenanceNote && !isReviewIntro) return;
             const previous = paragraph.previousElementSibling;
-            if (previous?.tagName === 'HR') previous.remove();
+            if (isProvenanceNote && previous?.tagName === 'HR') previous.remove();
             paragraph.remove();
         });
         return template.innerHTML;
@@ -509,10 +512,6 @@
             panel.append(dentalElement('div', 'rounded-xl border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-4 text-amber-900 dark:text-amber-200 text-sm',
                 record.observacao || 'Essa possibilidade não possui protocolo no material fornecido.'));
             return;
-        }
-        if (status === 'revisao_docente') {
-            panel.append(dentalElement('div', 'mb-5 rounded-xl border border-amber-300 dark:border-amber-700 bg-amber-50 dark:bg-amber-900/20 p-4 text-amber-900 dark:text-amber-200 text-sm',
-                'CONTEÚDO PRELIMINAR — NÃO VALIDADO. Esta combinação com ionômero não consta no documento original. Os materiais e as etapas são propostas didáticas para revisão docente, e não devem ser utilizados como protocolo clínico aprovado.'));
         }
         panel.append(dentalElement('h3', 'font-bold text-lg text-gray-900 dark:text-white mb-3', record.title || 'Protocolo'));
         if (record.summary) panel.append(dentalElement('p', 'text-sm text-gray-500 dark:text-gray-400 mb-3', record.summary));
