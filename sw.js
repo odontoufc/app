@@ -6,11 +6,11 @@
  */
 'use strict';
 
-const VERSION = '2026-11-01-01';
+const VERSION = '2026-11-01-02';
 const PREFIX = 'guia-clinico-offline-';
 const SHELL_CACHE = `${PREFIX}shell-${VERSION}`;
 
-// Preserva os downloads feitos com a versão anterior; não força baixar 60 MB novamente.
+// Preserva os downloads feitos com as versões anteriores; evita repetir arquivos grandes.
 // O header-component.js atual reconhece estes prefixos.
 const CONTENT_CACHE = `${PREFIX}content-2026-10-31-01`;
 const EXTERNAL_CACHE = `${PREFIX}external-2026-10-31-01`;
@@ -50,6 +50,7 @@ const COVER_ALIASES = new Map([
 ]);
 const CONTENT_FILES = [
   'banco_de_dados/livros/manual.pdf',
+  'banco_de_dados/livros/odontograma.pdf',
   ...COVER_ALIASES.keys(),
   ...Array.from({ length: 107 }, (_, i) =>
     `reabilitacao-oral/assets/paginas/pagina-${String(i + 1).padStart(3, '0')}.webp`)
