@@ -136,6 +136,7 @@
     // O progresso mostra os recursos locais comprovadamente presentes no Cache Storage.
     const OFFLINE_FILES = [
         'banco_de_dados/livros/manual.pdf',
+        'banco_de_dados/livros/odontograma.pdf',
         'capas/dentistica.png', 'capas/periodontia.png',
         'capas/endodontia.png', 'capas/cirurgia.png', 'capas/manual.png',
         ...Array.from({ length: 107 }, (_, i) =>
@@ -177,8 +178,8 @@
                     </div>
                 </div>
                 <p class="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
-                    Baixe as páginas, o Manual de Biossegurança e as imagens de Reabilitação Oral
-                    para consultar sem internet. Recomenda-se Wi-Fi e espaço livre (aproximadamente 60 MB).
+                    Baixe as páginas, o Manual de Biossegurança, o livro do Odontograma e as imagens de Reabilitação Oral
+                    para consultar sem internet. Recomenda-se Wi-Fi e aproximadamente 100 MB de espaço livre.
                 </p>
                 <p class="text-xs text-amber-700 dark:text-amber-300">
                     Livros externos do Google Drive e o formulário de feedback precisam de internet.
