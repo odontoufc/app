@@ -1,5 +1,5 @@
 /**
- * Guia Clínico — Banco de protocolos clínicos.
+ * Guia Clínico - Banco de protocolos clínicos.
  *
  * Fonte dos protocolos de Dentística: arquivo "Restaurações.docx"
  * fornecido pelo responsável pelo site. A apresentação conserva a divisão
@@ -493,8 +493,8 @@
     }[character]));
     const listaMateriaisHtml = materiais =>
         `<ul>${materiais.map(m => `<li>${escapeHtml(m)}</li>`).join('')}</ul>`;
-    const fonteOriginal = "Restaurações.docx — material didático fornecido para o Guia Clínico (UFC Sobral); transcrição preservada.";
-    const fonteMateriais = "Checklist de Materiais — Dentística (banco_de_dados/dentistica.js, UFC Sobral).";
+    const fonteOriginal = "Restaurações.docx - material didático fornecido para o Guia Clínico (UFC Sobral); transcrição preservada.";
+    const fonteMateriais = "Checklist de Materiais - Dentística (banco_de_dados/dentistica.js, UFC Sobral).";
     protocolosDentistica.forEach(protocolo => {
         const meta = metaPorId.get(protocolo.id);
         if (!meta) return;
@@ -517,7 +517,7 @@
         "id": "dentistica-classe-i-oclusal-civ",
         "title": "Restauração oclusal com ionômero",
         "category": "Dentística",
-        "summary": "Classe I — oclusal • CIV (proposta em revisão)",
+        "summary": "Classe I - oclusal • CIV (proposta em revisão)",
         "classe": "I",
         "variacao": "oclusal",
         "material": "ionomero_vidro",
@@ -557,7 +557,7 @@
         "id": "dentistica-classe-ii-simples-civ",
         "title": "Classe II simples com ionômero",
         "category": "Dentística",
-        "summary": "Classe II — simples • CIV (proposta em revisão)",
+        "summary": "Classe II - simples • CIV (proposta em revisão)",
         "classe": "II",
         "variacao": "simples",
         "material": "ionomero_vidro",
@@ -600,7 +600,7 @@
         "id": "dentistica-classe-ii-composta-civ",
         "title": "Classe II composta com ionômero",
         "category": "Dentística",
-        "summary": "Classe II — composta • CIV (proposta em revisão)",
+        "summary": "Classe II - composta • CIV (proposta em revisão)",
         "classe": "II",
         "variacao": "composta",
         "material": "ionomero_vidro",
@@ -644,7 +644,7 @@
         "id": "dentistica-classe-ii-complexa-civ",
         "title": "Classe II complexa com ionômero",
         "category": "Dentística",
-        "summary": "Classe II — complexa • CIV (proposta em revisão)",
+        "summary": "Classe II - complexa • CIV (proposta em revisão)",
         "classe": "II",
         "variacao": "complexa",
         "material": "ionomero_vidro",
@@ -686,7 +686,7 @@
         "id": "dentistica-classe-v-cariosa-civ",
         "title": "Classe V cariosa com ionômero",
         "category": "Dentística",
-        "summary": "Classe V — cariosa • CIV (proposta em revisão)",
+        "summary": "Classe V - cariosa • CIV (proposta em revisão)",
         "classe": "V",
         "variacao": "cariosa",
         "material": "ionomero_vidro",
@@ -730,7 +730,7 @@
         "id": "dentistica-classe-v-nao_cariosa-civ",
         "title": "Classe V não cariosa com ionômero",
         "category": "Dentística",
-        "summary": "Classe V — nao cariosa • CIV (proposta em revisão)",
+        "summary": "Classe V - nao cariosa • CIV (proposta em revisão)",
         "classe": "V",
         "variacao": "nao_cariosa",
         "material": "ionomero_vidro",
@@ -784,15 +784,15 @@
         "variacoes": [
             {
                 "id": "simples",
-                "rotulo": "Simples — estritamente proximal"
+                "rotulo": "Simples - estritamente proximal"
             },
             {
                 "id": "composta",
-                "rotulo": "Composta — proximal e oclusal"
+                "rotulo": "Composta - proximal e oclusal"
             },
             {
                 "id": "complexa",
-                "rotulo": "Complexa — técnica da matriz circunferencial"
+                "rotulo": "Complexa - técnica da matriz circunferencial"
             }
         ]
     },
