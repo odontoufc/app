@@ -124,28 +124,28 @@ if ('serviceWorker' in navigator) {
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-3 xs:gap-4">
                     
                     <a href="./dentistica.html" class="btn-card bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
-                        <img src="./capas/dentistica.webp" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Dentística">
+                        <img src="./capas/dentistica.webp" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Dentística" loading="eager" decoding="async" fetchpriority="high">
                         <div class="flex-grow flex items-center justify-center bg-white dark:bg-gray-800 p-1">
                             <span class="font-semibold text-sm xs:text-base text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-cyan-400 transition-colors">Dentística</span>
                         </div>
                     </a>
 
                     <a href="./periodontia.html" class="btn-card bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
-                        <img src="./capas/periodontia.webp" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Periodontia">
+                        <img src="./capas/periodontia.webp" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Periodontia" loading="eager" decoding="async">
                         <div class="flex-grow flex items-center justify-center bg-white dark:bg-gray-800 p-1">
                             <span class="font-semibold text-sm xs:text-base text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-cyan-400 transition-colors">Periodontia</span>
                         </div>
                     </a>
 
                     <a href="./endodontia.html" class="btn-card bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
-                        <img src="./capas/endodontia.webp" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Endodontia">
+                        <img src="./capas/endodontia.webp" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Endodontia" loading="lazy" decoding="async" fetchpriority="low">
                         <div class="flex-grow flex items-center justify-center bg-white dark:bg-gray-800 p-1">
                             <span class="font-semibold text-sm xs:text-base text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-cyan-400 transition-colors">Endodontia</span>
                         </div>
                     </a>
 
                     <a href="./cirurgia.html" class="btn-card bg-white dark:bg-gray-800 dark:border-gray-700 rounded-xl border border-gray-200 shadow-sm flex flex-col cursor-pointer w-full h-36 xs:h-44 overflow-hidden p-0 group">
-                        <img src="./capas/cirurgia.webp" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Cirurgia">
+                        <img src="./capas/cirurgia.webp" class="w-full h-24 xs:h-32 object-cover group-hover:scale-105 transition-transform duration-500" alt="Cirurgia" loading="lazy" decoding="async" fetchpriority="low">
                         <div class="flex-grow flex items-center justify-center bg-white dark:bg-gray-800 p-1">
                             <span class="font-semibold text-sm xs:text-base text-gray-700 dark:text-gray-300 group-hover:text-primary dark:group-hover:text-cyan-400 transition-colors">Cirurgia</span>
                         </div>
@@ -218,7 +218,7 @@ if ('serviceWorker' in navigator) {
 
                 <div class="p-6 sm:p-8 flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8 relative z-10">
                     <div class="w-40 sm:w-48 shrink-0 rounded-lg overflow-hidden group-hover:scale-[1.02] transition-transform duration-300">
-                        <img src="./capas/manual.webp" alt="Capa Manual" class="w-full h-auto object-cover">
+                        <img src="./capas/manual.webp" alt="Capa Manual" class="w-full h-auto object-cover" loading="lazy" decoding="async" fetchpriority="low">
                     </div>
                     
                     <div class="flex-grow text-center md:text-left flex flex-col justify-center h-full py-2">
