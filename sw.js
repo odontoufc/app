@@ -6,13 +6,15 @@
  */
 'use strict';
 
-const VERSION = '2026-11-01-02';
+const VERSION = '2026-11-02-01';
 const PREFIX = 'guia-clinico-offline-';
 const SHELL_CACHE = `${PREFIX}shell-${VERSION}`;
 
 // Preserva os downloads feitos com as versões anteriores; evita repetir arquivos grandes.
 // O header-component.js atual reconhece estes prefixos.
 const CONTENT_CACHE = `${PREFIX}content-2026-10-31-01`;
+// Revisão das capas compactadas, independente dos PDFs e dos demais materiais offline.
+const COVER_REVISION = '2026-11-02-optimized';
 const EXTERNAL_CACHE = `${PREFIX}external-2026-10-31-01`;
 const BASE = new URL('./', self.location.href);
 const absolute = path => new URL(path, BASE).href;
@@ -88,12 +90,12 @@ async function queue(items, fn, concurrent = 3) {
   return { succeeded, total: items.length };
 }
 
-async function saveLocal(cache, path) {
+async function saveLocal(cache, path, forceRefresh = false) {
   const url = absolute(path);
   const actualUrl = absolute(COVER_ALIASES.get(path) || path);
   try {
     // Reaproveita a capa real caso ela já esteja armazenada.
-    if (actualUrl !== url) {
+    if (actualUrl !== url && !forceRefresh) {
       const existing = await cache.match(actualUrl);
       if (existing) {
         await cache.put(url, existing.clone());
@@ -110,6 +112,28 @@ async function saveLocal(cache, path) {
     console.warn('[Guia offline] Não foi possível salvar:', path, error);
     return false;
   }
+}
+
+// Atualiza somente as cinco capas que foram substituídas no GitHub.
+// Mantém as mesmas chaves .png e .webp para que o contador offline e as páginas
+// continuem funcionando. Não mexe em livros nem nas páginas de Reabilitação Oral.
+// Se não houver internet, conserva as imagens anteriores e tenta novamente
+// na próxima atualização manual dos conteúdos.
+async function refreshOptimizedCovers(cache) {
+  const marker = absolute(`__covers_revision_${COVER_REVISION}`);
+  if (await cache.match(marker)) return true;
+
+  const result = await queue(
+    [...COVER_ALIASES.keys()],
+    path => saveLocal(cache, path, true),
+    3
+  );
+  if (result.succeeded !== result.total) return false;
+
+  await cache.put(marker, new Response(COVER_REVISION, {
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+  }));
+  return true;
 }
 
 async function saveExternal(cache, pair) {
@@ -141,6 +165,11 @@ self.addEventListener('install', event => {
       path => saveLocal(shell, path), 4);
     const home = await shell.match(absolute('index.html'));
     await shell.put(absolute(''), home.clone());
+
+    // As capas compactadas têm poucos KB: renova apenas essas cinco imagens.
+    // Preserva o mesmo cache de conteúdo e evita baixar novamente livros grandes.
+    const contentCache = await caches.open(CONTENT_CACHE);
+    await refreshOptimizedCovers(contentCache);
 
     // O funcionamento de Tailwind, Lucide e PDF.js offline depende dessas
     // bibliotecas externas. Falhas são não fatais; podem ser tentadas pelo botão.
@@ -293,6 +322,7 @@ async function downloadAll() {
   const externalCache = await caches.open(EXTERNAL_CACHE);
   const external = await queue(EXTERNAL_FILES, item => saveExternal(externalCache, item), 3);
   const contentCache = await caches.open(CONTENT_CACHE);
+  await refreshOptimizedCovers(contentCache);
   // Download incremental: evita repetir os arquivos grandes já armazenados.
   const content = await queue(CONTENT_FILES, async path => {
     if (await contentCache.match(absolute(path))) return true;
